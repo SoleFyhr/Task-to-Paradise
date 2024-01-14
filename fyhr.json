@@ -1,0 +1,241 @@
+{
+    "tasks": [
+        {
+            "title": "Fd",
+            "content": "Ss",
+            "task_type": "once",
+            "expiration_time": "2024-01-14",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "wsdfw",
+            "content": "<dsf<xd",
+            "task_type": "once",
+            "expiration_time": "2024-01-14",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "Practice Japanese",
+            "content": "Ayo",
+            "task_type": "daily",
+            "expiration_time": "2024-01-14",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "Test Couleur Verte",
+            "content": "dfs",
+            "task_type": "habits",
+            "expiration_time": "2024-01-14",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "Ayo",
+            "content": "pdf",
+            "task_type": "habits",
+            "expiration_time": "2024-01-15",
+            "difficulty": "medium",
+            "importance": "important",
+            "penalty_induced": null
+        },
+        {
+            "title": "prooo",
+            "content": "ouytf",
+            "task_type": "prohibited",
+            "expiration_time": "2024-01-18",
+            "difficulty": "easy",
+            "importance": "important",
+            "penalty_induced": null
+        },
+        {
+            "title": "prohibitede",
+            "content": "efsd",
+            "task_type": "prohibited",
+            "expiration_time": "2024-12-30",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        }
+    ],
+    "projects": [],
+    "penalty": {
+        "daily": [
+            {
+                "content": "Douche Chaude"
+            },
+            {
+                "content": "Douche Moyenne"
+            },
+            {
+                "content": "Douche Froide"
+            }
+        ],
+        "weekly": [
+            {
+                "content": "Douche Moyenno"
+            },
+            {
+                "content": "Douche Brulante2"
+            },
+            {
+                "content": "Douche Brulante"
+            }
+        ],
+        "monthly": [
+            {
+                "content": "Douche Brulante2"
+            },
+            {
+                "content": "Douche Brul"
+            }
+        ],
+        "active": [
+            {
+                "content": "Douche Chaude"
+            },
+            {
+                "content": "Douche Moyenne"
+            },
+            {
+                "content": "Douche Tiede"
+            },
+            {
+                "content": "Douche Tiede"
+            }
+        ]
+    },
+    "reward": {
+        "daily": [
+            {
+                "content": "Meditate"
+            },
+            {
+                "content": "Meditate3"
+            },
+            {
+                "content": "Meditate2"
+            }
+        ],
+        "weekly": [
+            {
+                "content": "Chillax"
+            }
+        ],
+        "monthly": [
+            {
+                "content": "Chill"
+            }
+        ],
+        "active": [
+            {
+                "content": "Meditate"
+            },
+            {
+                "content": "Meditate"
+            },
+            {
+                "content": "Douche Tiede"
+            },
+            {
+                "content": "Douche Chaude"
+            }
+        ]
+    },
+    "historic": [
+        {
+            "title": "zbozbozbo",
+            "content": "dsccsd",
+            "task_type": "once",
+            "expiration_time": "2024-01-12",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "etst",
+            "content": "teetetete",
+            "task_type": "once",
+            "expiration_time": "2024-01-13",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "fvqe",
+            "content": "qfds",
+            "task_type": "once",
+            "expiration_time": "2024-01-13",
+            "difficulty": "medium",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "daily",
+            "content": "sdfsd",
+            "task_type": "daily",
+            "expiration_time": "2024-12-30",
+            "difficulty": "easy",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "hab",
+            "content": "habbbb",
+            "task_type": "habits",
+            "expiration_time": "2024-01-13",
+            "difficulty": "hard",
+            "importance": "very important",
+            "penalty_induced": null
+        },
+        {
+            "title": "gal",
+            "content": "ghk",
+            "task_type": "habits",
+            "expiration_time": "2024-01-13",
+            "difficulty": "hard",
+            "importance": "not so important",
+            "penalty_induced": null
+        },
+        {
+            "title": "hglh",
+            "content": "lkj",
+            "task_type": "habits",
+            "expiration_time": "2024-01-13",
+            "difficulty": "hard",
+            "importance": "not so important",
+            "penalty_induced": null
+        }
+    ],
+    "penalty_points": {
+        "daily": 0,
+        "weekly": 60,
+        "monthly": 80
+    },
+    "reward_points": {
+        "daily": 0,
+        "weekly": 29.299999999999997,
+        "monthly": 39.3
+    },
+    "scaling": {
+        "difficulty": [
+            3,
+            6,
+            10
+        ],
+        "importance": [
+            5,
+            15,
+            20
+        ]
+    },
+    "reward_unlocking_steps": 10,
+    "pause": "no",
+    "last_date": "2024-01-14"
+}

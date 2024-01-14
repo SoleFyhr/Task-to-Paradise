@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block content %}
+<h1>Hi, {{ user.username }}!</h1>
+<h3>Next Tasks :</h3>
+<div id="taskList">
+  {% for task in tasks %} {% if loop.index <= 5 %}
+  <div>
+    <h4>End the {{ task.expiration_time }}:</h4>
+    <p>
+      {{ task.title }} - {{ task.task_type }} - reward: {{ task.reward }} -
+      penalty: {{ task.penalty }}
+    </p>
+    <p>{{task.content}}</p>
+  </div>
+  {% endif %} {% endfor %}
+</div>
+{% endblock %}
+
+

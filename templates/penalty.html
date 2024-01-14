@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Penalty</h1>
+    <form id="penaltyForm">
+        <input type="text" id="content" placeholder="Penalty Content">
+        <select id="type">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+        </select>
+        <input type="text" id="place" placeholder="Place in the ranking">
+     
+
+        <button type ="button" class="penalty_button" button-action="penalty" >Add</button>
+        <div id="error">
+
+        </div>
+
+    </form>
+
+
+    <div id="penaltyList">
+        <h4>Daily Ranking</h4>
+        <!-- {% for penaltyD in dailyRanking %}
+            <div><p>{{penaltyD.content}}</p>
+            </div>
+        {% endfor %}
+
+        <h4>Weekly Ranking</h4>
+        {% for penaltyW in weeklyRanking %}
+            <div><p>{{penaltyW.content}}</p>
+            </div>
+        {% endfor %}
+
+        <h4>Monthly Ranking</h4>
+        {% for penaltyM in monthlyRanking %}
+            <div><p>{{penaltyM.content}}</p>
+            </div>
+        {% endfor %} -->
+    </div>
+    
+
+   
+    
+{% endblock %}

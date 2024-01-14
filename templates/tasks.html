@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tasks</h1>
+    <form id="taskForm">
+        <input type="text" id="name" placeholder="Task Name">
+        <input type="date" id="expiration_time" placeholder="Expiration Time">
+        <select id="type">
+            <option value="daily">Daily</option>
+            <option value="once">Once</option>
+            <option value="habits">Habits</option>
+            <option value="prohibited">Prohibited</option>
+        </select>
+        <input type="number" id="reward" placeholder="Reward">
+        <input type="number" id="penalty" placeholder="Penalty">
+        <input type="text" id="penalty_induced" placeholder="Penalty Induced">
+        <br>
+        <input type="text" id="content"  placeholder="Content">
+
+       
+       
+        <button type ="button" class="task-button" button-action="create" >Create New Task </button>
+        <div id="error">
+
+        </div>
+
+        <!-- <button type="button" id="myButton">Create Task</button> -->
+    </form>
+
+
+    <div id="taskList">
+        {% for task in tasks %}
+            <div><p>{{task.title}} - {{task.task_type}} - {{task.expiration_time}} - reward : {{task.reward}} - penalty : {{task.penalty}}</p>
+            <p>{{task.content}}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+
+   
+    
+{% endblock %}
