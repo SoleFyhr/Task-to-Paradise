@@ -1,0 +1,194 @@
+@import url('https://fonts.google.com/specimen/Playfair+Display?preview.text=Perform%20Japanese&stroke=Serif&vfonly=true&subset=latin&noto.script=Latn');
+
+
+body {
+  margin: 0;
+  padding:0;
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: rgb(0, 0, 0); 
+}
+
+.todo-title{
+  cursor:pointer;
+}
+.completed-todo { 
+  text-decoration: line-through;
+}
+.tab-list > span {
+  padding: 5px 8px;
+  border : 1px solid rgb(128, 5, 5);
+  border-radius:10px;
+  margin-right:5px;
+  cursor: pointer;
+}
+.tab-list>span.active {
+  background-color: rgb(5, 5, 128);
+  color:#fff;
+}
+/*! -----------ELEMENTS------------ */
+body {
+  background-color: black;
+  color: white;
+}
+
+h2,h1 {
+  color:white;
+}
+
+.taskZone {
+  margin-bottom:20px ;
+}
+
+.content{
+  margin-bottom: 10%;
+}
+
+.dashboard{
+  margin-bottom: 1%;
+}
+
+.penaltyGroup {
+  margin-top:20px ;
+}
+
+.outer-flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2%;
+}
+
+.inner-flex-container {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Adjust the gap as needed */
+}
+/*! -----------HEADER------------ */
+
+header {
+  
+  padding: 10px 0;
+}
+
+/* Style the navigation bar */
+nav {
+  text-align: center;
+}
+
+/* Style the unordered list */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style each list item */
+nav ul li {
+  display: inline; /* Inline display for horizontal alignment */
+  margin: 0 10px; /* Spacing between items */
+}
+
+/* Style the links */
+nav ul li a {
+  color: white;
+  text-decoration: none; /* Removes underline from links */
+  padding: 5px 10px; /* Padding for clickable area */
+}
+
+/* Style the links on hover */
+nav ul li a:hover {
+  background-color: grey; /* Change color on hover */
+}
+
+/*!----------- BUTTTONNNN */
+
+button.btn-info {
+  background-color: rgb(39, 135, 194);
+  color:#fff;
+}
+.btn-spacing {
+  margin-right: 10px;
+  color:#fff;
+}
+li.habits {
+  
+  background-color: #6DE1A7;
+}
+li.daily {
+  
+  background-color:#000407;
+  color:white
+}
+
+li.hard {
+  
+  background-color:rgba(162, 27, 27, 0.764);
+}
+
+
+
+.button-group {
+  display: flex; /* This ensures buttons are lined up horizontally */
+  align-items: center; /* Aligns buttons horizontally */
+}
+
+/*!----------- GRID-------------- */
+
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  align-items: center;
+  justify-items: center;
+  padding : 12px 10px 12px 10px;
+  gap: 10px;
+  border-radius: 10px;
+}
+
+.task-grid.penalty {
+  grid-template-columns: auto min-content 1fr 1fr auto;
+}
+
+.task-grid.no-penalty {
+  grid-template-columns: min-content 1fr 1fr auto;
+}
+
+/*!----------- TASK-------------- */
+
+.star-icon {
+
+  width: 2vw;
+  height: auto;
+  max-width: 30px;
+  min-width: 15px;
+
+}
+
+.difficulty-importance-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: red
+}
+
+
+.difficulty-stars {
+  display: flex; /* Enables flexbox */
+  align-items: center; /* Vertically centers the stars in the container */
+  justify-content: center; /* Horizontally centers the stars in the container */
+}
+
+.task-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: bold; /* Makes the title bold */
+  font-size: calc(1vw + 0.5rem);
+}
+
+.days-left {
+  font-family: 'Playfair Display', serif;
+  font-size: calc(1vw + 0.3rem);
+  font-weight: bold;
+
+}
