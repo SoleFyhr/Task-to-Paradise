@@ -86,7 +86,7 @@ class Tasks extends Component {
   manageCompletion = (title, type) => {
     const itemCompletion = {
       title: title,
-      completion: "went with the motion",
+      completion: "went through the motion",
       type: type,
     };
     this.setState((prevState) => ({

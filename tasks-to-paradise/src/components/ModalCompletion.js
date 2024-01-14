@@ -59,7 +59,7 @@ class CustomModalCompletion extends Component {
                 value={this.state.activeItem.completion}
                 onChange={this.handleChange}
               >
-                <option value="went with the motion">Went with the motion</option>
+                <option value="went through the motion">Went through the motion</option>
                 <option value="average">Average</option>
                 <option value="good">Good</option>
                 <option value="perfect">Perfect</option>

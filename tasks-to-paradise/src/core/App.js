@@ -44,13 +44,14 @@ function App() {
   
 }
 export default App;
-//S'occuper d'une disposition ok des tasks (pour importance et difficulty) et couleurs avec prohibited etc..
+// trouver bon équilibre couleurs taches et taille de texte
 //Faire prohibited (onglet à soi dans dashboard)
-//Si prohibited degager le scaling de difficulty et la date d'expiration (mettre dans 10 ans), si habits rajouter une frequence dans modal
+//Si prohibited degager le scaling de difficulty et la date d'expiration (mettre dans 10 ans), si habits rajouter une frequence dans modal et un nombre de jour avant que ca expire, pour daily dégager la date d'expiration dans le modal et juste mettre le jour meme quand j'envoie..
+//Faire penalty induced
 
 //Deploy
 //S'occuper des différents users
 //S'occuper du repsonsive
 
-//SideQuest :Faire le edit dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard  
+//SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard  
 //S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)

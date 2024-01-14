@@ -68,7 +68,7 @@ class Dashboard extends Component {
   manageCompletion = (title, type) => {
     const item = {
       title: title,
-      completion: "went with the motion",
+      completion: "went through the motion",
       type: type,
     };
     this.setState((prevState) => ({
@@ -124,7 +124,8 @@ class Dashboard extends Component {
     const dueDate = new Date(expirationDate);
     const timeDiff = dueDate - currentDate;
     let number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
-    number = number === 0 ? "Today" : number + " days left";
+    if(number===1) number = "1 day left"
+    else number = number === 0 ? "Today" : number + " days left";
     return number;
   };
 
@@ -149,7 +150,7 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.title}
-        className={`dashboard task-grid ${
+        className={`dashboard task-grid basic ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -166,7 +167,7 @@ class Dashboard extends Component {
           <div className="difficulty-stars">
             {this.renderStars(item.difficulty)}
           </div>
-          <div>{`-${10}`}</div>
+          <div>{`-${item.importance}`}</div>
         </div>
       </li>
     ));
@@ -179,7 +180,7 @@ class Dashboard extends Component {
           <h2 className="text-uppercase text-center my-4">Tasks To Paradise</h2>
           <div className="row">
             <div className="col-md-6 col-sm-10 mx-auto p-0">
-              <div className="card p-3">
+              <div className=" p-3 ">
                 {this.renderTabList()}
                 <ul className=" list-group-flush">{this.renderItems()}</ul>
               </div>

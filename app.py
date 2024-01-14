@@ -63,7 +63,13 @@ def my_function():
     type =  enu.TaskType.from_string(data.get('type'))
    
     expiration_time = data.get('expiration_time')
-    importance = enu.Importance.from_string(data.get('importance'))
+    values = ta.get_importance_values('fyhr')
+    print(data.get('importance'))
+    print(enu.Importance.from_string(data.get('importance')))
+    print(enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values))
+    importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
+    print(importance)
+    #importance = enu.Importance.from_string(data.get('importance'))
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
     penalty_induced = data.get('penalty_induced')# title of the penalty
     task_feedback = ta.create_new_task(title, content,type, expiration_time,difficulty, importance,penalty_induced)

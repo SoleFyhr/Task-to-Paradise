@@ -45,7 +45,7 @@ class Scaling_Cat(Enum):
 
 
 class Completion(Enum):
-    MOTION = "went with the motion"
+    MOTION = "went through the motion"
     FORGOT = "forgot to put the task"
     AVERAGE = "average" 
     GOOD = "good"
@@ -60,7 +60,7 @@ class Completion(Enum):
     
     @staticmethod
     def value_completion(completion):
-        values = [0.25,0.5,0.8,1,1.2]
+        values = [0.25,0.5,0.8,1,1.5]
         return values[list(Completion).index(completion)]
 
 #Completion.value_completion(Completion.AVERAGE)
@@ -78,6 +78,7 @@ class Difficulty(Enum):
                 return member
         raise ValueError(f'{label} is not a valid Difficulty')
 
+
 class Importance(Enum):
     NSIMPORTANT= "not so important"
     IMPORTANT = "important"
@@ -89,5 +90,10 @@ class Importance(Enum):
             if member.value == label:
                 return member
         raise ValueError(f'{label} is not a valid Importance')
-
-
+    
+    @staticmethod
+    def value_importance(importance,values):
+        #values = [0.25,0.5,0.8,1,1.5]
+        return values[list(Importance).index(importance)]
+    
+#Importance.value_importance(Importance.from_string("important"),values)

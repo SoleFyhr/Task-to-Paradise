@@ -21,7 +21,7 @@ class Task:
             "task_type": self.task_type.value,
             "expiration_time": self.expiration_time,
             "difficulty": self.difficulty.value,
-            "importance":self.importance.value,
+            "importance":self.importance,
             "penalty_induced": self.penalty_induced
             
         }
@@ -38,6 +38,7 @@ class Task:
 
 
 def create_new_task(name,content, type, expiration_time,difficulty, importance,penalty_induced=None):
+    
     new_task = Task(name,content,type,expiration_time,difficulty,importance,penalty_induced)
     task_json = new_task.to_json()
     json_manager.add_task_to_json(json_manager.user, task_json,json_manager.JSONCategory.TASK)
@@ -52,3 +53,6 @@ def get_all_tasks(user):
 
 def get_all_tasks_sorted(user):
     return json_manager.get_all_tasks_by_type(user)
+
+def get_importance_values(user):
+    return json_manager.retrieve_scaling(user,enu.Scaling_Cat.IMPORTANCE)

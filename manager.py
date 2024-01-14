@@ -52,8 +52,12 @@ def check_tasks_expiration(user):
        
         if current_date > expiration_date:
             task2 = json.dumps(task)
-            tasks_to_move.append(ta.Task.from_json(task2))            
-            total_penalty += js.retrieve_value_in_scaling(user,enum.Scaling_Cat.IMPORTANCE,list(enum.Importance).index(enum.Importance.from_string(task["importance"])))
+            tasks_to_move.append(ta.Task.from_json(task2))  
+            try: 
+                value = int(task["importance"])
+                total_penalty += value
+            except ValueError as e:
+                print("error Invalid input. Sequence values must be integers.")
 
     if(len(tasks_to_move)>0):
         js.move_task_to_historic(js.user,tasks_to_move)
@@ -100,7 +104,11 @@ def task_completed(user, title,completion):
 
 def penalty_task_done(user,title):
     task = ta.Task.from_json(js.get_thing_by_title(user,title,js.JSONCategory.TASK))
-    importance_value = js.retrieve_value_in_scaling(user,enum.Scaling_Cat.IMPORTANCE,list(enum.Importance).index(enum.Importance.from_string(task.importance)))
+    try:
+        importance_value = int(task.importance)
+    except ValueError as e:
+                print("error Invalid input. Sequence values must be integers.")
+
     pen.add_penalty_to_all(importance_value,user)
     #We let the task in pending    
 
