@@ -19,17 +19,15 @@ class Tasks extends Component {
         type: "",
       },
       activeItemCompletion: {
-        title:"",
-        completion:"",
-        type:""
-        
+        title: "",
+        completion: "",
+        type: "",
       },
       once: [],
       daily: [],
       habits: [],
       prohibited: [],
       checkedTasks: {},
-      
     };
   }
   componentDidMount() {
@@ -55,14 +53,25 @@ class Tasks extends Component {
       },
       body: body_content,
     })
-      .then((response) => response.json()) // Assuming your server responds with JSON
+      .then((response) => {
+        if (response.ok) {
+          // If the response is OK, parse it as JSON
+          return response.json();
+        } else {
+          // If the response is not OK, parse it as JSON and throw an error
+          return response.json().then((data) => {
+            throw new Error(data.error || "Unknown server error");
+          });
+        }
+      })
       .then((data) => {
         if (data) {
           return_func(data);
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // This will catch both network errors and the errors thrown above
+        console.error("Error:", error.message);
       });
   }
 

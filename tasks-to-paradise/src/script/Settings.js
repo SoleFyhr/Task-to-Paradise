@@ -14,14 +14,11 @@ class Settings extends Component {
     super(props);
     this.state = {
       pause: "",
-      activeItem: {
-        number1: "",
-        number2: "",
-        number3: "",
-      },
-      activeCategory:"",
+      activeCategory: "",
+      numberOfInputs: 3,
       importanceScaling: [],
       difficultyScaling: [],
+      completionScaling: [],
       isOpen: false,
     };
     this.openPopover = this.openPopover.bind(this);
@@ -42,6 +39,7 @@ class Settings extends Component {
       this.setState({
         difficultyScaling: data.difficulty,
         importanceScaling: data.importance,
+        completionScaling: data.completion,
       });
     });
   };
@@ -54,17 +52,27 @@ class Settings extends Component {
       },
       body: body_content,
     })
-      .then((response) => response.json()) // Assuming your server responds with JSON
+      .then((response) => {
+        if (response.ok) {
+          // If the response is OK, parse it as JSON
+          return response.json();
+        } else {
+          // If the response is not OK, parse it as JSON and throw an error
+          return response.json().then((data) => {
+            throw new Error(data.error || "Unknown server error");
+          });
+        }
+      })
       .then((data) => {
         if (data) {
           return_func(data);
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // This will catch both network errors and the errors thrown above
+        console.error("Error:", error.message);
       });
   }
-
   openPopover() {
     this.setState({ isOpen: true });
   }
@@ -86,16 +94,17 @@ class Settings extends Component {
       </PopoverTrigger>
     );
   };
-  // Main variable to render items on the screen
+
   renderScale = (list) => {
+    const lastIndex = list.length - 1; // Calculate the last index of the list
+
     return list.map((item, index) => (
       <span
         key={index}
-        className={` justify-content-between align-items-center ${item.difficulty}`}
+        className={`justify-content-between align-items-center ${item.difficulty}`}
       >
-         {item} {index === 2 ?" ":"- "}
-        </span>
-        
+        {item} {index === lastIndex ? " " : "- "}
+      </span>
     ));
   };
 
@@ -104,13 +113,12 @@ class Settings extends Component {
     this.setState({ modal: !this.state.modal }); //add this after modal creation
   };
 
-  createItem = (category) => {
-    const item = {
-      number1: "",
-      number2: "",
-      number3: "",
-    };
-    this.setState({ activeItem: item,activeCategory: category, modal: !this.state.modal });
+  handleButtonClickSequence = (number, category) => {
+    this.setState({
+      numberOfInputs: number,
+      activeCategory: category,
+      modal: !this.state.modal,
+    });
   };
 
   handleDelete = (content, type) => {
@@ -131,12 +139,19 @@ class Settings extends Component {
     });
   };
   // Submit an item
-  handleNewSequence = (sequence,category) => {
+  handleNewSequence = (sequence, category) => {
     this.toggle();
-    let body_content = JSON.stringify({ category: category, sequence: sequence });
-    this.post_method(body_content, "http://127.0.0.1:5000/change_scaling", (data) => {
-      this.refreshList();
+    let body_content = JSON.stringify({
+      category: category,
+      sequence: sequence,
     });
+    this.post_method(
+      body_content,
+      "http://127.0.0.1:5000/change_scaling",
+      (data) => {
+        this.refreshList();
+      }
+    );
   };
 
   render() {
@@ -147,7 +162,6 @@ class Settings extends Component {
           <div className="outer-flex-container text-center  ">
             <div className="inner-flex-container">
               <div>
-                
                 <strong>Pause mode</strong>: {this.state.pause}
               </div>
               <span>
@@ -170,7 +184,6 @@ class Settings extends Component {
                 >
                   {this.renderPopoverTrigger()}
                   <PopoverContent>
-                    
                     <PopoverArrow />
 
                     <PopoverBody>
@@ -181,8 +194,8 @@ class Settings extends Component {
                       There are 3 degrees : not so important / important / very
                       important.
                       <br></br>
-                      <br></br>A not so important task penalizes less than a very
-                      important for example.
+                      <br></br>A not so important task penalizes less than a
+                      very important for example.
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
@@ -190,7 +203,9 @@ class Settings extends Component {
               </div>
               <span>
                 <button
-                  onClick={() => this.createItem("importance")}
+                  onClick={() =>
+                    this.handleButtonClickSequence(3, "importance")
+                  }
                   className="btn btn-info btn-spacing"
                 >
                   Add New Sequence
@@ -201,13 +216,13 @@ class Settings extends Component {
           <div className="outer-flex-container text-center  ">
             <div className="inner-flex-container">
               <div>
-                
-                  
                 Difficulty: {this.renderScale(this.state.difficultyScaling)}
               </div>
               <span>
                 <button
-                  onClick={() => this.createItem("difficulty")}
+                  onClick={() =>
+                    this.handleButtonClickSequence(4, "difficulty")
+                  }
                   className="btn btn-info btn-spacing"
                 >
                   Add New Sequence
@@ -216,10 +231,27 @@ class Settings extends Component {
             </div>
           </div>
 
+          <div className="outer-flex-container text-center  ">
+            <div className="inner-flex-container">
+              <div>
+                Completion: {this.renderScale(this.state.completionScaling)}
+              </div>
+              <span>
+                <button
+                  onClick={() =>
+                    this.handleButtonClickSequence(5, "completion")
+                  }
+                  className="btn btn-info btn-spacing"
+                >
+                  Add New Sequence
+                </button>
+              </span>
+            </div>
+          </div>
 
           {this.state.modal ? (
             <ModalSequence
-              activeItem={this.state.activeItem}
+              numberOfInputs={this.state.numberOfInputs}
               activeCategory={this.state.activeCategory}
               toggle={this.toggle}
               onSave={this.handleNewSequence}

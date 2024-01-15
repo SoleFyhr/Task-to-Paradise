@@ -57,6 +57,10 @@ def remove_active_reward(user,content):
 def remove_reward(user,content,type):
     json_manager.delete_penalty_reward_by_content(user,content,json_manager.JSONCategory.REWARD,type)
 
+def get_active_reward(user):
+    return json_manager.get_active(json_manager.JSONCategory.REWARD,enu.Active.ACTIVE,user)
+
+
 #create_new_reward('fyhr',"Meditate",enu.TimeEnum.DAILY,1)
 #activate_reward('fyhr',enu.TimeEnum.DAILY,4)
 #remove_active_penalty('fyhr',"Meditate")

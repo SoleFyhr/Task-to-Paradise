@@ -1,24 +1,6 @@
 {
     "tasks": [
         {
-            "title": "Practice Japanese",
-            "content": "Ayo",
-            "task_type": "daily",
-            "expiration_time": "2024-01-14",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "Once Task 3 Star",
-            "content": "F",
-            "task_type": "once",
-            "expiration_time": "2024-01-14",
-            "difficulty": "hard",
-            "importance": 13,
-            "penalty_induced": null
-        },
-        {
             "title": "Medium Habits Task",
             "content": "At",
             "task_type": "habits",
@@ -83,13 +65,13 @@
                 "content": "Douche Chaude"
             },
             {
-                "content": "Douche Moyenne"
+                "content": "Douche Chaude2"
             },
             {
-                "content": "Douche Tiede"
+                "content": "Douche C"
             },
             {
-                "content": "Douche Tiede"
+                "content": "Douche Chaude3"
             }
         ]
     },
@@ -130,130 +112,38 @@
             }
         ]
     },
-    "historic": [
-        {
-            "title": "zbozbozbo",
-            "content": "dsccsd",
-            "task_type": "once",
-            "expiration_time": "2024-01-12",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "etst",
-            "content": "teetetete",
-            "task_type": "once",
-            "expiration_time": "2024-01-13",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "fvqe",
-            "content": "qfds",
-            "task_type": "once",
-            "expiration_time": "2024-01-13",
-            "difficulty": "medium",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "daily",
-            "content": "sdfsd",
-            "task_type": "daily",
-            "expiration_time": "2024-12-30",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "hab",
-            "content": "habbbb",
-            "task_type": "habits",
-            "expiration_time": "2024-01-13",
-            "difficulty": "hard",
-            "importance": 20,
-            "penalty_induced": null
-        },
-        {
-            "title": "gal",
-            "content": "ghk",
-            "task_type": "habits",
-            "expiration_time": "2024-01-13",
-            "difficulty": "hard",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "hglh",
-            "content": "lkj",
-            "task_type": "habits",
-            "expiration_time": "2024-01-13",
-            "difficulty": "hard",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "Fd",
-            "content": "Ss",
-            "task_type": "once",
-            "expiration_time": "2024-01-14",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "Ayo",
-            "content": "pdf",
-            "task_type": "habits",
-            "expiration_time": "2024-01-15",
-            "difficulty": "medium",
-            "importance": 13,
-            "penalty_induced": null
-        },
-        {
-            "title": "Test Couleur Verte",
-            "content": "dfs",
-            "task_type": "habits",
-            "expiration_time": "2024-01-14",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "Testo very important",
-            "content": "Ayo",
-            "task_type": "once",
-            "expiration_time": "2024-01-14",
-            "difficulty": "medium",
-            "importance": 13,
-            "penalty_induced": null
-        }
-    ],
+    "historic": [],
     "penalty_points": {
         "daily": 0,
         "weekly": 0,
         "monthly": 0
     },
     "reward_points": {
-        "daily": 6.75,
-        "weekly": 6.75,
-        "monthly": 6.75
+        "daily": 0,
+        "weekly": 0,
+        "monthly": 0
     },
     "scaling": {
         "difficulty": [
-            3,
-            6,
-            10
+            1.0,
+            3.0,
+            6.0,
+            10.0
+        ],
+        "completion": [
+            0.25,
+            0.5,
+            0.8,
+            1.0,
+            1.5
         ],
         "importance": [
-            5,
-            13,
-            20
+            5.0,
+            13.0,
+            20.0
         ]
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-14"
+    "last_date": "2024-01-15"
 }

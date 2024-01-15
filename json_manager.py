@@ -284,6 +284,12 @@ def delete_penalty_reward_by_content(user_id, content,category,type):
 
     print("Pen or Rew deleted successfully.")
 
+def get_active(category,active_category,user_id):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")    
+    return data[category.value][active_category.value]
+
 #----------------- PPOINTS - RPOINTS --------------------------
 
 
@@ -302,6 +308,13 @@ def get_value(category, time_period,user_id):
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")    
     return data[category.value][time_period.value]
+
+def get_points_category(category,user_id):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")    
+    return data[category.value]
+
 
   
 

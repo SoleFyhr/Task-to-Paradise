@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// importing all of these classes from reactstrap module
 import {
   Button,
   Modal,
@@ -12,36 +11,38 @@ import {
   Label,
 } from "reactstrap";
 
-// build a class base component
 class CustomModalSequence extends Component {
   constructor(props) {
     super(props);
+    // Create an initial state based on the number of inputs
+    const activeItem = {};
+    for (let i = 1; i <= this.props.numberOfInputs; i++) {
+      activeItem[`number${i}`] = '';
+    }
+
     this.state = {
-      activeItem: this.props.activeItem,
+      activeItem,
       activeCategory: this.props.activeCategory,
       validationErrors: {},
     };
   }
-  // changes handler to check if a checkbox is checked or not
+
   handleChange = (e) => {
-    let { name, value } = e.target;
-    if (e.target.type === "checkbox") {
-      value = e.target.checked;
-    }
+    const { name, value } = e.target;
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
   };
 
   validateForm = () => {
-    const { number1,number2,number3 } = this.state.activeItem;
     let errors = {};
-    if (!number1) errors.number1 = "Number 1 is required";
-    if (!number2) errors.number2 = "Number 2 is required";
-    if (!number3) errors.number3 = "Number 3 is required";
-    // Add other field validations as necessary
+    for (let i = 1; i <= this.props.numberOfInputs; i++) {
+      if (!this.state.activeItem[`number${i}`]) {
+        errors[`number${i}`] = `Number ${i} is required`;
+      }
+    }
 
     this.setState({ validationErrors: errors });
-    return Object.keys(errors).length === 0; // Return true if no errors
+    return Object.keys(errors).length === 0;
   };
 
   handleSave = () => {
@@ -50,63 +51,43 @@ class CustomModalSequence extends Component {
     }
   };
 
+  renderInputFields = () => {
+    const { validationErrors, activeItem } = this.state;
+    let inputFields = [];
 
+    for (let i = 1; i <= this.props.numberOfInputs; i++) {
+      inputFields.push(
+        <FormGroup key={`number${i}`}>
+          <Label for={`number${i}`}>{`Number ${i}`}</Label>
+          <Input
+            type="text"
+            name={`number${i}`}
+            value={activeItem[`number${i}`]}
+            onChange={this.handleChange}
+            placeholder={`Enter Number ${i}`}
+            invalid={!!validationErrors[`number${i}`]}
+          />
+          {validationErrors[`number${i}`] && (
+            <div className="text-danger">{validationErrors[`number${i}`]}</div>
+          )}
+        </FormGroup>
+      );
+    }
 
-  // rendering modal in the custommodal class received toggle and on save as props,
+    return inputFields;
+  };
+
   render() {
     const { toggle } = this.props;
-    const { validationErrors } = this.state;
 
     return (
       <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Sequence </ModalHeader>
+        <ModalHeader toggle={toggle}>Sequence</ModalHeader>
         <ModalBody>
           <Form>
-            <FormGroup>
-              <Label for="number1">Number 1</Label>
-              <Input
-                type="text"
-                name="number1"
-                value={this.state.activeItem.number1}
-                onChange={this.handleChange}
-                placeholder={`Enter Number 1`}
-                invalid={!!validationErrors.number1}
-              />
-              {validationErrors.number1 && (
-                <div className="text-danger">{validationErrors.content}</div>
-              )}
-            </FormGroup> 
-            <FormGroup>
-              <Label for="number2">Number 2</Label>
-              <Input
-                type="text"
-                name="number2"
-                value={this.state.activeItem.number2}
-                onChange={this.handleChange}
-                placeholder={`Enter Number 2`}
-                invalid={!!validationErrors.number2}
-              />
-              {validationErrors.number2 && (
-                <div className="text-danger">{validationErrors.content}</div>
-              )}
-            </FormGroup> 
-            <FormGroup>
-              <Label for="number3">Number 3</Label>
-              <Input
-                type="text"
-                name="number3"
-                value={this.state.activeItem.number3}
-                onChange={this.handleChange}
-                placeholder={`Enter Number 3`}
-                invalid={!!validationErrors.number3}
-              />
-              {validationErrors.number3 && (
-                <div className="text-danger">{validationErrors.content}</div>
-              )}
-            </FormGroup> 
+            {this.renderInputFields()}
           </Form>
         </ModalBody>
-        {/* create a modal footer */}
         <ModalFooter>
           <Button color="success" onClick={this.handleSave}>
             Save
@@ -116,4 +97,5 @@ class CustomModalSequence extends Component {
     );
   }
 }
+
 export default CustomModalSequence;

@@ -179,6 +179,15 @@ li.prohibited {
 
 }
 
+.exclamation-icon {
+
+  width: 2.5vw;
+  height: auto;
+  max-width: 50px;
+  min-width: 15px;
+
+}
+
 .difficulty-importance-column {
   display: flex;
   flex-direction: column;

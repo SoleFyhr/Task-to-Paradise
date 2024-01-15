@@ -64,12 +64,8 @@ def my_function():
    
     expiration_time = data.get('expiration_time')
     values = ta.get_importance_values('fyhr')
-    print(data.get('importance'))
-    print(enu.Importance.from_string(data.get('importance')))
-    print(enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values))
+   
     importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
-    print(importance)
-    #importance = enu.Importance.from_string(data.get('importance'))
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
     penalty_induced = data.get('penalty_induced')# title of the penalty
     task_feedback = ta.create_new_task(title, content,type, expiration_time,difficulty, importance,penalty_induced)
@@ -144,7 +140,7 @@ def function_remove_penalty():
 
     data = request.json  # This will contain the data sent from the JavaScript
     content = data.get('content')
-    type = enu.TimeEnum.from_string(data.get('type'))
+    type = enu.Active.ACTIVE
     pe.remove_penalty('fyhr',content,type)
     response_data = {"message": "Penalty removed successfully"}
     return jsonify(response_data)
@@ -153,6 +149,12 @@ def function_remove_penalty():
 def function_get_penalty():
     daily,weekly,monthly = pe.get_all_penalty_sorted('fyhr')
     response_data = {"message": "Penalty captured successfully","daily":daily,"weekly":weekly,"monthly":monthly}
+    return jsonify(response_data)
+
+@app.route('/button_get_active_penalty', methods=['POST'])
+def function_get_active_penalty():
+    active = pe.get_active_penalty('fyhr')
+    response_data = {"message": "Penalty captured successfully","active": active}
     return jsonify(response_data)
 
 
@@ -187,23 +189,43 @@ def function_get_reward():
     response_data = {"message": "Reward captured successfully","daily":daily,"weekly":weekly,"monthly":monthly}
     return jsonify(response_data)
 
+
+
+#!------------------ Points ------------------
+@app.route('/button_get_points', methods=['POST'])
+def function_get_points():
+    rpoints,ppoints = other.get_ppoints_rpoints('fyhr')
+    response_data = {"message": "points captured successfully","rpoints":rpoints,"ppoints":ppoints}
+    return jsonify(response_data)
+
 #!------------------ Scaling ------------------
 
 @app.route('/button_get_scaling', methods=['POST'])
 def function_get_scaling():
-    difficulty,importance = other.get_scaling_parameters('fyhr')
-    response_data = {"message": "Scaling captured successfully","difficulty":difficulty,"importance":importance}
+    difficulty,importance,completion = other.get_scaling_parameters('fyhr')
+    response_data = {"message": "Scaling captured successfully","difficulty":difficulty,"importance":importance,"completion":completion}
     return jsonify(response_data)
+
+
 
 @app.route('/change_scaling', methods=['POST'])
 def function_change_scaling():
-    data = request.json 
+    data = request.json
     category = enu.Scaling_Cat.from_string(data.get('category'))
-    
+
+    # Function to determine the number of inputs for the given category
+    num_inputs = enu.Scaling_Cat.number_of_inputs(category)
+
     sequence = data.get('sequence')
     try:
-        true_sequence = [int(sequence['number1']), int(sequence['number2']), int(sequence['number3'])]
-        print(true_sequence)
+        true_sequence = []
+        for i in range(1, num_inputs + 1):
+            num_key = f'number{i}'
+            if num_key in sequence:
+                true_sequence.append(float(sequence[num_key]))
+            else:
+                return jsonify({"error": f"Missing {num_key} in sequence."}), 400
+
         other.new_sequence('fyhr', true_sequence, category)
     except ValueError as e:
         return jsonify({"error": "Invalid input. Sequence values must be integers."}), 400

@@ -32,10 +32,10 @@ class CustomModal extends Component {
   };
 
   validateForm = () => {
-    const { title, content } = this.state.activeItem;
+    const { title } = this.state.activeItem;
     let errors = {};
     if (!title) errors.title = "Title is required";
-    if (!content) errors.content = "Content is required";
+    
     // Add other field validations as necessary
 
     this.setState({ validationErrors: errors });
@@ -79,18 +79,15 @@ class CustomModal extends Component {
 
             {/* 2 content label */}
             <FormGroup>
-              <Label for="content">Content</Label>
+              <Label for="content">Details</Label>
               <Input
                 type="text"
                 name="content"
                 value={this.state.activeItem.content}
                 onChange={this.handleChange}
-                placeholder="Enter Task Content"
-                invalid={!!validationErrors.content}
+                placeholder="Enter Task Details"
               />
-              {validationErrors.content && (
-                <div className="text-danger">{validationErrors.content}</div>
-              )}
+              
             </FormGroup> 
 
             <FormGroup>
@@ -126,6 +123,7 @@ class CustomModal extends Component {
                 value={this.state.activeItem.difficulty}
                 onChange={this.handleChange}
               >
+                <option value="very_easy">Very Easy</option>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Difficult</option>

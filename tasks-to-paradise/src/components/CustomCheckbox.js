@@ -2,14 +2,17 @@ import React from "react";
 import { Checkbox } from "@chakra-ui/react";
 
 
-function CustomCheckbox({ onCheck,checked }) {
+function CustomCheckbox({ onCheck,checked=null }) {
+  const checkboxProps = checked !== null ? { isChecked: checked } : {};
+
   return (
     <Checkbox
       size = "lg"
       borderColor="white"
       colorScheme="blue"
       onChange={(e) => onCheck(e.target.checked)}
-      isChecked={checked}
+
+      {...checkboxProps}
       sx={{
         '.chakra-checkbox__control': {
           borderWidth: '1px', // Set the thickness of the border

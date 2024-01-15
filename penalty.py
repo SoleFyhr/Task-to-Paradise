@@ -67,4 +67,5 @@ def remove_penalty(user,content,type):
 
 #json_manager.change_value(9,json_manager.JSONCategory.PPOINTS,"daily",json_manager.user)
 
-
+def get_active_penalty(user):
+    return json_manager.get_active(json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,user)

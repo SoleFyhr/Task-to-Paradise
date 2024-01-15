@@ -11,7 +11,9 @@ def new_sequence(user,sequence,category):
 def get_scaling_parameters(user):
     difficulty = json_manager.retrieve_scaling(user,enu.Scaling_Cat.DIFFICULTY)
     importance = json_manager.retrieve_scaling(user,enu.Scaling_Cat.IMPORTANCE)
-    return difficulty,importance
+    completion = json_manager.retrieve_scaling(user,enu.Scaling_Cat.COMPLETION)
+
+    return difficulty,importance,completion
 
 #!--------------------Pause-------------------
 
@@ -20,3 +22,11 @@ def change_pause_field(user):
 
 def get_pause_field(user):
     return json_manager.retrieve_pause_field(user)
+
+
+#!--------------------Pause-------------------
+def get_ppoints_rpoints(user):
+    rpoints = json_manager.get_points_category(json_manager.JSONCategory.RPOINTS,user)
+    ppoints = json_manager.get_points_category(json_manager.JSONCategory.PPOINTS,user)
+
+    return rpoints,ppoints

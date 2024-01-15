@@ -42,41 +42,46 @@ class Penalty extends Component {
       },
       body: body_content,
     })
-      .then((response) => response.json()) // Assuming your server responds with JSON
+      .then((response) => {
+        if (response.ok) {
+          // If the response is OK, parse it as JSON
+          return response.json();
+        } else {
+          // If the response is not OK, parse it as JSON and throw an error
+          return response.json().then((data) => {
+            throw new Error(data.error || "Unknown server error");
+          });
+        }
+      })
       .then((data) => {
         if (data) {
           return_func(data);
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // This will catch both network errors and the errors thrown above
+        console.error("Error:", error.message);
       });
   }
 
   // Main variable to render items on the screen
-  renderItems = (newItems,type) => {
-    
-    return newItems.map((item,index) => (
-      
+  renderItems = (newItems, type) => {
+    return newItems.map((item, index) => (
       <li
         key={index}
         className={`list-group-item d-flex justify-content-between align-items-center ${item.difficulty}`}
       >
-        <span>
-        {(index + 1)*10}
-        </span>
-        <span>
-        {item.content}
-        </span>
+        <span>{(index + 1) * 10}</span>
+        <span>{item.content}</span>
         <span>
           <button
-            onClick={() => console.log('yo en travaux')}
+            onClick={() => console.log("yo en travaux")}
             className="btn btn-info btn-spacing"
           >
             Edit
           </button>
           <button
-            onClick={() => this.handleDelete(item.content,type)}
+            onClick={() => this.handleDelete(item.content, type)}
             className="btn btn-danger"
           >
             Delete
@@ -92,7 +97,6 @@ class Penalty extends Component {
   };
 
   createItem = () => {
-    
     const item = {
       content: "",
       place: "1",
@@ -101,8 +105,8 @@ class Penalty extends Component {
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
 
-  handleDelete = (content,type) => {
-    let body_content = JSON.stringify({content:content,type:type});
+  handleDelete = (content, type) => {
+    let body_content = JSON.stringify({ content: content, type: type });
     this.post_method(
       body_content,
       "http://127.0.0.1:5000/button_remove_active_penalty",
@@ -123,8 +127,6 @@ class Penalty extends Component {
         this.refreshList();
       }
     );
-
-    
   };
 
   render() {
@@ -144,25 +146,24 @@ class Penalty extends Component {
               <div className="card p-3 penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
-                  {this.renderItems(this.state.penaltyDaily,'daily')}
+                  {this.renderItems(this.state.penaltyDaily, "daily")}
                 </ul>
               </div>
               <h3 className="text-uppercase  my-4">Weekly</h3>
               <div className="card p-3 penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
-                  {this.renderItems(this.state.penaltyWeekly,'weekly')}
+                  {this.renderItems(this.state.penaltyWeekly, "weekly")}
                 </ul>
               </div>
               <h3 className="text-uppercase  my-4">Monthly</h3>
               <div className="card p-3 penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
-                  {this.renderItems(this.state.penaltyMonthly,'monthly')}
+                  {this.renderItems(this.state.penaltyMonthly, "monthly")}
                 </ul>
               </div>
             </div>
-            
           </div>
           {this.state.modal ? (
             <ModalPenalty

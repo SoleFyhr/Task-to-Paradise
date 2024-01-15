@@ -94,8 +94,10 @@ def check_if_new_day(user):
 def task_completed(user, title,completion):
     task = js.get_thing_by_title(user,title,js.JSONCategory.TASK)
     difficulty = enum.Difficulty.from_string(ta.Task.from_json(task).difficulty)
+    completion_scaling = ta.get_completion_values('fyhr')
 
-    value_completion = enum.Completion.value_completion(completion)
+    value_completion = enum.Completion.value_completion(completion,completion_scaling)
+
     value_of_task = js.retrieve_value_in_scaling('fyhr',enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
     rew.add_reward_to_all(value_completion*value_of_task,user)
     js.move_task_to_historic(user,ta.Task.from_json(task))

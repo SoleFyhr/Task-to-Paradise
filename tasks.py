@@ -56,3 +56,6 @@ def get_all_tasks_sorted(user):
 
 def get_importance_values(user):
     return json_manager.retrieve_scaling(user,enu.Scaling_Cat.IMPORTANCE)
+
+def get_completion_values(user):
+    return json_manager.retrieve_scaling(user,enu.Scaling_Cat.COMPLETION)

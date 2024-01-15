@@ -34,6 +34,7 @@ class Active(Enum):
 
 class Scaling_Cat(Enum):
     DIFFICULTY = "difficulty"
+    COMPLETION = "completion"
     IMPORTANCE = "importance"
 
     @staticmethod
@@ -42,6 +43,13 @@ class Scaling_Cat(Enum):
             if member.value == label:
                 return member
         raise ValueError(f'{label} is not a valid Scaling Cat')
+    
+
+    @staticmethod
+    def number_of_inputs(category):
+        values = [4,5,3]
+        return values[list(Scaling_Cat).index(category)]
+
 
 
 class Completion(Enum):
@@ -59,14 +67,16 @@ class Completion(Enum):
         raise ValueError(f'{label} is not a valid Completion')
     
     @staticmethod
-    def value_completion(completion):
-        values = [0.25,0.5,0.8,1,1.5]
+    def value_completion(completion,values):
+        #values = [0.25,0.5,0.8,1,1.5]
         return values[list(Completion).index(completion)]
 
-#Completion.value_completion(Completion.AVERAGE)
+# values = [0.25,0.5,0.8,1,1.5]
+# print(Completion.value_completion(Completion.AVERAGE,values))
 
 
 class Difficulty(Enum):
+    VEASY = "very_easy"
     EASY = "easy"
     MEDIUM = "medium"
     HARD = "hard"
