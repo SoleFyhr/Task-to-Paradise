@@ -5,6 +5,13 @@ import CustomCheckbox from "../components/CustomCheckbox";
 import starIcon from "../svg/star.svg";
 import exclamation from "../svg/exclamationRed.svg";
 
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+
+// Use theme (optional)
+am4core.useTheme(am4themes_animated);
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -21,14 +28,64 @@ class Dashboard extends Component {
     };
   }
 
+  createDonutChart = (chartDiv, data) => {
+    // Create chart instance
+    let chart = am4core.create(chartDiv, am4charts.PieChart);
+    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    // Set data
+    chart.data = data;
+
+    // Add and configure Series
+    let pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "value";
+    pieSeries.dataFields.category = "category";
+
+    // Inner radius for Donut chart
+    pieSeries.innerRadius = am4core.percent(50);
+
+    // Animations
+    pieSeries.slices.template.states.getKey(
+      "active"
+    ).properties.shiftRadius = 0;
+    pieSeries.slices.template.states.getKey("hover").properties.scale = 1.1;
+    pieSeries.alignLabels = false;
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+    pieSeries.labels.template.radius = am4core.percent(-40);
+    pieSeries.labels.template.fill = am4core.color("white");
+
+    return chart;
+  };
+
   componentDidMount() {
     this.refreshList();
-    this.setState({
-      activePenaltyList: this.state.activePenaltyList.map((item, index) => ({
-        ...item,
-        uniqueId: `unique-${index}-${Date.now()}`,
-      })),
-    });
+    const penaltyPointsData = [
+      { category: "Category A", value: 50 },
+      { category: "Category B", value: 50 },
+    ];
+    const rewardsPointsData = [
+      { category: "Category X", value: 40 },
+      { category: "Category Y", value: 60 },
+    ];
+
+    // Create charts
+    this.penaltyPointsChart = this.createDonutChart(
+      "penaltyPointsChartDiv",
+      penaltyPointsData
+    );
+    this.rewardsPointsChart = this.createDonutChart(
+      "rewardsPointsChartDiv",
+      rewardsPointsData
+    );
+  }
+
+  componentWillUnmount() {
+    if (this.penaltyPointsChart) {
+      this.penaltyPointsChart.dispose();
+    }
+    if (this.rewardsPointsChart) {
+      this.rewardsPointsChart.dispose();
+    }
   }
 
   // componentDidUpdate(prevProps, prevState) {
@@ -38,13 +95,9 @@ class Dashboard extends Component {
   // }
 
   refreshList = () => {
-    this.post_method(
-      "",
-      "http://127.0.0.1:5000/get_dashboard_tasks",
-      (data) => {
-        this.setState({ taskList: data.tasks});
-      }
-    );
+    this.post_method("", "http://127.0.0.1:5000/get_tasks", (data) => {
+      this.setState({ taskList: data.tasks }); //TODO
+    });
     this.post_method(
       "",
       "http://127.0.0.1:5000/button_get_active_penalty",
@@ -244,7 +297,17 @@ class Dashboard extends Component {
           {this.renderSection("Tasks", this.renderTasks)}
           {this.renderSection("Penalty Points")}
           {this.renderSection("Reward Points")}
+          {/* Penalty Points Chart */}
+          <div
+            id="penaltyPointsChartDiv"
+            style={{ width: "100%", height: "500px" }}
+          ></div>
 
+          {/* Rewards Points Chart */}
+          <div
+            id="rewardsPointsChartDiv"
+            style={{ width: "100%", height: "500px" }}
+          ></div>
           {this.state.modal ? (
             <ModalCompletion
               activeItem={this.state.activeItem}
