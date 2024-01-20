@@ -1,14 +1,17 @@
 import json
 import json_manager
 import enum_list as enu
+import uuid
 
 class Penalty:
-    def __init__(self, content):
+    def __init__(self, content,id=None):
+        self.id = str(id) if id is not None else str(uuid.uuid4())
         self.content = content #Cold Shower 1 time
        
     def to_json(self):
         # Convert instance to a dictionary
         penalty_dict = {
+            "id": self.id,
             "content": self.content
         }
         return json.dumps(penalty_dict)

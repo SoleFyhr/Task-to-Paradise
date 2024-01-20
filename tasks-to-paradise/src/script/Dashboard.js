@@ -22,8 +22,11 @@ class Dashboard extends Component {
         type: "",
       },
       checkedTasks: {},
+      onceList: [],
+      dailyList: [],
+      habitsList: [],
+      prohibitedList: [],
       taskList: [],
-      taskListProhibited: [],
       activePenaltyList: [],
     };
   }
@@ -96,7 +99,16 @@ class Dashboard extends Component {
 
   refreshList = () => {
     this.post_method("", "http://127.0.0.1:5000/get_tasks", (data) => {
-      this.setState({ taskList: data.tasks }); //TODO
+      // Concatenate the arrays using the spread operator
+      const concatenatedList = [...data.daily, ...data.habits, ...data.once];
+
+      this.setState({
+        onceList: data.once,
+        habitsList: data.habits,
+        dailyList: data.daily,
+        prohibitedList: data.prohibited,
+        taskList: concatenatedList, // Updated taskList
+      });
     });
     this.post_method(
       "",
@@ -173,11 +185,23 @@ class Dashboard extends Component {
 
   handleCompletionActive = (content) => {
     let body_content = JSON.stringify({ content: content });
-    // Introduce a delay before executing the post method
     setTimeout(() => {
       this.post_method(
         body_content,
         "http://127.0.0.1:5000/button_remove_active_penalty",
+        (data) => {
+          this.refreshList();
+        }
+      );
+    }, 500); // Delay in milliseconds, adjust as needed
+  };
+  handleProhibited = (prohibited) => {
+    console.log(prohibited)
+    let body_content = JSON.stringify(prohibited);
+    setTimeout(() => {
+      this.post_method(
+        body_content,
+        "http://127.0.0.1:5000/button_task_completion",
         (data) => {
           this.refreshList();
         }
@@ -194,12 +218,16 @@ class Dashboard extends Component {
   };
 
   calculateDaysLeft = (expirationDate) => {
-    const currentDate = new Date();
-    const dueDate = new Date(expirationDate);
-    const timeDiff = dueDate - currentDate;
-    let number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
-    if (number === 1) number = "1 day left";
-    else number = number === 0 ? "Today" : number + " days left";
+    let number;
+    if (expirationDate === "") number = "Today";
+    else {
+      const currentDate = new Date();
+      const dueDate = new Date(expirationDate);
+      const timeDiff = dueDate - currentDate;
+      number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
+      if (number === 1) number = "1 day left";
+      else number = number === 0 ? "Today" : number + " days left";
+    }
     return number;
   };
 
@@ -221,12 +249,11 @@ class Dashboard extends Component {
     return starElements;
   };
 
-  renderTasks = () => {
-    const newItems = this.state.taskList.slice(0, 5);
+  renderTasks = (newItems) => {
     return newItems.map((item) => (
       <li
-        key={item.title}
-        className={`dashboard task-grid basic ${
+        key={item.id}
+        className={`task-grid basic ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -243,6 +270,28 @@ class Dashboard extends Component {
           <div className="difficulty-stars">
             {this.renderStars(item.difficulty)}
           </div>
+
+          <div>{`-${item.importance}`}</div>
+        </div>
+      </li>
+    ));
+  };
+
+  renderProhibited = (newItems) => {
+    return newItems.map((item) => (
+      <li
+        key={item.id}
+        className={`dashboard task-grid basic ${
+          item.penalty_induced ? "penalty" : "no-penalty"
+        } ${item.task_type}`}
+      >
+        {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
+        <CustomCheckbox
+          onCheck={() => this.handleProhibited(item)}
+        />
+        <span className="task-title">{item.title}</span>
+        <span className="days-left"></span>
+        <div className="difficulty-importance-column">
           <div>{`-${item.importance}`}</div>
         </div>
       </li>
@@ -251,7 +300,7 @@ class Dashboard extends Component {
 
   renderActive = () => {
     return this.state.activePenaltyList.map((item, index) => (
-      <li key={item.content} className={`dashboard task-grid basic no-penalty`}>
+      <li key={item.id} className={`dashboard task-grid basic no-penalty`}>
         <CustomCheckbox
           onCheck={() => this.handleCompletionActive(item.content)}
         />
@@ -272,15 +321,18 @@ class Dashboard extends Component {
     ));
   };
 
-  renderSection(title, renderFunction = null) {
+  renderSection(title, renderFunction = null, args = null) {
     return (
-      <div className="col-md-6 col-sm-10 mx-auto p-0">
+      <div className="scroll-section-tasks">
+      <div className="col-md-6 col-sm-10 mx-auto p-0 ">
+      {this.renderTabList(title)}
         <div className=" p-3 ">
-          {this.renderTabList(title)}
+          
           {renderFunction ? (
-            <ul className=" list-group-flush">{renderFunction()}</ul>
+            <ul className=" list-group-flush">{renderFunction(args)}</ul>
           ) : null}
         </div>
+      </div>
       </div>
     );
   }
@@ -288,20 +340,30 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <main className="content">
-          <h2 className="text-uppercase text-center my-4">Tasks To Paradise</h2>
-
+        <main className="content scroll-container">
+          <div className="scroll-section-title">
+            <h1 className="title">TASKS TO PARADISE</h1>
+          </div>
           {this.state.activePenaltyList.length === 0
             ? ""
             : this.renderSection("Do it or it doubles", this.renderActive)}
-          {this.renderSection("Tasks", this.renderTasks)}
+          {this.renderSection(
+            "Tasks",
+            this.renderTasks,
+            this.state.taskList.slice(0, 8)
+          )}
+          {this.renderSection(
+            "Prohibited",
+            this.renderProhibited,
+            this.state.prohibitedList
+          )}
           {this.renderSection("Penalty Points")}
-          {this.renderSection("Reward Points")}
-          {/* Penalty Points Chart */}
           <div
             id="penaltyPointsChartDiv"
             style={{ width: "100%", height: "500px" }}
           ></div>
+          {this.renderSection("Reward Points")}
+          {/* Penalty Points Chart */}
 
           {/* Rewards Points Chart */}
           <div

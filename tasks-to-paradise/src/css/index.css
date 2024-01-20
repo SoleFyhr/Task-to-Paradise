@@ -1,57 +1,49 @@
-@import url('https://fonts.google.com/specimen/Playfair+Display?preview.text=Perform%20Japanese&stroke=Serif&vfonly=true&subset=latin&noto.script=Latn');
+@import url("https://fonts.google.com/specimen/Playfair+Display?preview.text=Perform%20Japanese&stroke=Serif&vfonly=true&subset=latin&noto.script=Latn");
 
-
-body {
-  margin: 0;
-  padding:0;
-  font-family: sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background-color: rgb(0, 0, 0); 
+:root {
+  --main-bg-color: #013120;
+  --second-bg-color: #5c605e5f;
+  --navbar-bg-color: #94c6b0;
+  --navbar-color-text: #013120;
+  --navbar-hover-color: #bddbce;
+  --title-color: #fffaee;
+  --title-second: #d889139f;
 }
 
-.todo-title{
-  cursor:pointer;
+* {
+font-family: "Playfair Display", serif;
+
 }
-.completed-todo { 
+.completed-todo {
   text-decoration: line-through;
 }
+.tab-list {
+  margin-bottom: 40px;
+}
 .tab-list > span {
-  padding: 5px 8px;
-  border : 1px solid rgb(128, 5, 5);
-  border-radius:5px;
-  margin-right:5px;
+  padding: 8px;
+  border: 1px solid rgb(255, 250, 250);
+  font-family: "Playfair Display", serif;
+  font-weight: 500;
+  border-radius: 5px;
   cursor: pointer;
 }
-.tab-list>span.active {
+.tab-list > span.active {
   background-color: rgb(5, 5, 128);
-  color:#fff;
+  color: #fff;
 }
 /*! -----------ELEMENTS------------ */
-body {
-  background-color: black;
-  color: white;
-}
-
-h2,h1 {
-  color:white;
-}
 
 .taskZone {
-  margin-bottom:20px ;
+  margin-bottom: 50px;
 }
 
-.content{
+.content {
   margin-bottom: 10%;
 }
 
-.dashboard{
-  margin-bottom: 5%;
-  border: 0.2px solid rgb(179, 167, 167);
-  
-}
-
 .penaltyGroup {
-  margin-top:20px ;
+  margin-top: 20px;
 }
 
 .outer-flex-container {
@@ -66,81 +58,96 @@ h2,h1 {
   align-items: center;
   gap: 20px; /* Adjust the gap as needed */
 }
-/*! -----------HEADER------------ */
 
-header {
-  
-  padding: 10px 0;
-}
+/*! -----------TEXT------------ */
 
-/* Style the navigation bar */
-nav {
+.title {
+  color: white;
+  /* padding-top: 40vh; */
+  font-size: clamp(25px, 4vw, 50px);
+  font-family: "Playfair Display", serif;
+  font-weight: 800;
   text-align: center;
 }
 
-/* Style the unordered list */
+/*! -----------HEADER------------ */
+
+nav {
+  text-align: center;
+  margin-top: 20px;
+}
+
 nav ul {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding-top: 0;
 }
 
-/* Style each list item */
 nav ul li {
-  display: inline; /* Inline display for horizontal alignment */
-  margin: 0 10px; /* Spacing between items */
+  display: inline;
 }
 
-/* Style the links */
 nav ul li a {
   color: white;
-  text-decoration: none; /* Removes underline from links */
-  padding: 5px 10px; /* Padding for clickable area */
+  font-family: "Playfair Display", serif;
+  font-weight: 300;
+  margin: 6px 40px 6px 40px;
+
+  font-size: clamp(14px, 1.8vw, 30px);
+  text-decoration: none;
+  position: relative;
 }
 
-/* Style the links on hover */
-nav ul li a:hover {
-  background-color: grey; /* Change color on hover */
+nav ul li a::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 1px;
+  bottom: 0px;
+  left: 0px;
+  background-color: white;
+  transform-origin: top right; /* Origin set to left for the initial state */
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+}
+
+nav ul li a:hover::before {
+  transform: scaleX(1);
+  transform-origin: top left; /* Change origin to right on hover */
 }
 
 /*!----------- BUTTTONNNN */
 
 button.btn-info {
   background-color: rgb(39, 135, 194);
-  color:#fff;
+  color: #fff;
 }
 .btn-spacing {
   margin-right: 10px;
-  color:#fff;
+  color: #fff;
 }
 
 li.basic {
-  
   background-color: #031523;
-  color:white
+  color: white;
 }
-li.once {
-  
-  background-color:#1766a3;
-  color:white
+li.habits {
+  background-color: #09477747;
+  color: white;
 }
 
-li.habits {
-  
-  background-color:#a4912388;
-  color:white
+li.once {
+  background-color: #31227342;
+  color: white;
 }
 
 li.daily {
-  
-  background-color:rgba(143, 12, 106, 0.715);
+  background-color: rgba(76, 11, 80, 0.336);
 }
 li.prohibited {
-  
-  background-color:rgb(139, 0, 0);
+  background-color: rgba(103, 11, 11, 0.367);
 }
-
-
 
 .button-group {
   display: flex; /* This ensures buttons are lined up horizontally */
@@ -149,15 +156,21 @@ li.prohibited {
 
 /*!----------- GRID-------------- */
 
-
 .task-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   align-items: center;
   justify-items: center;
-  padding : 12px 10px 12px 11px;
+  padding: 12px 10px 12px 11px;
   gap: 10px;
   border-radius: 12px;
+  transition: transform 0.5s ease;
+  margin-bottom: 5%;
+  border: 0.5px solid rgba(223, 210, 210, 0.421);
+}
+
+.task-grid:hover {
+  transform: scale(1.03);
 }
 
 .task-grid.penalty {
@@ -171,32 +184,27 @@ li.prohibited {
 /*!----------- TASK-------------- */
 
 .star-icon {
-
   width: 2vw;
   height: auto;
   max-width: 30px;
   min-width: 15px;
-
 }
 
 .exclamation-icon {
-
   width: 2.5vw;
   height: auto;
   max-width: 50px;
   min-width: 15px;
-
 }
 
 .difficulty-importance-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size:calc(0.3vw + 0.9rem);
+  font-size: calc(0.3vw + 0.9rem);
   justify-content: center;
-  color: rgb(255, 0, 0)
+  color: rgb(255, 0, 0);
 }
-
 
 .difficulty-stars {
   display: flex; /* Enables flexbox */
@@ -205,14 +213,33 @@ li.prohibited {
 }
 
 .task-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-weight: 300; /* Makes the title bold */
   font-size: calc(0.5vw + 1rem);
 }
 
 .days-left {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: calc(0.5vw + 0.8rem);
-  font-weight:500;
+  font-weight: 500;
+}
 
+/*! -----------SCROLL------------ */
+
+.scroll-container {
+  scroll-snap-type: y mandatory; /* Vertical scrolling */
+  overflow-y: scroll;
+  height: 100vh; /* Adjust as needed */
+}
+
+.scroll-section-title {
+  scroll-snap-align: start;
+  height: 100vh;
+  padding-top: 40vh;
+}
+
+.scroll-section-tasks {
+  scroll-snap-align: start;
+  height: 100vh;
+  padding-top: 10vh;
 }

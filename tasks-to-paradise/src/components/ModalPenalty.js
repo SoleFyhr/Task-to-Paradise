@@ -1,18 +1,20 @@
 import React, { Component } from "react";
-// importing all of these classes from reactstrap module
 import {
-  Button,
   Modal,
+  ModalOverlay,
+  ModalContent,
   ModalHeader,
-  ModalBody,
   ModalFooter,
-  Form,
-  FormGroup,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
   Input,
-  Label,
-} from "reactstrap";
+  Select,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 
-// build a class base component
 class CustomModalPenalty extends Component {
   constructor(props) {
     super(props);
@@ -48,70 +50,66 @@ class CustomModalPenalty extends Component {
     }
   };
 
-
-
-  // rendering modal in the custommodal class received toggle and on save as props,
   render() {
     const { toggle } = this.props;
-    const { validationErrors } = this.state;
+    const { validationErrors, activeItem } = this.state;
 
     return (
-      <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Penalty </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="content">Content</Label>
+      <Modal isOpen={true} onClose={toggle}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{this.state.sectionName}</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
+            <FormControl isInvalid={!!validationErrors.content}>
+              <FormLabel htmlFor="content">Content</FormLabel>
               <Input
+                id="content"
                 type="text"
                 name="content"
-                value={this.state.activeItem.content}
+                value={activeItem.content}
                 onChange={this.handleChange}
                 placeholder={`Enter ${this.state.sectionName} Content`}
-                invalid={!!validationErrors.content}
               />
-              {validationErrors.content && (
-                <div className="text-danger">{validationErrors.content}</div>
-              )}
-            </FormGroup> 
+              <FormErrorMessage>{validationErrors.content}</FormErrorMessage>
+            </FormControl>
 
-            <FormGroup>
-              <Label for="type">Type</Label>
-              <Input
-                type="select"
+            <FormControl>
+              <FormLabel htmlFor="type">Type</FormLabel>
+              <Select
+                id="type"
                 name="type"
-                value={this.state.activeItem.type}
+                value={activeItem.type}
                 onChange={this.handleChange}
               >
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
-              </Input>
-            </FormGroup>
-            
-            <FormGroup>
-              <Label for="place">Place in { this.state.sectionName } list</Label>
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <FormLabel htmlFor="place">Place in {this.state.sectionName} list</FormLabel>
               <Input
+                id="place"
                 type="text"
                 name="place"
-                value={this.state.activeItem.place}
+                value={activeItem.place}
                 onChange={this.handleChange}
-              >
-                
-              </Input>
-            </FormGroup>
+              />
+            </FormControl>
+          </ModalBody>
 
-          
-          </Form>
-        </ModalBody>
-        {/* create a modal footer */}
-        <ModalFooter>
-          <Button color="success" onClick={this.handleSave}>
-            Save
-          </Button>
-        </ModalFooter>
+          <ModalFooter>
+            <Button colorScheme="green" onClick={this.handleSave}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     );
   }
 }
+
 export default CustomModalPenalty;

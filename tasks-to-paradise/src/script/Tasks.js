@@ -14,6 +14,8 @@ class Tasks extends Component {
         content: "",
         difficulty: "",
         expiration_time: "",
+        time_to_completion: "",
+        frequency_coming_back: "",
         importance: "",
         penalty_induced: null,
         type: "",
@@ -126,6 +128,8 @@ class Tasks extends Component {
       content: "",
       difficulty: "easy",
       expiration_time: formattedDate, // Set to current date
+      time_to_completion: "",
+      frequency_coming_back: "",
       importance: "not so important",
       penalty_induced: null,
       type: "once",
@@ -133,9 +137,9 @@ class Tasks extends Component {
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
 
-  handleDelete = (title) => {
+  handleDelete = (id) => {
     let body_content = JSON.stringify({
-      title: title,
+      id: id,
     });
     this.post_method(
       body_content,
@@ -162,7 +166,7 @@ class Tasks extends Component {
   renderItems = (list) => {
     return list.map((item) => (
       <li
-        key={item.title}
+        key={item.id}
         className={`list-group-item d-flex align-items-center ${item.difficulty}`}
       >
         <div className="d-flex align-items-center flex-grow-1 mr-2">
@@ -182,7 +186,7 @@ class Tasks extends Component {
             Edit
           </button>
           <button
-            onClick={() => this.handleDelete(item.title)}
+            onClick={() => this.handleDelete(item.id)}
             className="btn btn-danger"
           >
             Delete

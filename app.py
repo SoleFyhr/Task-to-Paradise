@@ -9,14 +9,14 @@ import enum_list as enu
 import manager as man
 import other_stuff as other
 import os
-
+ 
 app = Flask(__name__, static_folder='./tasks-to-paradise/build')
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 
-#------------------ HTML ------------------
+#!------------------ HTML ------------------
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
@@ -24,30 +24,6 @@ def serve(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-
-# @app.route('/')
-# @app.route('/<path:path>')
-# def serve():
-#     print("ayoooo")
-#     return send_from_directory('./tasks-to-paradise/build', 'index.html')
-
-# @app.route('/')
-# def home():
-#     user = {'username': 'Fyhr'}
-#     tasks_ = ta.get_all_tasks()
-#     return render_template('home.html', user=user,tasks=tasks_)
-#     #return render_template('base.html')
-
-
-# @app.route('/tasks')
-# def tasks_page():
-#     tasks_ = ta.get_all_tasks()
-#     return render_template('tasks.html',tasks = tasks_)
-
-# @app.route('/penalty')
-# def penalty_page():
-#     penalty_ = pe.get_all_penalty() #Separate in the function for daily etc
-#     return render_template('penalty.html')
 
 
 #!------------------ TASK ------------------
@@ -68,15 +44,18 @@ def my_function():
     importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
     penalty_induced = data.get('penalty_induced')# title of the penalty
-    task_feedback = ta.create_new_task(title, content,type, expiration_time,difficulty, importance,penalty_induced)
+    time_to_completion = data.get('time_to_completion')
+    frequency_coming_back = data.get('frequency_coming_back')
+    
+    task_feedback = ta.create_new_task(title=title, content=content,type=type, expiration_time=expiration_time,difficulty= difficulty, importance=importance,penalty_induced=penalty_induced,time_to_completion=time_to_completion,frequency_coming_back=frequency_coming_back)
     response_data = {"message": "Task added successfully","task":task_feedback}
     return jsonify(response_data)
 
-@app.route('/get_dashboard_tasks', methods=['POST'])
-def all_dashboard_tasks():
-    tasks = ta.get_all_tasks('fyhr')
-    response_data = {"message": "Task sent successfully","tasks":tasks}
-    return jsonify(response_data)
+# @app.route('/get_dashboard_tasks', methods=['POST'])
+# def all_dashboard_tasks():
+#     tasks = ta.get_all_tasks('fyhr')
+#     response_data = {"message": "Task sent successfully","tasks":tasks}
+#     return jsonify(response_data)
 
 @app.route('/get_tasks', methods=['POST'])
 def all_tasks():
@@ -86,12 +65,11 @@ def all_tasks():
 
 @app.route('/button_delete_task', methods=['POST'])
 def function_task_deleting():
-
     data = request.json  # This will contain the data sent from the JavaScript
-    title = data.get('title')
+    id = data.get('id')
     
 
-    ta.delete_task(title,'fyhr')
+    ta.delete_task(id,'fyhr')
     response_data = {"message": "Task deleted successfully"}
     return jsonify(response_data) #if it's once or habits, it should be erased (for habits it will just appear again the next day/week...)
 
@@ -100,20 +78,20 @@ def function_task_deleting():
 def function_task_completion():
 
     data = request.json  # This will contain the data sent from the JavaScript
-    title = data.get('title')
-    type =  enu.TaskType.from_string(data.get('type'))
+    id = data.get('id')
+    type =  enu.TaskType.from_string(data.get('task_type'))
  
 
     if(type == enu.TaskType.PROHIBITED):
-        if(data.get('penalty_induced') == None): #test this
+        if(data.get('penalty_induced') != None): #test this
             pe.activate_penalty_through_content('fyhr',data.get('penalty_induced'))
-        man.penalty_task_done('fyhr',title)
+        man.penalty_task_done('fyhr',id)#TODO
         response_data = {"message": "Task treated successfully","action":"reactivate"}
  
 
     else: #Not a prohibited task
         completion = enu.Completion.from_string(data.get('completion'))
-        man.task_completed('fyhr',title,completion)
+        man.task_completed('fyhr',id,completion)
         #remove task from pending (delete once or move to trash, and move habits and daily in other compartiments)        
         response_data = {"message": "Task treated successfully","action":"erase"}
 

@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import {
-  Button,
   Modal,
+  ModalOverlay,
+  ModalContent,
   ModalHeader,
+  ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Form,
-  FormGroup,
+  Button,
+  FormControl,
+  FormLabel,
   Input,
-  Label,
-} from "reactstrap";
+  FormErrorMessage,
+} from "@chakra-ui/react";
 
 class CustomModalSequence extends Component {
   constructor(props) {
     super(props);
-    // Create an initial state based on the number of inputs
     const activeItem = {};
     for (let i = 1; i <= this.props.numberOfInputs; i++) {
       activeItem[`number${i}`] = '';
@@ -57,20 +59,18 @@ class CustomModalSequence extends Component {
 
     for (let i = 1; i <= this.props.numberOfInputs; i++) {
       inputFields.push(
-        <FormGroup key={`number${i}`}>
-          <Label for={`number${i}`}>{`Number ${i}`}</Label>
+        <FormControl key={`number${i}`} isInvalid={!!validationErrors[`number${i}`]}>
+          <FormLabel htmlFor={`number${i}`}>{`Number ${i}`}</FormLabel>
           <Input
+            id={`number${i}`}
             type="text"
             name={`number${i}`}
             value={activeItem[`number${i}`]}
             onChange={this.handleChange}
             placeholder={`Enter Number ${i}`}
-            invalid={!!validationErrors[`number${i}`]}
           />
-          {validationErrors[`number${i}`] && (
-            <div className="text-danger">{validationErrors[`number${i}`]}</div>
-          )}
-        </FormGroup>
+          <FormErrorMessage>{validationErrors[`number${i}`]}</FormErrorMessage>
+        </FormControl>
       );
     }
 
@@ -81,18 +81,22 @@ class CustomModalSequence extends Component {
     const { toggle } = this.props;
 
     return (
-      <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Sequence</ModalHeader>
-        <ModalBody>
-          <Form>
+      <Modal isOpen={true} onClose={toggle}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Sequence</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
             {this.renderInputFields()}
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="success" onClick={this.handleSave}>
-            Save
-          </Button>
-        </ModalFooter>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="green" onClick={this.handleSave}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     );
   }

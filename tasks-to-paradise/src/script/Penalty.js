@@ -68,7 +68,7 @@ class Penalty extends Component {
   renderItems = (newItems, type) => {
     return newItems.map((item, index) => (
       <li
-        key={index}
+        key={item.id}
         className={`list-group-item d-flex justify-content-between align-items-center ${item.difficulty}`}
       >
         <span>{(index + 1) * 10}</span>

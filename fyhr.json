@@ -1,116 +1,98 @@
 {
-    "tasks": [
-        {
-            "title": "Medium Habits Task",
-            "content": "At",
-            "task_type": "habits",
-            "expiration_time": "2024-01-15",
-            "difficulty": "medium",
-            "importance": 5,
-            "penalty_induced": null
-        },
-        {
-            "title": "prooo",
-            "content": "ouytf",
-            "task_type": "prohibited",
-            "expiration_time": "2024-01-18",
-            "difficulty": "easy",
-            "importance": 13,
-            "penalty_induced": null
-        },
-        {
-            "title": "prohibitede",
-            "content": "efsd",
-            "task_type": "prohibited",
-            "expiration_time": "2024-12-30",
-            "difficulty": "easy",
-            "importance": 5,
-            "penalty_induced": null
-        }
-    ],
+    "tasks": {
+        "once": [
+            {
+                "id": "6da8d357-15ae-49db-99ef-49175cce788b",
+                "title": "SuperTest",
+                "content": "",
+                "task_type": "once",
+                "expiration_time": "2024-01-23",
+                "difficulty": "hard",
+                "importance": 8,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
+        ],
+        "daily": [
+            {
+                "id": "470a78d4-c615-45f0-8e9c-6cc47b72dcc8",
+                "title": "SuperTest",
+                "content": "",
+                "task_type": "daily",
+                "expiration_time": "",
+                "difficulty": "hard",
+                "importance": 10,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
+        ],
+        "habits": [
+            {
+                "id": "20877e6b-4ede-401f-b0c5-d53e846890a3",
+                "title": "SuperTest",
+                "content": "",
+                "task_type": "habits",
+                "expiration_time": "2024-02-11",
+                "difficulty": "hard",
+                "importance": 10,
+                "penalty_induced": null,
+                "time_to_completion": 7,
+                "frequency_coming_back": 3
+            }
+        ],
+        "prohibited": [
+            {
+                "id": "876c255c-80ea-4ef3-b71f-c8a4cdd3713b",
+                "title": "Prohibited",
+                "content": "",
+                "task_type": "prohibited",
+                "expiration_time": "2024-01-20",
+                "difficulty": "easy",
+                "importance": 5.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
+        ]
+    },
     "projects": [],
     "penalty": {
         "daily": [
             {
-                "content": "Douche Chaude"
+                "id": "238e7e9e-8bb7-4d39-852a-232308299358",
+                "content": "Douche Froidi"
             },
             {
-                "content": "Douche Moyenne"
-            },
-            {
-                "content": "Douche Froide"
+                "id": "37b352af-eb91-4681-a7ba-60a084ad628f",
+                "content": "TestoModal"
             }
         ],
-        "weekly": [
-            {
-                "content": "Douche Moyenno"
-            },
-            {
-                "content": "Douche Brulante2"
-            },
-            {
-                "content": "Douche Brulante"
-            }
-        ],
-        "monthly": [
-            {
-                "content": "Douche Brulante2"
-            },
-            {
-                "content": "Douche Brul"
-            }
-        ],
-        "active": [
-            {
-                "content": "Douche Chaude"
-            },
-            {
-                "content": "Douche Chaude2"
-            },
-            {
-                "content": "Douche C"
-            },
-            {
-                "content": "Douche Chaude3"
-            }
-        ]
+        "weekly": [],
+        "monthly": [],
+        "active": []
     },
     "reward": {
         "daily": [
             {
-                "content": "Meditate"
-            },
-            {
-                "content": "Meditate3"
-            },
-            {
-                "content": "Meditate2"
+                "id": "6a4383bc-47f0-498e-b874-6b871e52dfc9",
+                "content": "TestReward"
             }
         ],
         "weekly": [
             {
-                "content": "Chillax"
+                "id": "fdd4cd15-386c-4d2c-997f-dbbb3bf4c370",
+                "content": "Tests"
             }
         ],
         "monthly": [
             {
-                "content": "Chill"
+                "id": "219d6605-2a7c-44a4-9469-852d4416b380",
+                "content": "f"
             }
         ],
-        "active": [
-            {
-                "content": "Meditate"
-            },
-            {
-                "content": "Meditate"
-            },
-            {
-                "content": "Douche Tiede"
-            },
-            {
-                "content": "Douche Chaude"
-            }
-        ]
+        "active": []
     },
     "historic": [],
     "penalty_points": {
@@ -145,5 +127,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-15"
+    "last_date": "2024-01-21"
 }

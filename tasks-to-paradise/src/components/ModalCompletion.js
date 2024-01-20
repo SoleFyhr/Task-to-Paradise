@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-// importing all of these classes from reactstrap module
 import {
-  Button,
   Modal,
+  ModalOverlay,
+  ModalContent,
   ModalHeader,
+  ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from "reactstrap";
+  Button,
+  FormControl,
+  FormLabel,
+  Select,
+} from "@chakra-ui/react";
 
-// build a class base component
 class CustomModalCompletion extends Component {
   constructor(props) {
     super(props);
@@ -34,47 +34,46 @@ class CustomModalCompletion extends Component {
 
 
   handleSave = () => {
-   
     this.props.onSave(this.state.activeItem);
-    
   };
 
-
-
-  // rendering modal in the custommodal class received toggle and on save as props,
   render() {
     const { toggle } = this.props;
-
+    const { activeItem } = this.state;
 
     return (
-      <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Completion </ModalHeader>
-        <ModalBody>
-          <Form>
-          <FormGroup>
-              <Label for="completion">Type</Label>
-              <Input
-                type="select"
+      <Modal isOpen={true} onClose={toggle}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Completion</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
+            <FormControl>
+              <FormLabel htmlFor="completion">Type</FormLabel>
+              <Select
+                id="completion"
                 name="completion"
-                value={this.state.activeItem.completion}
+                value={activeItem.completion}
                 onChange={this.handleChange}
               >
                 <option value="went through the motion">Went through the motion</option>
                 <option value="average">Average</option>
                 <option value="good">Good</option>
                 <option value="perfect">Perfect</option>
-              </Input>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        {/* create a modal footer */}
-        <ModalFooter>
-          <Button color="success" onClick={this.handleSave}>
-            Save
-          </Button>
-        </ModalFooter>
+              </Select>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="green" onClick={this.handleSave}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     );
   }
 }
+
 export default CustomModalCompletion;

@@ -4,16 +4,10 @@
   import App from './core/App';
   import reportWebVitals from './core/reportWebVitals';
   import 'bootstrap/dist/css/bootstrap.min.css'; //add this line only in this file
-  import { ChakraProvider, extendTheme } from '@chakra-ui/react';
-  import { ColorModeScript } from "@chakra-ui/react"
+  import { ChakraProvider } from '@chakra-ui/react';
+  import theme from './core/theme'
 
-  // Configure the initial color mode
-  const theme = extendTheme({
-    config: {
-      initialColorMode: 'dark',
-      useSystemColorMode: false,
-    },
-  });
+  
 
 
   const container = document.getElementById('root');
@@ -21,7 +15,6 @@
 
   root.render(
     <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
 
       <React.StrictMode>
         <App />

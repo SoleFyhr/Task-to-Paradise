@@ -1,14 +1,18 @@
 import json
 import json_manager
 import enum_list as enu
+import uuid
+
 
 class Reward:
-    def __init__(self, content):
+    def __init__(self, content,id=None):
+        self.id = str(id) if id is not None else str(uuid.uuid4())
         self.content = content #Meditate
        
     def to_json(self):
         # Convert instance to a dictionary
         reward_dict = {
+            "id": self.id,
             "content": self.content
         }
         return json.dumps(reward_dict)

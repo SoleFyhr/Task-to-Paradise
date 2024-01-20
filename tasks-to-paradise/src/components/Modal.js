@@ -1,18 +1,21 @@
 import React, { Component } from "react";
-// importing all of these classes from reactstrap module
 import {
-  Button,
   Modal,
+  ModalOverlay,
+  ModalContent,
   ModalHeader,
+  ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Form,
-  FormGroup,
+  Button,
+  FormControl,
+  FormLabel,
   Input,
-  Label,
-} from "reactstrap";
+  Select,
+  Checkbox,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 
-// build a class base component
 class CustomModal extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +23,40 @@ class CustomModal extends Component {
       activeItem: this.props.activeItem,
       validationErrors: {},
     };
+    this.fieldConfig = {
+      daily: [
+        "title",
+        "content",
+        "type",
+        "difficulty",
+        "importance",
+        "penalty_induced",
+      ],
+      prohibited: ["title", "content", "type","importance" ],
+      once: [
+        "title",
+        "content",
+        "type",
+        "expiration_time",
+        "difficulty",
+        "importance",
+        "penalty_induced",
+      ],
+      habits: [
+        "title",
+        "content",
+        "type",
+        "expiration_time",
+        "time_to_completion",
+        "frequency_coming_back",
+        "difficulty",
+        "importance",
+        "penalty_induced",
+      ],
+      // Add new types here as needed
+    };
   }
+
   // changes handler to check if a checkbox is checked or not
   handleChange = (e) => {
     let { name, value } = e.target;
@@ -35,7 +71,7 @@ class CustomModal extends Component {
     const { title } = this.state.activeItem;
     let errors = {};
     if (!title) errors.title = "Title is required";
-    
+
     // Add other field validations as necessary
 
     this.setState({ validationErrors: errors });
@@ -48,124 +84,180 @@ class CustomModal extends Component {
     }
   };
 
+  renderField = (fieldName) => {
+    const { activeItem, validationErrors } = this.state;
 
+    switch (fieldName) {
+      case "title":
+        return (
+          <FormControl isInvalid={!!validationErrors.title}>
+            <FormLabel htmlFor="title">Title</FormLabel>
+            <Input
+              id="title"
+              type="text"
+              name="title"
+              value={activeItem.title}
+              onChange={this.handleChange}
+              placeholder="Enter Task Title"
+            />
+            <FormErrorMessage>{validationErrors.title}</FormErrorMessage>
+          </FormControl>
+        );
+      case "content":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="content">Details</FormLabel>
+            <Input
+              id="content"
+              type="text"
+              name="content"
+              value={activeItem.content}
+              onChange={this.handleChange}
+              placeholder="Enter Task Details"
+            />
+          </FormControl>
+        );
+      case "difficulty":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="difficulty">Difficulty</FormLabel>
+            <Select
+              id="difficulty"
+              name="difficulty"
+              value={activeItem.difficulty}
+              onChange={this.handleChange}
+            >
+              <option value="very_easy">Very Easy</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Difficult</option>
+            </Select>
+          </FormControl>
+        );
+      case "importance":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="importance">Importance</FormLabel>
+            <Select
+              id="importance"
+              name="importance"
+              value={activeItem.importance}
+              onChange={this.handleChange}
+            >
+              <option value="not so important">Not so important</option>
+              <option value="important">Important</option>
+              <option value="very important">Very important</option>
+            </Select>
+          </FormControl>
+        );
 
-  // rendering modal in the custommodal class received toggle and on save as props,
+      case "type":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="type">Type</FormLabel>
+            <Select
+              id="type"
+              name="type"
+              value={activeItem.type}
+              onChange={this.handleChange}
+            >
+              <option value="once">Once</option>
+              <option value="daily">Daily</option>
+              <option value="habits">Habits</option>
+              <option value="prohibited">Prohibited</option>
+            </Select>
+          </FormControl>
+        );
+      case "expiration_time":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="expiration_time">Expiration Time</FormLabel>
+            <Input
+              id="expiration_time"
+              type="date"
+              name="expiration_time"
+              value={activeItem.expiration_time}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        );
+      case "time_to_completion":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="time_to_completion">
+              Time to Complete the Habits
+            </FormLabel>
+            <Input
+              id="time_to_completion"
+              type="text"
+              name="time_to_completion"
+              value={activeItem.time_to_completion}
+              onChange={this.handleChange}
+              placeholder="Enter the amount of time under which you should complete the task"
+            />
+          </FormControl>
+        );
+      case "frequency_coming_back":
+        return (
+          <FormControl>
+            <FormLabel htmlFor="frequency_coming_back">
+              Frequency of Coming Back
+            </FormLabel>
+            <Input
+              id="frequency_coming_back"
+              type="text"
+              name="frequency_coming_back"
+              value={activeItem.frequency_coming_back}
+              onChange={this.handleChange}
+              placeholder="Enter the frequency in which the habits should come back in being active"
+            />
+          </FormControl>
+        );
+
+      case "penalty_induced":
+        return (
+          <FormControl>
+            <Checkbox
+              id="penalty_induced"
+              name="penalty_induced"
+              isChecked={activeItem.penalty_induced}
+              onChange={this.handleChange}
+            >
+              Penalty induced
+            </Checkbox>
+          </FormControl>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   render() {
     const { toggle } = this.props;
-    const { validationErrors } = this.state;
+    const { activeItem } = this.state;
+    const fieldsToShow = this.fieldConfig[activeItem.type] || [];
 
     return (
-      <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Task </ModalHeader>
-        <ModalBody>
-          <Form>
-            {/* 3 formgroups
-            1 title label */}
-            <FormGroup>
-              <Label for="title">Title</Label>
-              <Input
-                type="text"
-                name="title"
-                value={this.state.activeItem.title}
-                onChange={this.handleChange}
-                placeholder="Enter Task Title"
-                invalid={!!validationErrors.title}
-                />
-                {validationErrors.title && (
-                  <div className="text-danger">{validationErrors.title}</div>
-                )}
-            </FormGroup>
+      <Modal isOpen={true} onClose={toggle}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Task</ModalHeader>
+          <ModalCloseButton />
 
-            {/* 2 content label */}
-            <FormGroup>
-              <Label for="content">Details</Label>
-              <Input
-                type="text"
-                name="content"
-                value={this.state.activeItem.content}
-                onChange={this.handleChange}
-                placeholder="Enter Task Details"
-              />
-              
-            </FormGroup> 
+          <ModalBody>
+            {fieldsToShow.map((fieldName) => this.renderField(fieldName))}
+          </ModalBody>
 
-            <FormGroup>
-              <Label for="type">Type</Label>
-              <Input
-                type="select"
-                name="type"
-                value={this.state.activeItem.type}
-                onChange={this.handleChange}
-              >
-                <option value="once">Once</option>
-                <option value="daily">Daily</option>
-                <option value="habits">Habits</option>
-                <option value="prohibited">Prohibited</option>
-              </Input>
-            </FormGroup>
-            {/* Rajouter trois milliards de trucs genre, le habits */}
-            <FormGroup>
-              <Label for="expiration_time">Expiration Time</Label>
-              <Input
-                type="date"
-                name="expiration_time"
-                value={this.state.activeItem.expiration_time}
-                onChange={this.handleChange}
-              ></Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="difficulty">Difficulty</Label>
-              <Input
-                type="select"
-                name="difficulty"
-                value={this.state.activeItem.difficulty}
-                onChange={this.handleChange}
-              >
-                <option value="very_easy">Very Easy</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Difficult</option>
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="importance">Importance</Label>
-              <Input
-                type="select"
-                name="importance"
-                value={this.state.activeItem.importance}
-                onChange={this.handleChange}
-              >
-                <option value="not so important">Not so important</option>
-                <option value="important">Important</option>
-                <option value="very important">Very important</option>
-              </Input>
-            </FormGroup>
-
-            {/* 3 penalty induced label */}
-            <FormGroup check>
-              <Label for="penalty induced">
-                <Input
-                  type="checkbox"
-                  name="penalty induced"
-                  checked={this.state.activeItem.penalty_induced}
-                  onChange={this.handleChange}
-                />
-                Penalty induced
-              </Label>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        {/* create a modal footer */}
-        <ModalFooter>
-          <Button color="success" onClick={this.handleSave}>
-            Save
-          </Button>
-        </ModalFooter>
+          <ModalFooter>
+            <Button colorScheme="green" onClick={this.handleSave}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     );
   }
 }
+
 export default CustomModal;

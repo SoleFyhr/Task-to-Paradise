@@ -1,5 +1,6 @@
 import json
 from enum import Enum
+import enum_list as enu
 from datetime import datetime
 
 
@@ -29,48 +30,6 @@ def init_check_procedure(user_id):
         return
     
     return data
-def delete_task_by_title(user_id, title):
-    
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-
-
-    task_to_move = None
-    for task in data[JSONCategory.TASK.value]:
-        if task["title"] == title:
-            task_to_move = task
-            break
-
-    if task_to_move is None:
-        print("Task not found.")
-        return False
-
-    data["tasks"].remove(task_to_move)
-
-    # Write the updated data back to the file
-    with open(user_id +".json",'w') as file:
-        json.dump(data, file, indent=4)
-
-    print("task deleted successfully.")
-
-def get_thing_by_title(user_id, title,category):
-    
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-
-    for obj in data[category.value]:
-        if obj["title"] == title:
-            # Convert the task dictionary to a JSON string
-            obj_json = json.dumps(obj)
-            # Use the from_json method to create a Task object
-            return obj_json
-
-    print("obj not found.")
-    return None
-
-
 
 def get_all_things(category,user_id):
     data = init_check_procedure(user_id)
@@ -80,56 +39,32 @@ def get_all_things(category,user_id):
 
 #----------------- TASKS --------------------------
 
-def add_task_to_json(user_id, new_task_json, category):
-    # Read the existing data from the file
+def add_task_to_json(user_id, new_task_json, category,type):
     data = init_check_procedure(user_id)
-    # Check if the data is None or empty
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")
-
-    # Parse the new task JSON
+    
     new_task = json.loads(new_task_json)
+    if(type == enu.TaskType.ONCE or type == enu.TaskType.HABITS): 
+        new_task_expiration = datetime.strptime(new_task['expiration_time'], "%Y-%m-%d")
+        size_list = len(data[category.value][type.value])
+        if(size_list==0):
+            data[category.value][type.value].append(new_task)
+        else:
+            for index, task in enumerate(data[category.value][type.value]):
+                task_expiration = datetime.strptime(task['expiration_time'], "%Y-%m-%d")
+                if new_task_expiration < task_expiration:
+                    data[category.value][type.value].insert(index, new_task)
+                    break
+                if(index == size_list-1):
+                    data[category.value][type.value].insert(index +1, new_task)
 
-    # Ensure the new task has an expiration date
-    if 'expiration_time' not in new_task or not new_task['expiration_time']:
-        raise ValueError("New task must have an expiration time.")
-
-    # Convert expiration time to a datetime object for comparison
-    new_task_expiration = datetime.strptime(new_task['expiration_time'], "%Y-%m-%d")
-
-    # Find the correct position to insert the new task
-    for index, task in enumerate(data[category.value]):
-        task_expiration = datetime.strptime(task['expiration_time'], "%Y-%m-%d")
-        if new_task_expiration < task_expiration:
-            # Insert the new task before the first task that expires later
-            data[category.value].insert(index, new_task)
-            break
-    else:
-        # If all tasks expire earlier, append the new task
-        data[category.value].append(new_task)
+   
+    else:     
+        data[category.value][type.value].append(new_task) #daily and prohibited don't care about order
 
     with open(user_id +".json", 'w') as file:
         json.dump(data, file, indent=4)
-
-
-def move_task_to_historic(user_id, tasks_to_move):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-
-    if type(tasks_to_move) is list:
-        tasks_to_move_titles = {task.title for task in tasks_to_move}
-    else:
-        tasks_to_move_titles = {tasks_to_move.title}
-    tasks_remaining = [task for task in data["tasks"] if task['title'] not in tasks_to_move_titles]
-    tasks_moved = [task for task in data["tasks"] if task['title'] in tasks_to_move_titles]
-
-    data["tasks"] = tasks_remaining
-    data["historic"].extend(tasks_moved)
-
-    with open(user_id + ".json", 'w') as file:
-        json.dump(data, file, indent=4)
-
 
 def get_all_tasks_by_type(user_id):
     data = init_check_procedure(user_id)
@@ -137,23 +72,113 @@ def get_all_tasks_by_type(user_id):
         raise ValueError("Initial check failed or no data found for user.")
     
     tasks = data[JSONCategory.TASK.value]
+    daily = tasks[enu.TaskType.DAILY.value]
+    habits = tasks[enu.TaskType.HABITS.value]
+    once = tasks[enu.TaskType.ONCE.value]
+    prohibited = tasks[enu.TaskType.PROHIBITED.value]
 
-    tasks_once = []
-    tasks_daily = []
-    tasks_habits = []
-    tasks_prohibited = []
+    return once, daily, habits, prohibited
 
-    for task in tasks:
-        if task["task_type"] == "once":
-            tasks_once.append(task)
-        elif task["task_type"] == "daily":
-            tasks_daily.append(task)
-        elif task["task_type"] == "habits":
-            tasks_habits.append(task)
-        elif task["task_type"] == "prohibited":
-            tasks_prohibited.append(task)
+def delete_task_by_id(user_id, id):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+    once, daily, habits, prohibited = get_all_tasks_by_type(user_id)
+    task_found = False
+    task_types = [("once", once), ("daily", daily), ("habits", habits), ("prohibited", prohibited)]
+    print(id)
+    for task_type, task_list in task_types:
+        for task in task_list:
+            if task["id"] == id:
+                task_list.remove(task)  # Remove the task from the list
+                task_found = True
+                break
 
-    return tasks_once, tasks_daily, tasks_habits, tasks_prohibited
+        if task_found:
+            break
+
+    if not task_found:
+        print("Task not found.")
+        return False
+
+    data["tasks"]["once"] = once
+    data["tasks"]["daily"] = daily
+    data["tasks"]["habits"] = habits
+    data["tasks"]["prohibited"] = prohibited
+
+    with open(user_id + ".json", 'w') as file:
+        json.dump(data, file, indent=4)
+
+    print("Task deleted successfully.")
+
+def change_one_field_of_given_task(user, type_task, id, parameter, new_value):
+    data = init_check_procedure(user)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+
+    for task in data[JSONCategory.TASK.value][type_task.value]:
+        if task["id"] == id:
+            task[parameter]=new_value
+            break
+
+    with open(user + ".json", 'w') as file:
+        json.dump(data, file, indent=4)
+
+
+def get_thing_by_id(user_id, id,category):
+    
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+    
+    once, daily, habits, prohibited = get_all_tasks_by_type(user_id)
+    task_types = [("once", once), ("daily", daily), ("habits", habits), ("prohibited", prohibited)]
+
+    for task_type, task_list in task_types:
+        for task in task_list:
+            if task["id"] == id:
+                obj_json = json.dumps(task)
+            # Use the from_json method to create a Task object
+                return obj_json
+
+        
+
+
+    print("Task not found.")
+    return False
+
+
+#TODO
+def move_task_to_historic(user_id, tasks_to_move):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+
+    # Ensure tasks_to_move is a list
+    if not isinstance(tasks_to_move, list):
+        tasks_to_move = [tasks_to_move]
+
+    # Create a set of IDs for the tasks to move
+    tasks_to_move_id = {task.id for task in tasks_to_move}
+
+    # Iterate over each task category and update tasks
+    for category in data["tasks"]:
+        # Filter out tasks that need to be moved to 'historic'
+        tasks_remaining = [task for task in data["tasks"][category] if task['id'] not in tasks_to_move_id]
+        tasks_moved = [task for task in data["tasks"][category] if task['id'] in tasks_to_move_id and task['task_type'] != enu.TaskType.ONCE.value]
+
+        # Update the tasks in the current category
+        data["tasks"][category] = tasks_remaining
+
+        # Add the moved tasks to the 'historic' category
+        data["historic"].extend(tasks_moved)
+
+    # Save the updated data to the file
+    with open(user_id + ".json", 'w') as file:
+        json.dump(data, file, indent=4)
+
+
+
 
 
 
@@ -419,6 +444,11 @@ def read_usernames_from_file(file_path):
 def add_user_to_user_file(file_path, new_user):
     with open(file_path, 'a') as file:
         file.write(new_user + '\n')
+
+
+
+#----------------- ID --------------------------
+
 
 
 #!alert
