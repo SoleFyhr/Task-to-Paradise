@@ -50,7 +50,7 @@ class CustomModalCompletion extends Component {
 
           <ModalBody>
             <FormControl>
-              <FormLabel htmlFor="completion">Type</FormLabel>
+              <FormLabel htmlFor="completion">Level of Completion</FormLabel>
               <Select
                 id="completion"
                 name="completion"
@@ -66,7 +66,7 @@ class CustomModalCompletion extends Component {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="green" onClick={this.handleSave}>
+            <Button colorScheme="blue" onClick={this.handleSave}>
               Save
             </Button>
           </ModalFooter>

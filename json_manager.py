@@ -13,6 +13,8 @@ class JSONCategory(Enum):
     PROJECT = "projects"
     PENALTY = "penalty"
     REWARD = "reward"
+    HISTORIC = "historic"
+
     PPOINTS = "penalty_points"
     RPOINTS = "reward_points"
     DATE ="last_date"
@@ -148,7 +150,6 @@ def get_thing_by_id(user_id, id,category):
     return False
 
 
-#TODO
 def move_task_to_historic(user_id, tasks_to_move):
     data = init_check_procedure(user_id)
     if data is None:
@@ -178,7 +179,18 @@ def move_task_to_historic(user_id, tasks_to_move):
         json.dump(data, file, indent=4)
 
 
+def clean_historic(user):
+    data = init_check_procedure(user)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
 
+    for task in data[JSONCategory.HISTORIC.value]:
+        if task["task_type"] == enu.TaskType.DAILY.value:
+            data[JSONCategory.TASK.value][enu.TaskType.DAILY.value].append(task)
+            data[JSONCategory.HISTORIC.value].remove(task)
+
+    with open(user + ".json", 'w') as file:
+        json.dump(data, file, indent=4)
 
 
 

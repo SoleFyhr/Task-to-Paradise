@@ -79,19 +79,22 @@ function App() {
 }
 export default App;
 
-
-//Corriger bug des prohibited dont la checkbox est pas remise à defaut.
-//Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
-//Changer le format des taches dans tasks pour faire comme dans dashboard.
 //Rendre les textes des autres sections un minmum beau.
 
-//S'occuper de clean l'historique tous les jours, enelever les taches après x temps(si once ou alors), et remettre les daily habits (comment faire si qqn veut supprimer une daily et qu'elle est dans historique?), et de remettre les daily tous les jours et les habits a toutes les frequences, et remettre à jour leur date d'expiration à ajd quand on les remet et flean les date of completion a 0 de habits
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //S'occuper du responsive et améliorer le thème un minimum.
+
+
+//Changer le format des taches dans tasks pour faire comme dans dashboard.
+//S'occuper de clean l'historique tous les jours, enlever les taches après x temps(si once ou alors), et remettre les daily habits (comment faire si qqn veut supprimer une daily et qu'elle est dans historique?), et de remettre les daily tous les jours et les habits a toutes les frequences, et remettre à jour leur date d'expiration à ajd quand on les remet et flean les date of completion a 0 de habits
+
 
 //Deploy
 //S'occuper des différents users
 //Faire penalty induced
+//Corriger problème d'alignement entre menu et titre
+//Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
+
 
 //SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard
 //S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)

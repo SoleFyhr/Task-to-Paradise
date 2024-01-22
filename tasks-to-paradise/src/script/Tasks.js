@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Modal from "../components/Modal";
 import ModalCompletion from "../components/ModalCompletion";
+import starIcon from "../svg/star.svg";
 
 import CustomCheckbox from "../components/CustomCheckbox";
 
@@ -94,15 +95,15 @@ class Tasks extends Component {
     }
   };
 
-  manageCompletion = (title, type) => {
+  manageCompletion = (id, type) => {
     const itemCompletion = {
-      title: title,
+      id: id,
       completion: "went through the motion",
       type: type,
     };
     this.setState((prevState) => ({
       activeItemCompletion: itemCompletion,
-      checkedTasks: { ...prevState.checkedTasks, [title]: true },
+      checkedTasks: { ...prevState.checkedTasks, [id]: true },
       modalCompletion: !this.state.modalCompletion,
     }));
   };
@@ -161,6 +162,87 @@ class Tasks extends Component {
         this.refreshList();
       }
     );
+  };
+
+  calculateDaysLeft = (expirationDate) => {
+    let number;
+    if (expirationDate === "") number = "Today";
+    else {
+      const currentDate = new Date();
+      const dueDate = new Date(expirationDate);
+      const timeDiff = dueDate - currentDate;
+      number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
+      if (number === 1) number = "1 day left";
+      else number = number === 0 ? "Today" : number + " days left";
+    }
+    return number;
+  };
+
+  renderStars = (difficulty) => {
+    const stars = {
+      very_easy: 0,
+      easy: 1,
+      medium: 2,
+      hard: 3,
+    };
+    let starElements = [];
+
+    for (let i = 0; i < stars[difficulty]; i++) {
+      starElements.push(
+        <img key={i} src={starIcon} alt="star" className="star-icon" />
+      );
+    }
+
+    return starElements;
+  };
+
+  renderTasks = (newItems) => {
+    return newItems.map((item) => (
+      <li
+        key={item.id}
+        className={`task-grid basic ${
+          item.penalty_induced ? "penalty" : "no-penalty"
+        } ${item.task_type}`}
+      >
+        {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
+        <CustomCheckbox
+          onCheck={() => this.manageCompletion(item.id, item.task_type)}
+          checked={this.state.checkedTasks[item.id] || false}
+        />
+        <span className="task-title">{item.title}</span>
+        <span className="days-left">
+          {this.calculateDaysLeft(item.expiration_time)}
+        </span>
+        <div className="difficulty-importance-column">
+          <div className="difficulty-stars">
+            {this.renderStars(item.difficulty)}
+          </div>
+
+          <div>{`-${item.importance}`}</div>
+        </div>
+      </li>
+    ));
+  };
+
+  renderProhibited = (newItems) => {
+    return newItems.map((item) => (
+      <li
+        key={item.id}
+        className={`dashboard task-grid basic ${
+          item.penalty_induced ? "penalty" : "no-penalty"
+        } ${item.task_type}`}
+      >
+        {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
+        <CustomCheckbox
+          onCheck={() => this.handleProhibited(item)}
+        />
+        <span className="task-title">{item.title}</span>
+        <span className="days-left"></span>
+        <div className="difficulty-importance-column">
+          <div>{`-${item.importance}`}</div>
+        </div>
+      </li>
+    ));
   };
 
   renderItems = (list) => {

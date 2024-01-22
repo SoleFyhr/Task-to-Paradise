@@ -19,9 +19,11 @@ class Dashboard extends Component {
       activeItem: {
         title: "",
         completion: "",
-        type: "",
+        task_type: "",
       },
       checkedTasks: {},
+      checkedTasksProhibited: {},
+
       onceList: [],
       dailyList: [],
       habitsList: [],
@@ -158,15 +160,15 @@ class Dashboard extends Component {
     }
   };
 
-  manageCompletion = (title, type) => {
+  manageCompletion = (id, type) => {
     const item = {
-      title: title,
+      id: id,
       completion: "went through the motion",
-      type: type,
+      task_type: type,
     };
     this.setState((prevState) => ({
       activeItem: item,
-      checkedTasks: { ...prevState.checkedTasks, [title]: true },
+      checkedTasks: { ...prevState.checkedTasks, [id]: true },
       modal: !this.state.modal,
     }));
   };
@@ -197,6 +199,9 @@ class Dashboard extends Component {
   };
   handleProhibited = (prohibited) => {
     console.log(prohibited)
+    this.setState((prevState) => ({
+      checkedTasksProhibited: { ...prevState.checkedTasksProhibited, [prohibited.id]: true },
+    }));
     let body_content = JSON.stringify(prohibited);
     setTimeout(() => {
       this.post_method(
@@ -205,8 +210,12 @@ class Dashboard extends Component {
         (data) => {
           this.refreshList();
         }
+        
       );
-    }, 500); // Delay in milliseconds, adjust as needed
+      this.setState(({
+        checkedTasksProhibited: {},
+      }));
+    }, 500); 
   };
 
   renderTabList = (title) => {
@@ -259,8 +268,8 @@ class Dashboard extends Component {
       >
         {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
         <CustomCheckbox
-          onCheck={() => this.manageCompletion(item.title, item.task_type)}
-          checked={this.state.checkedTasks[item.title] || false}
+          onCheck={() => this.manageCompletion(item.id, item.task_type)}
+          checked={this.state.checkedTasks[item.id] || false}
         />
         <span className="task-title">{item.title}</span>
         <span className="days-left">
@@ -288,6 +297,7 @@ class Dashboard extends Component {
         {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
         <CustomCheckbox
           onCheck={() => this.handleProhibited(item)}
+          checked={this.state.checkedTasksProhibited[item.id] || false}
         />
         <span className="task-title">{item.title}</span>
         <span className="days-left"></span>

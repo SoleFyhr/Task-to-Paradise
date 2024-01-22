@@ -21,7 +21,8 @@ def daily_routine():
 
                 pen.reset_total_value(user,enum.TimeEnum.DAILY) #Reset daily ppoint counter, for new day
                 rew.reset_total_value(user,enum.TimeEnum.DAILY) #Reset daily rpoint counter, for new day
-                #TODO if daily done in historic, put it back in daily, if daily not done , don't touch. if habits not done in habits ->let in habits but extend their completion by their time of completion , check if habits in historic don't have to come back, 
+                manage_historic(user) #if daily not done, let in daily but add penalty points, if daily in histroic put back, if habits not done, add penalty points and extend their time expiration by their time of completion, if habits in historic, move back when we reach the good date and change the date of expiration.
+                #TODO check if habits in historic don't have to come back, 
 
                 today = datetime.datetime.now().date()
                 if today.weekday() == 0: #It's Monday
@@ -46,7 +47,6 @@ def check_tasks_expiration(user):
     total_penalty = 0
 
     once, daily, habits,_ = js.get_all_tasks_by_type(user)
-
     for task in daily: #If there is any task in daily, it means they weren't completed on the day so -> failed
         value = int(task["importance"])
         total_penalty += value
@@ -106,17 +106,19 @@ def check_if_new_day(user):
         js.change_date(user,current_date)
         return True
     return False
-        
-#TODO
+
 def task_completed(user, id,completion):
     task = js.get_thing_by_id(user,id,js.JSONCategory.TASK)
     difficulty = enum.Difficulty.from_string(ta.Task.from_json(task).difficulty)
     completion_scaling = ta.get_completion_values('fyhr')
-
+    
     value_completion = enum.Completion.value_completion(completion,completion_scaling)
-
     value_of_task = js.retrieve_value_in_scaling('fyhr',enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
     rew.add_reward_to_all(value_completion*value_of_task,user)
+    if(task["task_type"]==enum.TaskType.HABITS.value):
+        current_date = datetime.datetime.now().date()
+        task["expiration_time"]= current_date
+
     js.move_task_to_historic(user,ta.Task.from_json(task))
     update_reward_unlocking(user,enum.TimeEnum.DAILY) #Choice of doing it only daily. If you do a hard task during your day, I want it to be rewarded. As for the week or the month, I prefer to have it done at the end of the week or end of the month.
     
@@ -129,6 +131,10 @@ def penalty_task_done(user,id):
                 print("error Invalid input. Sequence values must be integers.")
 
     pen.add_penalty_to_all(importance_value,user)
+
+
+def manage_historic(user):
+    js.clean_historic(user)
 
 def user_process(user):
     #Check if the user doesn't exist

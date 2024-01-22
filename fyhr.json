@@ -14,28 +14,15 @@
                 "frequency_coming_back": ""
             }
         ],
-        "daily": [
-            {
-                "id": "470a78d4-c615-45f0-8e9c-6cc47b72dcc8",
-                "title": "SuperTest",
-                "content": "",
-                "task_type": "daily",
-                "expiration_time": "",
-                "difficulty": "hard",
-                "importance": 10,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            }
-        ],
+        "daily": [],
         "habits": [
             {
                 "id": "20877e6b-4ede-401f-b0c5-d53e846890a3",
                 "title": "SuperTest",
                 "content": "",
                 "task_type": "habits",
-                "expiration_time": "2024-02-11",
-                "difficulty": "hard",
+                "expiration_time": "2024-01-25",
+                "difficulty": "easy",
                 "importance": 10,
                 "penalty_induced": null,
                 "time_to_completion": 7,
@@ -44,13 +31,25 @@
         ],
         "prohibited": [
             {
-                "id": "876c255c-80ea-4ef3-b71f-c8a4cdd3713b",
-                "title": "Prohibited",
-                "content": "",
+                "id": "bce5f8ed-4b1f-4ef4-8fe2-407e1ecda50f",
+                "title": "Test",
+                "content": "Prohibited",
                 "task_type": "prohibited",
-                "expiration_time": "2024-01-20",
+                "expiration_time": "2024-01-21",
                 "difficulty": "easy",
                 "importance": 5.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            },
+            {
+                "id": "164b9ebe-3995-4159-98b2-293bf5606ab0",
+                "title": "Prohi",
+                "content": "",
+                "task_type": "prohibited",
+                "expiration_time": "2024-01-21",
+                "difficulty": "easy",
+                "importance": 20.0,
                 "penalty_induced": null,
                 "time_to_completion": "",
                 "frequency_coming_back": ""
@@ -69,9 +68,23 @@
                 "content": "TestoModal"
             }
         ],
-        "weekly": [],
+        "weekly": [
+            {
+                "id": "238e7e9e-8bb7-4d12-852a-232308299358",
+                "content": "Douche Froido"
+            }
+        ],
         "monthly": [],
-        "active": []
+        "active": [
+            {
+                "id": "f6f83964-a3ec-4708-bab7-c947818b481f",
+                "content": "Douche Froido"
+            },
+            {
+                "id": "c3d48d16-4a02-4805-a3a5-49a8912edd98",
+                "content": "Douche Froidi"
+            }
+        ]
     },
     "reward": {
         "daily": [
@@ -92,13 +105,18 @@
                 "content": "f"
             }
         ],
-        "active": []
+        "active": [
+            {
+                "id": "876ded80-eefc-482f-8526-471fbf68c43e",
+                "content": "TestReward"
+            }
+        ]
     },
     "historic": [],
     "penalty_points": {
         "daily": 0,
         "weekly": 0,
-        "monthly": 0
+        "monthly": 10
     },
     "reward_points": {
         "daily": 0,
@@ -127,5 +145,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-21"
+    "last_date": "2024-01-22"
 }
