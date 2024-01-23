@@ -30,6 +30,8 @@ class Dashboard extends Component {
       prohibitedList: [],
       taskList: [],
       activePenaltyList: [],
+      ppoints: [],
+      rpoints: [],
     };
   }
 
@@ -100,18 +102,22 @@ class Dashboard extends Component {
   // }
 
   refreshList = () => {
-    this.post_method("", "http://127.0.0.1:5000/get_tasks", (data) => {
-      // Concatenate the arrays using the spread operator
-      const concatenatedList = [...data.daily, ...data.habits, ...data.once];
+    this.post_method(
+      "",
+      "http://127.0.0.1:5000/get_dashboard_tasks",
+      (data) => {
+        // Concatenate the arrays using the spread operator
+        const concatenatedList = [...data.daily, ...data.habits, ...data.once];
 
-      this.setState({
-        onceList: data.once,
-        habitsList: data.habits,
-        dailyList: data.daily,
-        prohibitedList: data.prohibited,
-        taskList: concatenatedList, // Updated taskList
-      });
-    });
+        this.setState({
+          onceList: data.once,
+          habitsList: data.habits,
+          dailyList: data.daily,
+          prohibitedList: data.prohibited,
+          taskList: concatenatedList, // Updated taskList
+        });
+      }
+    );
     this.post_method(
       "",
       "http://127.0.0.1:5000/button_get_active_penalty",
@@ -119,6 +125,9 @@ class Dashboard extends Component {
         this.setState({ activePenaltyList: data.active });
       }
     );
+    this.post_method("", "http://127.0.0.1:5000/button_get_points", (data) => {
+      this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
+    });
   };
 
   post_method(body_content, path, return_func) {
@@ -128,6 +137,7 @@ class Dashboard extends Component {
         "Content-Type": "application/json",
       },
       body: body_content,
+      credentials: 'include',
     })
       .then((response) => {
         if (response.ok) {
@@ -198,9 +208,11 @@ class Dashboard extends Component {
     }, 500); // Delay in milliseconds, adjust as needed
   };
   handleProhibited = (prohibited) => {
-    console.log(prohibited)
     this.setState((prevState) => ({
-      checkedTasksProhibited: { ...prevState.checkedTasksProhibited, [prohibited.id]: true },
+      checkedTasksProhibited: {
+        ...prevState.checkedTasksProhibited,
+        [prohibited.id]: true,
+      },
     }));
     let body_content = JSON.stringify(prohibited);
     setTimeout(() => {
@@ -210,12 +222,11 @@ class Dashboard extends Component {
         (data) => {
           this.refreshList();
         }
-        
       );
-      this.setState(({
+      this.setState({
         checkedTasksProhibited: {},
-      }));
-    }, 500); 
+      });
+    }, 500);
   };
 
   renderTabList = (title) => {
@@ -290,7 +301,7 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.id}
-        className={`dashboard task-grid basic ${
+        className={` task-grid basic ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -310,7 +321,7 @@ class Dashboard extends Component {
 
   renderActive = () => {
     return this.state.activePenaltyList.map((item, index) => (
-      <li key={item.id} className={`dashboard task-grid basic no-penalty`}>
+      <li key={item.id} className={` task-grid basic no-penalty`}>
         <CustomCheckbox
           onCheck={() => this.handleCompletionActive(item.content)}
         />
@@ -331,18 +342,27 @@ class Dashboard extends Component {
     ));
   };
 
+  renderPoints = (sectionName, pointsType) => {
+    const listNames = ["Daily", "Weekly", "Monthly"];
+
+    return listNames.map((name, index) => (
+      <li className="ppoints-li">
+        <span  key={index} className="points-text">{`${name} ${sectionName} Points: ${pointsType[name.toLowerCase()]}`}</span>
+      </li>
+    ));
+  };
+
   renderSection(title, renderFunction = null, args = null) {
     return (
       <div className="scroll-section-tasks">
-      <div className="col-md-6 col-sm-10 mx-auto p-0 ">
-      {this.renderTabList(title)}
-        <div className=" p-3 ">
-          
-          {renderFunction ? (
-            <ul className=" list-group-flush">{renderFunction(args)}</ul>
-          ) : null}
+        <div className="col-md-6 col-sm-10 mx-auto p-0 ">
+          {this.renderTabList(title)}
+          <div className=" p-3 ">
+            {renderFunction ? (
+              <ul className=" list-group-flush">{renderFunction(args)}</ul>
+            ) : null}
+          </div>
         </div>
-      </div>
       </div>
     );
   }
@@ -351,7 +371,7 @@ class Dashboard extends Component {
     return (
       <>
         <main className="content scroll-container">
-          <div className="scroll-section-title">
+          <div className="scroll-section-title center">
             <h1 className="title">TASKS TO PARADISE</h1>
           </div>
           {this.state.activePenaltyList.length === 0
@@ -367,19 +387,33 @@ class Dashboard extends Component {
             this.renderProhibited,
             this.state.prohibitedList
           )}
-          {this.renderSection("Penalty Points")}
-          <div
-            id="penaltyPointsChartDiv"
-            style={{ width: "100%", height: "500px" }}
-          ></div>
-          {this.renderSection("Reward Points")}
-          {/* Penalty Points Chart */}
+          <div className="scroll-section-tasks">
+            <div className="col-md-6 col-sm-10 mx-auto p-0 ">
+              {this.renderTabList("Penalty")}
+              <div className=" p-3 ">
+                <ul className=" list-group-flush">
+                  {this.renderPoints("Penalty", this.state.ppoints)}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="scroll-section-tasks">
+            <div className="col-md-6 col-sm-10 mx-auto p-0 ">
+              {this.renderTabList("Reward")}
+              <div className=" p-3 ">
+                <ul className=" list-group-flush">
+                  {this.renderPoints("Reward", this.state.rpoints)}
+                </ul>
+              </div>
+            </div>
+          </div>
 
-          {/* Rewards Points Chart */}
-          <div
+
+
+          {/* <div
             id="rewardsPointsChartDiv"
             style={{ width: "100%", height: "500px" }}
-          ></div>
+          ></div> */}
           {this.state.modal ? (
             <ModalCompletion
               activeItem={this.state.activeItem}

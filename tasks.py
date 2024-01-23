@@ -36,18 +36,17 @@ class Task:
 
     @staticmethod
     def from_json(json_str):
-        # Convert JSON string to a dictionary
         task_dict = json.loads(json_str)
         return Task(**task_dict)
     
 
 
-def create_new_task(title,content, type, expiration_time,difficulty=enu.Difficulty.EASY, importance=0,penalty_induced=None,time_to_completion="",frequency_coming_back=""):
+def create_new_task(user,title,content, type, expiration_time,difficulty=enu.Difficulty.EASY, importance=0,penalty_induced=None,time_to_completion="",frequency_coming_back=""):
     
     new_task = Task(title,content,type,expiration_time,difficulty,importance,penalty_induced,time_to_completion,frequency_coming_back)
     task_json = new_task.to_json()
     
-    json_manager.add_task_to_json(json_manager.user, task_json,json_manager.JSONCategory.TASK,type)
+    json_manager.add_task_to_json(user, task_json,json_manager.JSONCategory.TASK,type)
     return task_json
 
 
@@ -61,6 +60,8 @@ def get_all_tasks(user):
 def get_all_tasks_sorted(user):
     return json_manager.get_all_tasks_by_type(user)
 
+def get_all_tasks_sorted_with_historic(user):
+    return json_manager.get_all_tasks_by_type_with_historic(user)
 
 
 def get_importance_values(user):

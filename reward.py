@@ -53,13 +53,13 @@ def activate_reward(user,time,number_iteration):
     contents =  json_manager.penalty_reward_iterate(user,json_manager.JSONCategory.REWARD,time,number_iteration)
     for content in contents:
         json_rew =Reward(content).to_json()
-        json_manager.add_penalty_reward_to_json(json_manager.user,json_rew,json_manager.JSONCategory.REWARD,enu.Active.ACTIVE,-1)
+        json_manager.add_penalty_reward_to_json(user,json_rew,json_manager.JSONCategory.REWARD,enu.Active.ACTIVE,-1)
 
-def remove_active_reward(user,content):
-    json_manager.remove_penalty_reward_in_active(user,content,json_manager.JSONCategory.REWARD)
+def remove_active_reward(user,id):
+    json_manager.remove_penalty_reward_in_active(user,id,json_manager.JSONCategory.REWARD)
     
-def remove_reward(user,content,type):
-    json_manager.delete_penalty_reward_by_content(user,content,json_manager.JSONCategory.REWARD,type)
+def remove_reward(user,id,type):
+    json_manager.delete_penalty_reward_by_id(user,id,json_manager.JSONCategory.REWARD,type)
 
 def get_active_reward(user):
     return json_manager.get_active(json_manager.JSONCategory.REWARD,enu.Active.ACTIVE,user)

@@ -68,6 +68,36 @@ font-family: "Playfair Display", serif;
   font-family: "Playfair Display", serif;
   font-weight: 800;
   text-align: center;
+  justify-content: center;
+}
+.center {
+  text-align: center;
+  justify-content: center;
+
+}
+
+.right {
+  text-align: right;
+  justify-content: right;
+
+}
+
+.points-text {
+  color: white;
+  /* padding-top: 40vh; */
+  font-size: clamp(15px, 2vw, 30px);
+  font-family: "Playfair Display", serif;
+  font-weight: 500;
+  
+}
+
+li {
+  list-style-type: none;
+}
+
+.ppoints-li{
+  margin: 20px;
+
 }
 
 /*! -----------HEADER------------ */
@@ -81,6 +111,10 @@ nav ul {
   list-style-type: none;
   margin: 0;
   padding-top: 0;
+}
+
+nav ul:last-child {
+  margin-left: 40px;
 }
 
 nav ul li {
@@ -116,6 +150,9 @@ nav ul li a:hover::before {
   transform: scaleX(1);
   transform-origin: top left; /* Change origin to right on hover */
 }
+
+
+
 
 /*!----------- BUTTTONNNN */
 
@@ -227,10 +264,20 @@ li.prohibited {
 /*! -----------SCROLL------------ */
 
 .scroll-container {
-  scroll-snap-type: y mandatory; /* Vertical scrolling */
-  overflow-y: scroll;
-  height: 100vh; /* Adjust as needed */
+  scroll-snap-type: y mandatory;
+  overflow-y: auto; /* Allows scrolling */
+  height: 100vh;
 }
+
+/* Making scrollbar transparent */
+.scroll-container::-webkit-scrollbar {
+  width: 0.1em;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 
 .scroll-section-title {
   scroll-snap-align: start;

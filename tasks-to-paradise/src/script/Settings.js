@@ -157,10 +157,12 @@ class Settings extends Component {
   render() {
     return (
       <>
-        <main className="content">
-          <h2 className="text-uppercase text-center my-4">Settings</h2>
-          <div className="outer-flex-container text-center  ">
+        <main className="content scroll-container">
+          {/* <h2 className="text-uppercase text-center my-4">Settings</h2> */}
+          <div className="scroll-section-tasks">
+          <div className="outer-flex-container text-center">
             <div className="inner-flex-container">
+            
               <div>
                 <strong>Pause mode</strong>: {this.state.pause}
               </div>
@@ -174,6 +176,7 @@ class Settings extends Component {
               </span>
             </div>
           </div>
+          
           <div className="outer-flex-container text-center  ">
             <div className="inner-flex-container">
               <div>
@@ -248,6 +251,8 @@ class Settings extends Component {
               </span>
             </div>
           </div>
+          </div>
+          
 
           {this.state.modal ? (
             <ModalSequence

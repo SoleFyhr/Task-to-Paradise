@@ -12,21 +12,33 @@
                 "penalty_induced": null,
                 "time_to_completion": "",
                 "frequency_coming_back": ""
+            },
+            {
+                "id": "f90c2410-92df-4c49-abe4-eae26340384c",
+                "title": "D",
+                "content": "",
+                "task_type": "once",
+                "expiration_time": "2024-01-23",
+                "difficulty": "easy",
+                "importance": 5.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
             }
         ],
         "daily": [],
         "habits": [
             {
-                "id": "20877e6b-4ede-401f-b0c5-d53e846890a3",
-                "title": "SuperTest",
+                "id": "413060bd-bf78-40b5-b086-ca93ff4a6e27",
+                "title": "Habitsss",
                 "content": "",
                 "task_type": "habits",
-                "expiration_time": "2024-01-25",
+                "expiration_time": "2024-01-23",
                 "difficulty": "easy",
-                "importance": 10,
+                "importance": 5.0,
                 "penalty_induced": null,
-                "time_to_completion": 7,
-                "frequency_coming_back": 3
+                "time_to_completion": "3",
+                "frequency_coming_back": "3"
             }
         ],
         "prohibited": [
@@ -35,7 +47,7 @@
                 "title": "Test",
                 "content": "Prohibited",
                 "task_type": "prohibited",
-                "expiration_time": "2024-01-21",
+                "expiration_time": "",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -47,7 +59,7 @@
                 "title": "Prohi",
                 "content": "",
                 "task_type": "prohibited",
-                "expiration_time": "2024-01-21",
+                "expiration_time": "",
                 "difficulty": "easy",
                 "importance": 20.0,
                 "penalty_induced": null,
@@ -62,10 +74,6 @@
             {
                 "id": "238e7e9e-8bb7-4d39-852a-232308299358",
                 "content": "Douche Froidi"
-            },
-            {
-                "id": "37b352af-eb91-4681-a7ba-60a084ad628f",
-                "content": "TestoModal"
             }
         ],
         "weekly": [
@@ -74,17 +82,13 @@
                 "content": "Douche Froido"
             }
         ],
-        "monthly": [],
-        "active": [
+        "monthly": [
             {
-                "id": "f6f83964-a3ec-4708-bab7-c947818b481f",
-                "content": "Douche Froido"
-            },
-            {
-                "id": "c3d48d16-4a02-4805-a3a5-49a8912edd98",
-                "content": "Douche Froidi"
+                "id": "b6b00b00-a48a-433c-aff0-72e86ecedbc0",
+                "content": "d"
             }
-        ]
+        ],
+        "active": []
     },
     "reward": {
         "daily": [
@@ -101,8 +105,8 @@
         ],
         "monthly": [
             {
-                "id": "219d6605-2a7c-44a4-9469-852d4416b380",
-                "content": "f"
+                "id": "e4267cde-fae0-4b85-86b2-cca5caf0ff19",
+                "content": "FF"
             }
         ],
         "active": [
@@ -112,16 +116,41 @@
             }
         ]
     },
-    "historic": [],
+    "historic": [
+        {
+            "id": "cd59f9ea-1fec-42f7-8e25-dcb699730938",
+            "title": "Dailyyy",
+            "content": "",
+            "task_type": "daily",
+            "expiration_time": "",
+            "difficulty": "easy",
+            "importance": 5.0,
+            "penalty_induced": null,
+            "time_to_completion": "",
+            "frequency_coming_back": ""
+        },
+        {
+            "id": "7d580db1-ded3-4bdc-a994-98a97c6720d0",
+            "title": "Daily Expi",
+            "content": "",
+            "task_type": "daily",
+            "expiration_time": "",
+            "difficulty": "easy",
+            "importance": 5.0,
+            "penalty_induced": null,
+            "time_to_completion": "",
+            "frequency_coming_back": ""
+        }
+    ],
     "penalty_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 10
+        "daily": 25,
+        "weekly": 25,
+        "monthly": 35
     },
     "reward_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 0
+        "daily": 1.5,
+        "weekly": 3.0,
+        "monthly": 7.5
     },
     "scaling": {
         "difficulty": [
@@ -145,5 +174,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-22"
+    "last_date": "2024-01-23"
 }

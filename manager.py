@@ -9,7 +9,7 @@ import datetime
 #Function to run everytime someone connects
 def daily_routine():
 
-    if check_if_new_day('fyhr'):
+    if check_if_new_day('fyhr'): #hard coded because I am the user that will always be there
 
         users = js.read_usernames_from_file('users.txt')
 
@@ -60,7 +60,7 @@ def check_tasks_expiration(user):
                 try: 
                     time_to_completion = int(task["time_to_completion"])
                     new_expiration_date = expiration_date + datetime.timedelta(days=time_to_completion)
-                    js.change_one_field_of_given_task('fyhr',enum.TaskType.HABITS,task["id"],"expiration_time",new_expiration_date.strftime('%Y-%m-%d'))
+                    js.change_one_field_of_given_task(user,enum.TaskType.HABITS,task["id"],"expiration_time",new_expiration_date.strftime('%Y-%m-%d'))
                 except ValueError as e:
                     print("Error: Invalid 'time_to_completion'. It must be an integer")
 
@@ -108,23 +108,26 @@ def check_if_new_day(user):
     return False
 
 def task_completed(user, id,completion):
-    task = js.get_thing_by_id(user,id,js.JSONCategory.TASK)
+    task = js.get_thing_by_id(user,id)
     difficulty = enum.Difficulty.from_string(ta.Task.from_json(task).difficulty)
-    completion_scaling = ta.get_completion_values('fyhr')
+    completion_scaling = ta.get_completion_values(user)
     
     value_completion = enum.Completion.value_completion(completion,completion_scaling)
-    value_of_task = js.retrieve_value_in_scaling('fyhr',enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
+    value_of_task = js.retrieve_value_in_scaling(user,enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
     rew.add_reward_to_all(value_completion*value_of_task,user)
-    if(task["task_type"]==enum.TaskType.HABITS.value):
-        current_date = datetime.datetime.now().date()
-        task["expiration_time"]= current_date
+    task = ta.Task.from_json(task)
+    # if(task.task_type==enum.TaskType.HABITS.value): Commented because then the counter starts when i do the task. like if I want a task every week, and i do it the wednesday it will come back next wednesday
+    
+    #     current_date = datetime.datetime.now().date()
+    #     js.change_one_field_of_given_task(user,enum.TaskType.HABITS,task.id,"expiration_time",current_date.strftime('%Y-%m-%d'))
 
-    js.move_task_to_historic(user,ta.Task.from_json(task))
+
+    js.move_task_to_historic(user,task)
     update_reward_unlocking(user,enum.TimeEnum.DAILY) #Choice of doing it only daily. If you do a hard task during your day, I want it to be rewarded. As for the week or the month, I prefer to have it done at the end of the week or end of the month.
     
 
 def penalty_task_done(user,id):
-    task = ta.Task.from_json(js.get_thing_by_id(user,id,js.JSONCategory.TASK))
+    task = ta.Task.from_json(js.get_thing_by_id(user,id))
     try:
         importance_value = int(task.importance)
     except ValueError as e:
@@ -139,14 +142,14 @@ def manage_historic(user):
 def user_process(user):
     #Check if the user doesn't exist
     if(user in js.read_usernames_from_file('users.txt')):
-        print("okay")
+        print("user found")
         #go dailyroutine from there
     else:
-       js.create_json_from_template(user+'.json') 
+       js.create_json_from_template('./json/'+user+'.json') 
        js.add_user_to_user_file('users.txt',user)
        check_if_new_day(user)#update the date in the json file created
 
 
-daily_routine()
-
+#daily_routine()
+#user_process('aotrix')
 #ta.create_new_task("Sampe Task","test task", enum.TaskType.ONCE,"2023-12-20",enum.Difficulty.MEDIUM,enum.Importance.NSIMPORTANT)

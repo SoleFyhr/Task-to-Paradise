@@ -53,20 +53,20 @@ def double_penalty(user):
 
 def activate_penalty(user,time,number_iteration):
 
-    contents =  json_manager.penalty_reward_iterate(user,json_manager.JSONCategory.PENALTY,time,number_iteration)
-    for content in contents:
-        json_pen =Penalty(content).to_json()
-        json_manager.add_penalty_reward_to_json(json_manager.user,json_pen,json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,-1)
+    ids =  json_manager.penalty_reward_iterate(user,json_manager.JSONCategory.PENALTY,time,number_iteration)
+    for id in ids:
+        json_pen =Penalty(id).to_json()
+        json_manager.add_penalty_reward_to_json(user,json_pen,json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,-1)
 
 def activate_penalty_through_content(user, content):
     json_pen =Penalty(content).to_json()
     json_manager.add_penalty_reward_to_json(user,json_pen,json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,-1)
 
-def remove_active_penalty(user,content):
-    json_manager.remove_penalty_reward_in_active(user,content,json_manager.JSONCategory.PENALTY)
+def remove_active_penalty(user,id):
+    json_manager.remove_penalty_reward_in_active(user,id,json_manager.JSONCategory.PENALTY)
 
-def remove_penalty(user,content,type):
-    json_manager.delete_penalty_reward_by_content(user,content,json_manager.JSONCategory.PENALTY,type)
+def remove_penalty(user,id,type):
+    json_manager.delete_penalty_reward_by_id(user,id,json_manager.JSONCategory.PENALTY,type)
 
 #json_manager.change_value(9,json_manager.JSONCategory.PPOINTS,"daily",json_manager.user)
 

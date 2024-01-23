@@ -1,10 +1,11 @@
 import json
 from enum import Enum
 import enum_list as enu
-from datetime import datetime
+import datetime
 
 
-user='fyhr'
+json_path = "./json/"
+file_ext = ".json"
 
 #----------------- ENUM --------------------------
 
@@ -24,7 +25,7 @@ class JSONCategory(Enum):
 def init_check_procedure(user_id):
     # Read the existing data from the file
     try:
-        with open(user_id +".json", 'r') as file:
+        with open(json_path+user_id +file_ext, 'r') as file:
             data = json.load(file)
             
     except FileNotFoundError:
@@ -47,25 +48,28 @@ def add_task_to_json(user_id, new_task_json, category,type):
         raise ValueError("Initial check failed or no data found for user.")
     
     new_task = json.loads(new_task_json)
-    if(type == enu.TaskType.ONCE or type == enu.TaskType.HABITS): 
-        new_task_expiration = datetime.strptime(new_task['expiration_time'], "%Y-%m-%d")
+    if(type == enu.TaskType.ONCE or type == enu.TaskType.HABITS): #Order the task in the list
+        new_task_expiration = datetime.datetime.strptime(new_task['expiration_time'], "%Y-%m-%d")
         size_list = len(data[category.value][type.value])
         if(size_list==0):
             data[category.value][type.value].append(new_task)
         else:
             for index, task in enumerate(data[category.value][type.value]):
-                task_expiration = datetime.strptime(task['expiration_time'], "%Y-%m-%d")
+                task_expiration = datetime.datetime.strptime(task['expiration_time'], "%Y-%m-%d")
                 if new_task_expiration < task_expiration:
                     data[category.value][type.value].insert(index, new_task)
                     break
                 if(index == size_list-1):
                     data[category.value][type.value].insert(index +1, new_task)
 
+    
    
     else:     
+        new_task['expiration_time']=""
+
         data[category.value][type.value].append(new_task) #daily and prohibited don't care about order
 
-    with open(user_id +".json", 'w') as file:
+    with open(json_path + user_id +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 def get_all_tasks_by_type(user_id):
@@ -81,14 +85,33 @@ def get_all_tasks_by_type(user_id):
 
     return once, daily, habits, prohibited
 
+
+def get_all_tasks_by_type_with_historic(user_id):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+    
+    tasks = data[JSONCategory.TASK.value]
+    daily = tasks[enu.TaskType.DAILY.value]
+    habits = tasks[enu.TaskType.HABITS.value]
+    once = tasks[enu.TaskType.ONCE.value]
+    prohibited = tasks[enu.TaskType.PROHIBITED.value]
+    historic = data[JSONCategory.HISTORIC.value]
+    for task in historic:
+        if task["task_type"]==enu.TaskType.DAILY.value:
+            daily.append(task)
+        elif task["task_type"]==enu.TaskType.HABITS.value:
+            habits.append(task)
+    return once, daily, habits, prohibited
+
 def delete_task_by_id(user_id, id):
     data = init_check_procedure(user_id)
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")
     once, daily, habits, prohibited = get_all_tasks_by_type(user_id)
+    historic = data[JSONCategory.HISTORIC.value]
     task_found = False
-    task_types = [("once", once), ("daily", daily), ("habits", habits), ("prohibited", prohibited)]
-    print(id)
+    task_types = [("once", once), ("daily", daily), ("habits", habits), ("prohibited", prohibited),("historic",historic)]
     for task_type, task_list in task_types:
         for task in task_list:
             if task["id"] == id:
@@ -107,8 +130,9 @@ def delete_task_by_id(user_id, id):
     data["tasks"]["daily"] = daily
     data["tasks"]["habits"] = habits
     data["tasks"]["prohibited"] = prohibited
+    data[JSONCategory.HISTORIC.value] = historic
 
-    with open(user_id + ".json", 'w') as file:
+    with open(json_path + user_id + file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
     print("Task deleted successfully.")
@@ -123,11 +147,11 @@ def change_one_field_of_given_task(user, type_task, id, parameter, new_value):
             task[parameter]=new_value
             break
 
-    with open(user + ".json", 'w') as file:
+    with open(json_path + user + file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
-def get_thing_by_id(user_id, id,category):
+def get_thing_by_id(user_id, id):
     
     data = init_check_procedure(user_id)
     if data is None:
@@ -139,8 +163,8 @@ def get_thing_by_id(user_id, id,category):
     for task_type, task_list in task_types:
         for task in task_list:
             if task["id"] == id:
+                
                 obj_json = json.dumps(task)
-            # Use the from_json method to create a Task object
                 return obj_json
 
         
@@ -175,7 +199,7 @@ def move_task_to_historic(user_id, tasks_to_move):
         data["historic"].extend(tasks_moved)
 
     # Save the updated data to the file
-    with open(user_id + ".json", 'w') as file:
+    with open(json_path + user_id + file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
@@ -183,13 +207,31 @@ def clean_historic(user):
     data = init_check_procedure(user)
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")
-
-    for task in data[JSONCategory.HISTORIC.value]:
+    historic = data[JSONCategory.HISTORIC.value]
+    tasks_to_remove=[]
+    for task in historic :
         if task["task_type"] == enu.TaskType.DAILY.value:
             data[JSONCategory.TASK.value][enu.TaskType.DAILY.value].append(task)
-            data[JSONCategory.HISTORIC.value].remove(task)
+            tasks_to_remove.append(task)
+        
+        elif task["task_type"] == enu.TaskType.HABITS.value:
+            current_date = datetime.datetime.now().date()
+            expiration_date = datetime.datetime.strptime(task["expiration_time"], '%Y-%m-%d').date()
+            frequency_coming_back = int(task["frequency_coming_back"])
+            new_expiration_date = expiration_date + datetime.timedelta(days=frequency_coming_back)
+            
+            if current_date == new_expiration_date:
+                time_to_completion = int(task["time_to_completion"])
+                new_expiration_date = current_date + datetime.timedelta(days=time_to_completion)
+                task["expiration_time"] = new_expiration_date.strftime('%Y-%m-%d')               
+                data[JSONCategory.TASK.value][enu.TaskType.HABITS.value].append(task)
+                tasks_to_remove.append(task)
+                
+    
+    for tasks in tasks_to_remove:
+        data[JSONCategory.HISTORIC.value].remove(tasks)
 
-    with open(user + ".json", 'w') as file:
+    with open(json_path + user + file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
@@ -210,7 +252,7 @@ def change_reward_unlocking_steps(user,value):
         raise ValueError("Initial check failed or no data found for user.")    
     
     data['reward_unlocking_steps'] = value
-    with open(user +".json", 'w') as file:
+    with open(json_path + user +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 #----------------- PENALTY & REWARD  --------------------------
@@ -221,17 +263,17 @@ def add_penalty_reward_to_json(user_id, penalty_json,category,type,place):
         raise ValueError("Initial check failed or no data found for user.")
     data[category.value][type.value].insert(int(place)-1,json.loads(penalty_json))
 
-    with open(user_id +".json", 'w') as file:
+    with open(json_path + user_id +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
-def is_there_this_penalty_or_reward_in_active(user,content_target,category):
+def is_there_this_penalty_or_reward_in_active(user,id_target,category):
     data = init_check_procedure(user)
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")
 
-    for content in data[category.value]['active']:
-        if content["content"] == content_target:
+    for thing in data[category.value]['active']:
+        if thing["id"] == id_target:
             return True
     return False
 
@@ -247,33 +289,33 @@ def penalty_reward_iterate(user, category,time, num_iterations):
     if(category==JSONCategory.REWARD): #If reward, we check how many we unlocked today.
         value_to_start = get_reward_unlocking_steps(user)//10 #if 20, we unlcoked 2 steps, so 2
         list_range = list(range(value_to_start, num_iterations))#0,1 are excluded, since we took 20
-        change_reward_unlocking_steps('fyhr',(num_iterations)*10)
-    contents = []
+        change_reward_unlocking_steps(user,(num_iterations)*10)
+    ids = []
 
     for i in list_range:
         if i < len(lists):
-        #if not is_there_this_penalty_or_reward_in_active(user,lists[i]["content"],category):
+        #if not is_there_this_penalty_or_reward_in_active(user,lists[i]["id"],category):
         #Vu qu'on fait que une fois par jour le unlocking de penalty, pas besoin de check si on a deja unlock le seuil de 10 points etc.
-            contents.append(lists[i]["content"])
+            ids.append(lists[i]["id"])
         else:
             break
 
-    return contents
+    return ids
 
 
 
-def remove_penalty_reward_in_active(user,content,category):
+def remove_penalty_reward_in_active(user,id,category):
     data = init_check_procedure(user)
     if data is None:
         raise ValueError("Initial check failed or no data found for user.")
     
-    new_active_list = [item for item in data[JSONCategory.PENALTY.value]["active"] if item["content"] != content]
+    new_active_list = [item for item in data[JSONCategory.PENALTY.value]["active"] if item["id"] != id]
 
     # Update the data
     data[category.value]["active"] = new_active_list
 
 
-    with open(user +".json", 'w') as file:
+    with open(json_path + user +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 #Only for penalty
@@ -284,19 +326,19 @@ def double_penalty_in_activate(user):
     
     new_active_list = [] 
     if bool(data[JSONCategory.PENALTY.value]['active']): #Double penlaties only if there is anything in active
-        for content_dict in data[JSONCategory.PENALTY.value]['active']:
+        for things in data[JSONCategory.PENALTY.value]['active']:
             # Duplicate the entire dictionary, not just the content string
-            duplicated_content_dict = content_dict.copy()
-            duplicated_content_dict["content"] = content_dict["content"]
-            new_active_list.append(duplicated_content_dict)
-            new_active_list.append(duplicated_content_dict.copy())  # Duplicate it again
+            duplicated_things = things.copy()
+            duplicated_things["id"] = things["id"]#TODO with id, create a new penalty
+            new_active_list.append(duplicated_things)
+            new_active_list.append(duplicated_things.copy())  # Duplicate it again
 
     data[JSONCategory.PENALTY.value]['active'] = new_active_list
-    with open(user + ".json", 'w') as file:
+    with open(json_path + user + file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
-def delete_penalty_reward_by_content(user_id, content,category,type):
+def delete_penalty_reward_by_id(user_id, id,category,type):
     
     data = init_check_procedure(user_id)
     if data is None:
@@ -305,7 +347,7 @@ def delete_penalty_reward_by_content(user_id, content,category,type):
 
     pen_or_rew_to_delete = None
     for pen_or_rew in data[category.value][type.value]:
-        if pen_or_rew["content"] == content:
+        if pen_or_rew["id"] == id:
             pen_or_rew_to_delete = pen_or_rew
             break
 
@@ -316,7 +358,7 @@ def delete_penalty_reward_by_content(user_id, content,category,type):
     data[category.value][type.value].remove(pen_or_rew_to_delete)
 
     # Write the updated data back to the file
-    with open(user_id +".json",'w') as file:
+    with open(json_path + user_id +file_ext,'w') as file:
         json.dump(data, file, indent=4)
 
     print("Pen or Rew deleted successfully.")
@@ -337,7 +379,7 @@ def change_value(value, category, time_period,user_id):
         raise ValueError("Initial check failed or no data found for user.")    
     data[category.value][time_period.value] = value
 
-    with open(user_id +".json", 'w') as file:
+    with open(json_path + user_id +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 def get_value(category, time_period,user_id):
@@ -372,7 +414,7 @@ def add_sequence_to_scaling(user, sequence,category):
     # Add the 'penalty' field with the sequence
     data["scaling"][category.value] = sequence
 
-    with open(user +".json", 'w') as file:
+    with open(json_path + user +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
@@ -414,7 +456,7 @@ def change_pause(user):
     else:
         data["pause"]='yes'
 
-    with open(user +".json", 'w') as file:
+    with open(json_path + user +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 
@@ -430,7 +472,7 @@ def change_date(user, date):
     # Add the 'penalty' field with the sequence
     data["last_date"] = date
 
-    with open(user +".json", 'w') as file:
+    with open(json_path + user +file_ext, 'w') as file:
         json.dump(data, file, indent=4)
 
 

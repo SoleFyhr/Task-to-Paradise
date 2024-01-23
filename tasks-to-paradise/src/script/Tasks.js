@@ -252,12 +252,12 @@ class Tasks extends Component {
         className={`list-group-item d-flex align-items-center ${item.difficulty}`}
       >
         <div className="d-flex align-items-center flex-grow-1 mr-2">
-          <CustomCheckbox
+          {/* <CustomCheckbox
             onCheck={() => this.manageCompletion(item.title, item.task_type)}
             checked={this.state.checkedTasks[item.title] || false}
-          />
+          /> */}
           <span className="task-content">
-            {item.title} - {item.content} - Expires the {item.expiration_time}
+            {item.title} {item.task_type === "prohibited" ? null : "- " +item.difficulty} {item.task_type === "once" ?"- Expires the " +item.expiration_time : null} {"- importance :  -"+item.importance}
           </span>
         </div>
         <div className="button-group">
@@ -281,10 +281,11 @@ class Tasks extends Component {
   render() {
     return (
       <>
-        <main className="content">
-          <h2 className="text-uppercase text-center my-4">Tasks</h2>
+        <main className="content  scroll-container">
+          {/* <h2 className="text-uppercase text-center my-4">Tasks</h2> */}
           <div className="row ">
             <div className="col-md-6 col-sm-10 mx-auto p-0">
+              <div className="scroll-section-tasks">
               <div className="taskZone">
                 <button onClick={this.createItem} className="btn btn-primary">
                   Add Task
@@ -306,6 +307,10 @@ class Tasks extends Component {
                   {this.renderItems(this.state.daily)}
                 </ul>
               </div>
+
+              </div>
+
+              <div className="scroll-section-tasks">
               <h3 className="text-uppercase  my-4">Habits</h3>
 
               <div className="card p-3 penaltyGroup">
@@ -322,7 +327,9 @@ class Tasks extends Component {
                   {this.renderItems(this.state.prohibited)}
                 </ul>
               </div>
+              </div>
             </div>
+            
           </div>
           {this.state.modal ? (
             <Modal
