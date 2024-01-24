@@ -1,24 +1,25 @@
 {
     "tasks": {
-        "once": [
+        "once": [],
+        "daily": [
             {
-                "id": "6da8d357-15ae-49db-99ef-49175cce788b",
-                "title": "SuperTest",
+                "id": "cd59f9ea-1fec-42f7-8e25-dcb699730938",
+                "title": "Dailyyy",
                 "content": "",
-                "task_type": "once",
-                "expiration_time": "2024-01-23",
-                "difficulty": "hard",
-                "importance": 8,
+                "task_type": "daily",
+                "expiration_time": "",
+                "difficulty": "easy",
+                "importance": 5.0,
                 "penalty_induced": null,
                 "time_to_completion": "",
                 "frequency_coming_back": ""
             },
             {
-                "id": "f90c2410-92df-4c49-abe4-eae26340384c",
-                "title": "D",
+                "id": "7d580db1-ded3-4bdc-a994-98a97c6720d0",
+                "title": "Daily Expi",
                 "content": "",
-                "task_type": "once",
-                "expiration_time": "2024-01-23",
+                "task_type": "daily",
+                "expiration_time": "",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -26,14 +27,13 @@
                 "frequency_coming_back": ""
             }
         ],
-        "daily": [],
         "habits": [
             {
                 "id": "413060bd-bf78-40b5-b086-ca93ff4a6e27",
                 "title": "Habitsss",
                 "content": "",
                 "task_type": "habits",
-                "expiration_time": "2024-01-23",
+                "expiration_time": "2024-01-26",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -88,7 +88,12 @@
                 "content": "d"
             }
         ],
-        "active": []
+        "active": [
+            {
+                "id": "76c506cf-8960-4477-8929-14c553ad2864",
+                "content": "238e7e9e-8bb7-4d39-852a-232308299358"
+            }
+        ]
     },
     "reward": {
         "daily": [
@@ -116,39 +121,14 @@
             }
         ]
     },
-    "historic": [
-        {
-            "id": "cd59f9ea-1fec-42f7-8e25-dcb699730938",
-            "title": "Dailyyy",
-            "content": "",
-            "task_type": "daily",
-            "expiration_time": "",
-            "difficulty": "easy",
-            "importance": 5.0,
-            "penalty_induced": null,
-            "time_to_completion": "",
-            "frequency_coming_back": ""
-        },
-        {
-            "id": "7d580db1-ded3-4bdc-a994-98a97c6720d0",
-            "title": "Daily Expi",
-            "content": "",
-            "task_type": "daily",
-            "expiration_time": "",
-            "difficulty": "easy",
-            "importance": 5.0,
-            "penalty_induced": null,
-            "time_to_completion": "",
-            "frequency_coming_back": ""
-        }
-    ],
+    "historic": [],
     "penalty_points": {
-        "daily": 25,
-        "weekly": 25,
-        "monthly": 35
+        "daily": 0,
+        "weekly": 33,
+        "monthly": 43
     },
     "reward_points": {
-        "daily": 1.5,
+        "daily": 0,
         "weekly": 3.0,
         "monthly": 7.5
     },
@@ -174,5 +154,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-23"
+    "last_date": "2024-01-24"
 }

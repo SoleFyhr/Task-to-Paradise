@@ -14,6 +14,7 @@ def daily_routine():
         users = js.read_usernames_from_file('users.txt')
 
         for user in users:
+            print(user)
             if(js.retrieve_pause_field(user)=="no"):
                 check_if_penalty_completed(user) #If we are a new day, if there are any penalties in 'active', we double them
                 check_tasks_expiration(user) #Remove expired tasks, add penalties to ppoints
@@ -76,7 +77,7 @@ def check_tasks_expiration(user):
     
 
     if(len(tasks_to_move)>0):
-        js.move_task_to_historic(js.user,tasks_to_move)
+        js.move_task_to_historic(user,tasks_to_move)
 
     pen.add_penalty_to_all(total_penalty,user)
 
@@ -151,5 +152,5 @@ def user_process(user):
 
 
 #daily_routine()
-#user_process('aotrix')
+user_process('aotrix')
 #ta.create_new_task("Sampe Task","test task", enum.TaskType.ONCE,"2023-12-20",enum.Difficulty.MEDIUM,enum.Importance.NSIMPORTANT)

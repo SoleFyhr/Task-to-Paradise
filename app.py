@@ -15,6 +15,13 @@ app.secret_key = 'your_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 app.config['SESSION_COOKIE_NAME'] = 'your_session_cookie_name'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
+if os.getenv('FLASK_ENV') == 'production':
+    app.config['SESSION_COOKIE_SECURE'] = True
+
+else:
+    app.config['SESSION_COOKIE_SECURE'] = False
+
+
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True if you're using HTTPS
 
 CORS(app,supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -46,12 +53,11 @@ def serve(path):
 @app.route('/login', methods=['POST'])
 def login():
     username = request.json.get('username')
-    print("THE USERNAME IS : ", username)
     # Check if username == None exists in users.txt
     if other.do_user_exist(username):
         session['username'] = username
         session.permanent = True  # Make the session persistent
-        print(session)
+        man.daily_routine()
         return jsonify({'message': 'Logged in successfully'}), 200
     else:
         return jsonify({'message': 'User not found'}), 404
@@ -65,11 +71,16 @@ def logout():
 #!------------------ TASK ------------------
 def get_logged_in_user():
     """Check if a user is logged in and return their username."""
-    print(session)
-    #username = session.get('username')
-    # if not username:
-    #     return 'fyhr'  # or raise an exception, based on your design choice
-    return 'fyhr' 
+    if os.getenv('FLASK_ENV') == 'production':
+        username = session.get('username')
+        if not username:
+            return False  # or raise an exception, based on your design choice
+        return username 
+
+    else:
+        return 'fyhr'
+
+    
 
 @app.route('/button_create_task', methods=['POST'])
 def my_function():
@@ -112,7 +123,6 @@ def all_dashboard_tasks():
 def all_tasks():
     username = get_logged_in_user()
     if username == None:
-        print("here?")
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -398,4 +408,4 @@ def function_change_pause():
 
 #Don't touch
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

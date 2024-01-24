@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { css, Global } from "@emotion/react";
-import { Button } from "@chakra-ui/react";
+import { Button,useColorMode } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Tasks from "../script/Tasks"; // Adjust the path according to your project structure
 import Dashboard from "../script/Dashboard"; // Adjust the path according to your project structure
@@ -12,6 +12,12 @@ import backgroundImage from "../imgs/dark.jpg"; // Adjust the path according to 
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    setColorMode('light');
+  }, [setColorMode]);
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", "dark");
     const storedUser = localStorage.getItem("loggedInUser");
@@ -57,6 +63,7 @@ function App() {
             padding: 0;
             height: 100%;
             overflow: hidden;
+            color: white;
           }
 
           #root {
@@ -118,11 +125,11 @@ function App() {
 }
 export default App;
 
-// Corriger bug du penalty qui doit doubler
-//4 S'occuper du responsive
+//1 Corriger bug du penalty qui doit doubler et de leur affichage
+//2 S'occuper du responsive
+//3 S'occuper de pk c'est 30 fois plus gros sur Flask
+//4 Deploy
 
-//5 Deploy
-//6 S'occuper des différents users, d'une page de connexion et d'un easy mode/hard mode et des tokens.
 
 //Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //Faire penalty induced

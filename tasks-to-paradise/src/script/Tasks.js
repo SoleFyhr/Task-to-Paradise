@@ -55,6 +55,7 @@ class Tasks extends Component {
         "Content-Type": "application/json",
       },
       body: body_content,
+      credentials: 'include',
     })
       .then((response) => {
         if (response.ok) {

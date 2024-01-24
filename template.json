@@ -1,57 +1,40 @@
 {
-    "tasks": [
-    ],
-    "projects": [],
-    "penalty": {
-        "daily": [
-        
-        ],
-        "weekly": [
-            
-        ],
-        "monthly": [
-            
-        ],
-        "active": [
-            
-        ]
-    },
-    "reward": {
-        "daily": [
-            
-        ],
-        "weekly": [
-           
-        ],
-        "monthly": [
-           
-        ],
-        "active": []
-    },
-    "historic": [],
-    "penalty_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 0
-    },
-    "reward_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 0
-    },
-    "scaling": {
-        "difficulty": [
-            3,
-            6,
-            10
-        ],
-        "importance": [
-            5,
-            15,
-            20
-        ]
-    },
-    "reward_unlocking_steps":0,
-    "pause": "no",
-    "last_date": "2023-12-20"
+  "tasks": {
+    "once": [],
+    "daily": [],
+    "habits": [],
+    "prohibited": []
+  },
+  "projects": [],
+  "penalty": {
+    "daily": [],
+    "weekly": [],
+    "monthly": [],
+    "active": []
+  },
+  "reward": {
+    "daily": [],
+    "weekly": [],
+    "monthly": [],
+    "active": []
+  },
+  "historic": [],
+  "penalty_points": {
+    "daily": 0,
+    "weekly": 0,
+    "monthly": 0
+  },
+  "reward_points": {
+    "daily": 0,
+    "weekly": 0,
+    "monthly": 0
+  },
+  "scaling": {
+    "difficulty": [1.0, 3.0, 6.0, 10.0],
+    "completion": [0.25, 0.5, 0.8, 1.0, 1.5],
+    "importance": [5.0, 13.0, 20.0]
+  },
+  "reward_unlocking_steps": 0,
+  "pause": "no",
+  "last_date": "2024-01-23"
 }

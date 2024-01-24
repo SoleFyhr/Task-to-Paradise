@@ -1,5 +1,10 @@
 {
-    "tasks": [],
+    "tasks": {
+        "once": [],
+        "daily": [],
+        "habits": [],
+        "prohibited": []
+    },
     "projects": [],
     "penalty": {
         "daily": [],
@@ -26,17 +31,25 @@
     },
     "scaling": {
         "difficulty": [
-            3,
-            6,
-            10
+            1.0,
+            3.0,
+            6.0,
+            10.0
+        ],
+        "completion": [
+            0.25,
+            0.5,
+            0.8,
+            1.0,
+            1.5
         ],
         "importance": [
-            5,
-            15,
-            20
+            5.0,
+            13.0,
+            20.0
         ]
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2023-12-20"
+    "last_date": "2024-01-24"
 }
