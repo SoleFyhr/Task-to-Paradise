@@ -66,24 +66,24 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.refreshList();
-    const penaltyPointsData = [
-      { category: "Category A", value: 50 },
-      { category: "Category B", value: 50 },
-    ];
-    const rewardsPointsData = [
-      { category: "Category X", value: 40 },
-      { category: "Category Y", value: 60 },
-    ];
+    // const penaltyPointsData = [
+    //   { category: "Category A", value: 50 },
+    //   { category: "Category B", value: 50 },
+    // ];
+    // const rewardsPointsData = [
+    //   { category: "Category X", value: 40 },
+    //   { category: "Category Y", value: 60 },
+    // ];
 
-    // Create charts
-    this.penaltyPointsChart = this.createDonutChart(
-      "penaltyPointsChartDiv",
-      penaltyPointsData
-    );
-    this.rewardsPointsChart = this.createDonutChart(
-      "rewardsPointsChartDiv",
-      rewardsPointsData
-    );
+    // // Create charts
+    // this.penaltyPointsChart = this.createDonutChart(
+    //   "penaltyPointsChartDiv",
+    //   penaltyPointsData
+    // );
+    // this.rewardsPointsChart = this.createDonutChart(
+    //   "rewardsPointsChartDiv",
+    //   rewardsPointsData
+    // );
   }
 
   componentWillUnmount() {
@@ -195,8 +195,8 @@ class Dashboard extends Component {
     );
   };
 
-  handleCompletionActive = (content) => {
-    let body_content = JSON.stringify({ content: content });
+  handleCompletionActive = (id) => {
+    let body_content = JSON.stringify({ id: id });
     setTimeout(() => {
       this.post_method(
         body_content,
@@ -320,10 +320,12 @@ class Dashboard extends Component {
   };
 
   renderActive = () => {
+
     return this.state.activePenaltyList.map((item, index) => (
+      
       <li key={item.id} className={` task-grid basic no-penalty`}>
         <CustomCheckbox
-          onCheck={() => this.handleCompletionActive(item.content)}
+          onCheck={() => this.handleCompletionActive(item.id)}
         />
         <span className="task-title">{item.content}</span>
         <span className="days-left">{"Today"}</span>
@@ -346,8 +348,8 @@ class Dashboard extends Component {
     const listNames = ["Daily", "Weekly", "Monthly"];
 
     return listNames.map((name, index) => (
-      <li className="ppoints-li">
-        <span  key={index} className="points-text">{`${name} ${sectionName} Points: ${pointsType[name.toLowerCase()]}`}</span>
+      <li key = {index} className="ppoints-li">
+        <span className="points-text">{`${name} ${sectionName} Points: ${pointsType[name.toLowerCase()]}`}</span>
       </li>
     ));
   };

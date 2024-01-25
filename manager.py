@@ -23,21 +23,21 @@ def daily_routine():
                 pen.reset_total_value(user,enum.TimeEnum.DAILY) #Reset daily ppoint counter, for new day
                 rew.reset_total_value(user,enum.TimeEnum.DAILY) #Reset daily rpoint counter, for new day
                 manage_historic(user) #if daily not done, let in daily but add penalty points, if daily in histroic put back, if habits not done, add penalty points and extend their time expiration by their time of completion, if habits in historic, move back when we reach the good date and change the date of expiration.
-                #TODO check if habits in historic don't have to come back, 
 
-                today = datetime.datetime.now().date()
-                if today.weekday() == 0: #It's Monday
-                    update_penalties_unlocking(user,enum.TimeEnum.WEEKLY)
-                    pen.reset_total_value(user,enum.TimeEnum.WEEKLY)
-                    update_reward_unlocking(user,enum.TimeEnum.WEEKLY)
-                    rew.reset_total_value(user,enum.TimeEnum.WEEKLY) 
+                #TODO Create a good balance based on the rate of completion, of prohibited, of tasks failed. See what said Chatos
+                # today = datetime.datetime.now().date()
+                # if today.weekday() == 0: #It's Monday
+                #     update_penalties_unlocking(user,enum.TimeEnum.WEEKLY)
+                #     pen.reset_total_value(user,enum.TimeEnum.WEEKLY)
+                #     update_reward_unlocking(user,enum.TimeEnum.WEEKLY)
+                #     rew.reset_total_value(user,enum.TimeEnum.WEEKLY) 
         
 
-                if today.day == 1: # It's the first day of the month
-                    update_penalties_unlocking(user,enum.TimeEnum.MONTHLY) 
-                    pen.reset_total_value(user,enum.TimeEnum.MONTHLY) 
-                    update_reward_unlocking(user,enum.TimeEnum.MONTHLY)
-                    rew.reset_total_value(user,enum.TimeEnum.MONTHLY) 
+                # if today.day == 1: # It's the first day of the month
+                #     update_penalties_unlocking(user,enum.TimeEnum.MONTHLY) 
+                #     pen.reset_total_value(user,enum.TimeEnum.MONTHLY) 
+                #     update_reward_unlocking(user,enum.TimeEnum.MONTHLY)
+                #     rew.reset_total_value(user,enum.TimeEnum.MONTHLY) 
         
 
 

@@ -74,11 +74,19 @@
             {
                 "id": "238e7e9e-8bb7-4d39-852a-232308299358",
                 "content": "Douche Froidi"
+            },
+            {
+                "id": "3fab5b1c-a0dd-4dd1-9cc0-8739c9925306",
+                "content": "Oahio"
+            },
+            {
+                "id": "1607182e-2a33-4b87-b16e-2c296596ff21",
+                "content": "Not this one"
             }
         ],
         "weekly": [
             {
-                "id": "238e7e9e-8bb7-4d12-852a-232308299358",
+                "id": "238e7e9e-8bb7-4d12-852a-734508299358",
                 "content": "Douche Froido"
             }
         ],
@@ -88,12 +96,7 @@
                 "content": "d"
             }
         ],
-        "active": [
-            {
-                "id": "76c506cf-8960-4477-8929-14c553ad2864",
-                "content": "238e7e9e-8bb7-4d39-852a-232308299358"
-            }
-        ]
+        "active": []
     },
     "reward": {
         "daily": [
@@ -124,8 +127,8 @@
     "historic": [],
     "penalty_points": {
         "daily": 0,
-        "weekly": 33,
-        "monthly": 43
+        "weekly": 53,
+        "monthly": 63
     },
     "reward_points": {
         "daily": 0,
@@ -154,5 +157,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-24"
+    "last_date": "2024-01-25"
 }

@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { css, Global } from "@emotion/react";
-import { Button,useColorMode } from "@chakra-ui/react";
+import {
+  Button,
+  useColorMode,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  Box,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Tasks from "../script/Tasks"; // Adjust the path according to your project structure
 import Dashboard from "../script/Dashboard"; // Adjust the path according to your project structure
@@ -15,7 +26,7 @@ function App() {
   const { setColorMode } = useColorMode();
 
   useEffect(() => {
-    setColorMode('light');
+    setColorMode("light");
   }, [setColorMode]);
 
   useEffect(() => {
@@ -85,27 +96,68 @@ function App() {
           {loggedInUser ? (
             <>
               <nav>
-                <ul>
-                  <li>
-                    <Link to="/dashboard">Dashboard</Link>
-                  </li>
-                  <li>
-                    <Link to="/tasks">Tasks</Link>
-                  </li>
-                  <li>
-                    <Link to="/penalty">Penalty</Link>
-                  </li>
-                  <li>
-                    <Link to="/reward">Reward</Link>
-                  </li>
-                  <li>
-                    <Link to="/settings">Settings</Link>
-                  </li>
-                  <Button className="" onClick={handleLogout}>Logout</Button>
+                {/* Hamburger Menu for smaller screens */}
+                <Box display={{ base: "block", md: "none" }}>
+                  <Menu className="title">
+                    <MenuButton
+                      as={IconButton}
+                      icon={<HamburgerIcon />}
+                      variant="outline"
+                      aria-label="Options"
+                    />
+                    <MenuList
+                      sx={{
+                        bg: "black", // Your desired background color
+                        borderColor: "black", // Optional: if you want to change border color
+                        // Add any other styles here
+                      }}
+                    >
+                      <MenuItem as={Link} to="/dashboard">
+                        Dashboard
+                      </MenuItem>
+                      <MenuItem as={Link} to="/tasks">
+                        Tasks
+                      </MenuItem>
+                      <MenuItem as={Link} to="/penalty">
+                        Penalty
+                      </MenuItem>
+                      <MenuItem as={Link} to="/reward">
+                        Reward
+                      </MenuItem>
+                      <MenuItem as={Link} to="/settings">
+                        Settings
+                      </MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Box>
 
-                </ul>
-                
+                {/* Regular Menu for larger screens */}
+                <Box display={{ base: "none", md: "block" }}>
+                  <ul>
+                    <li>
+                      <Link to="/dashboard">Dashboard</Link>
+                    </li>
+                    <li>
+                      <Link to="/tasks">Tasks</Link>
+                    </li>
+                    <li>
+                      <Link to="/penalty">Penalty</Link>
+                    </li>
+                    <li>
+                      <Link to="/reward">Reward</Link>
+                    </li>
+                    <li>
+                      <Link to="/settings">Settings</Link>
+                    </li>
+                    <li>
+                      <Button onClick={handleLogout}>Logout</Button>
+                    </li>
+                  </ul>
+                </Box>
               </nav>
+
+              {/* Routes */}
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
@@ -123,14 +175,15 @@ function App() {
     </>
   );
 }
+
 export default App;
 
-//1 Corriger bug du penalty qui doit doubler et de leur affichage
 //2 S'occuper du responsive
 //3 S'occuper de pk c'est 30 fois plus gros sur Flask
-//4 Deploy
+//4 Deploy sur heroku
+//5 Ajouter add on pour scheduler la daily routine tous les jours.
 
-
+//Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
 //Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //Faire penalty induced
 //Corriger problème d'alignement entre menu et titre
@@ -139,6 +192,7 @@ export default App;
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
+//S'occuper du scaling des weekly et company
 
 //SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard
 //rendre plus joli tasks penlatys et rewards
@@ -146,3 +200,12 @@ export default App;
 //Mettre les popover dans settings
 //Faire les projects
 //Faire un beau dark mode.
+//Prohibited : The deduction could be a fixed amount or vary based on the severity or frequency of the violation.
+
+//Comprehensive Scoring System: Develop a scoring system that integrates completion levels, task importance, and prohibitions. This system should be transparent and easily understandable to the users.
+//Dynamic Thresholds for Rewards/Penalties: Adjust weekly and monthly reward/penalty thresholds based on average task difficulty, completion levels, and prohibitions. This makes the system more adaptive and personalized.
+
+//Performance Analysis: Provide users with insights into their performance, like trends in task completion, to help them understand and improve their habits.
+//Feedback Loop: Use these insights to adjust the point system dynamically, encouraging improvement in weaker areas.
+//2. Performance-based Multipliers Good Week/Month Bonus: If a user has an exceptionally good week or month (e.g., completing a high percentage of tasks), apply a multiplier to their reward points. This emphasizes the quality of performance over the period.
+//Consecutive Achievements: If users hit their targets consecutively (like achieving the weekly reward several weeks in a row), provide a bonus multiplier to reward consistency.

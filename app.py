@@ -114,7 +114,7 @@ def all_dashboard_tasks():
     if username == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
-    
+    man.daily_routine()
     once, daily, habits, prohibited = ta.get_all_tasks_sorted(username)
     response_data = {"message": "Task sent successfully","once":once, "daily":daily, "habits":habits, "prohibited":prohibited}
     return jsonify(response_data)

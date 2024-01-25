@@ -49,13 +49,24 @@ def reset_total_value(user,time):
     json_manager.change_value(0,json_manager.JSONCategory.PPOINTS,time,user)
 
 def double_penalty(user):
-    json_manager.double_penalty_in_activate(user)
+    active = json_manager.get_active(json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,user)
+    if (len(active)==0):
+        return
+    contents = []
+    for content in active:
+        contents +=[content["content"]]
+    
+    for content in contents:
+        json_pen =Penalty(content).to_json()
+        json_manager.add_penalty_reward_to_json(user,json_pen,json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,-1)
+
+
 
 def activate_penalty(user,time,number_iteration):
 
-    ids =  json_manager.penalty_reward_iterate(user,json_manager.JSONCategory.PENALTY,time,number_iteration)
-    for id in ids:
-        json_pen =Penalty(id).to_json()
+    contents =  json_manager.penalty_reward_iterate(user,json_manager.JSONCategory.PENALTY,time,number_iteration)
+    for content in contents:
+        json_pen =Penalty(content).to_json()
         json_manager.add_penalty_reward_to_json(user,json_pen,json_manager.JSONCategory.PENALTY,enu.Active.ACTIVE,-1)
 
 def activate_penalty_through_content(user, content):

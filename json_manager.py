@@ -290,17 +290,17 @@ def penalty_reward_iterate(user, category,time, num_iterations):
         value_to_start = get_reward_unlocking_steps(user)//10 #if 20, we unlcoked 2 steps, so 2
         list_range = list(range(value_to_start, num_iterations))#0,1 are excluded, since we took 20
         change_reward_unlocking_steps(user,(num_iterations)*10)
-    ids = []
+    contents = []
 
     for i in list_range:
         if i < len(lists):
         #if not is_there_this_penalty_or_reward_in_active(user,lists[i]["id"],category):
         #Vu qu'on fait que une fois par jour le unlocking de penalty, pas besoin de check si on a deja unlock le seuil de 10 points etc.
-            ids.append(lists[i]["id"])
+            contents.append(lists[i]["content"])
         else:
             break
 
-    return ids
+    return contents
 
 
 
