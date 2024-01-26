@@ -1,25 +1,12 @@
 {
     "tasks": {
-        "once": [],
-        "daily": [
+        "once": [
             {
-                "id": "cd59f9ea-1fec-42f7-8e25-dcb699730938",
-                "title": "Dailyyy",
+                "id": "66f100e9-0fe6-4522-9b52-a32f5fe6d5e8",
+                "title": "Oncy",
                 "content": "",
-                "task_type": "daily",
-                "expiration_time": "",
-                "difficulty": "easy",
-                "importance": 5.0,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            },
-            {
-                "id": "7d580db1-ded3-4bdc-a994-98a97c6720d0",
-                "title": "Daily Expi",
-                "content": "",
-                "task_type": "daily",
-                "expiration_time": "",
+                "task_type": "once",
+                "expiration_time": "2024-01-26",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -27,6 +14,7 @@
                 "frequency_coming_back": ""
             }
         ],
+        "daily": [],
         "habits": [
             {
                 "id": "413060bd-bf78-40b5-b086-ca93ff4a6e27",
@@ -101,6 +89,10 @@
     "reward": {
         "daily": [
             {
+                "id": "eaeb878a-d52c-4cca-817b-39ed8898e5d3",
+                "content": "1"
+            },
+            {
                 "id": "6a4383bc-47f0-498e-b874-6b871e52dfc9",
                 "content": "TestReward"
             }
@@ -127,13 +119,13 @@
     "historic": [],
     "penalty_points": {
         "daily": 0,
-        "weekly": 53,
-        "monthly": 63
+        "weekly": 0,
+        "monthly": 0
     },
     "reward_points": {
         "daily": 0,
-        "weekly": 3.0,
-        "monthly": 7.5
+        "weekly": 0,
+        "monthly": 0
     },
     "scaling": {
         "difficulty": [
@@ -157,5 +149,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-25"
+    "last_date": "2024-01-26"
 }

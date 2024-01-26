@@ -9,7 +9,10 @@ const theme = extendTheme({
   styles: {
     global: {
       '.chakra-form-control': {
-        mt: "20px",
+        mt: "10px",
+      },
+      'body .chakra-modal__header': {
+        pb: "0px",
       },
       // Adding styles directly to MenuList
       '.chakra-menu__menu-list': {

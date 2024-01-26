@@ -356,7 +356,8 @@ class Dashboard extends Component {
 
   renderSection(title, renderFunction = null, args = null) {
     return (
-      <div className="scroll-section-tasks">
+      <div className="scroll-section">
+      <div className="scroll-section-inner">
         <div className="col-md-6 col-sm-10 mx-auto p-0 ">
           {this.renderTabList(title)}
           <div className=" p-3 ">
@@ -365,6 +366,7 @@ class Dashboard extends Component {
             ) : null}
           </div>
         </div>
+      </div>
       </div>
     );
   }

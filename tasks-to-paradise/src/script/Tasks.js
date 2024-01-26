@@ -286,23 +286,24 @@ class Tasks extends Component {
           {/* <h2 className="text-uppercase text-center my-4">Tasks</h2> */}
           <div className="row ">
             <div className="col-md-6 col-sm-10 mx-auto p-0">
-              <div className="scroll-section-tasks">
-              <div className="taskZone">
+              <div className="scroll-section taskZone">
+               <div className="scroll-section-inner">
+              <div className="addTask">
                 <button onClick={this.createItem} className="btn btn-primary">
                   Add Task
                 </button>
               </div>
-              <h3 className="text-uppercase  my-4">Once</h3>
+              <h4 className="text-uppercase  my-4">Once</h4>
 
-              <div className="card p-3 penaltyGroup">
+              <div className="card penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
                   {this.renderItems(this.state.once)}
                 </ul>
               </div>
-              <h3 className="text-uppercase  my-4">Daily</h3>
+              <h4 className="text-uppercase  my-4">Daily</h4>
 
-              <div className="card p-3 penaltyGroup">
+              <div className="card penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
                   {this.renderItems(this.state.daily)}
@@ -311,22 +312,26 @@ class Tasks extends Component {
 
               </div>
 
-              <div className="scroll-section-tasks">
-              <h3 className="text-uppercase  my-4">Habits</h3>
+              </div>
 
-              <div className="card p-3 penaltyGroup">
+              <div className="scroll-section taskZone">
+               <div className="scroll-section-inner">
+              <h4 className="text-uppercase  my-4">Habits</h4>
+
+              <div className="card penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
                   {this.renderItems(this.state.habits)}
                 </ul>
               </div>
-              <h3 className="text-uppercase  my-4">Prohibited</h3>
+              <h4 className="text-uppercase  my-4">Prohibited</h4>
 
-              <div className="card p-3 penaltyGroup">
+              <div className="card penaltyGroup">
                 {/* {this.renderTabList()} */}
                 <ul className="list-group list-group-flush">
                   {this.renderItems(this.state.prohibited)}
                 </ul>
+              </div>
               </div>
               </div>
             </div>

@@ -26,7 +26,7 @@ function App() {
   const { setColorMode } = useColorMode();
 
   useEffect(() => {
-    setColorMode("light");
+    setColorMode("dark");
   }, [setColorMode]);
 
   useEffect(() => {
@@ -178,13 +178,11 @@ function App() {
 
 export default App;
 
-//2 S'occuper du responsive
-//3 S'occuper de pk c'est 30 fois plus gros sur Flask
 //4 Deploy sur heroku
 //5 Ajouter add on pour scheduler la daily routine tous les jours.
 
-//Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
-//Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
+
+//S'occuper du scaling des weekly et company
 //Faire penalty induced
 //Corriger problème d'alignement entre menu et titre
 //rendre le details hoverable urgeamment
@@ -192,7 +190,9 @@ export default App;
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
-//S'occuper du scaling des weekly et company
+//Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
+//Rendre le responsive plus beau ? (settings...)
+//Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
 
 //SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard
 //rendre plus joli tasks penlatys et rewards

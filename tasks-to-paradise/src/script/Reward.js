@@ -40,7 +40,7 @@ class Reward extends Component {
         "Content-Type": "application/json",
       },
       body: body_content,
-      credentials: 'include',
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -135,38 +135,51 @@ class Reward extends Component {
         <main className="content scroll-container">
           {/* <h2 className="text-uppercase text-center my-4">Reward</h2> */}
           <div className="row ">
-            <div className="scroll-section-tasks">
               <div className="col-md-6 col-sm-10 mx-auto p-0">
-                <div className="taskZone">
-                  <button onClick={this.createItem} className="btn btn-primary">
-                    Add Reward
-                  </button>
-                </div>
-                <h3 className="text-uppercase  my-4">Daily</h3>
+                <div className="scroll-section taskZone">
+                  <div className="scroll-section-inner">
+                    <div className="addTask">
+                      <button
+                        onClick={this.createItem}
+                        className="btn btn-primary"
+                      >
+                        Add Reward
+                      </button>
+                    </div>
+                    <h4 className="text-uppercase  my-4">Daily</h4>
 
-                <div className="card p-3 penaltyGroup">
-                  {/* {this.renderTabList()} */}
-                  <ul className="list-group list-group-flush">
-                    {this.renderItems(this.state.rewardDaily, "daily")}
-                  </ul>
+                    <div className="card penaltyGroup">
+                      {/* {this.renderTabList()} */}
+                      <ul className="list-group list-group-flush">
+                        {this.renderItems(this.state.rewardDaily, "daily")}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-uppercase  my-4">Weekly</h3>
-                <div className="card p-3 penaltyGroup">
-                  {/* {this.renderTabList()} */}
-                  <ul className="list-group list-group-flush">
-                    {this.renderItems(this.state.rewardWeekly, "weekly")}
-                  </ul>
+                <div className="scroll-section taskZone">
+                  <div className="scroll-section-inner">
+                    <h4 className="text-uppercase  my-4">Weekly</h4>
+                    <div className="card penaltyGroup">
+                      {/* {this.renderTabList()} */}
+                      <ul className="list-group list-group-flush">
+                        {this.renderItems(this.state.rewardWeekly, "weekly")}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-uppercase  my-4">Monthly</h3>
-                <div className="card p-3 penaltyGroup">
-                  {/* {this.renderTabList()} */}
-                  <ul className="list-group list-group-flush">
-                    {this.renderItems(this.state.rewardMonthly, "monthly")}
-                  </ul>
+                <div className="scroll-section taskZone">
+                  <div className="scroll-section-inner">
+                    <h4 className="text-uppercase  my-4">Monthly</h4>
+                    <div className="card penaltyGroup">
+                      {/* {this.renderTabList()} */}
+                      <ul className="list-group list-group-flush">
+                        {this.renderItems(this.state.rewardMonthly, "monthly")}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           {this.state.modal ? (
             <ModalReward
               activeItem={this.state.activeItem}
