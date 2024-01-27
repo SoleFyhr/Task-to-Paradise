@@ -49,9 +49,13 @@ CORS(app,supports_credentials=True, resources={r"/*": {"origins": "http://localh
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
+    print("I'M HEREEEE")
+    print(path)
     if path != "" and os.path.exists(app.static_folder + '/' + path):
+        print("okay")
         return send_from_directory(app.static_folder, path)
     else:
+        print("hmmm")
         return send_from_directory(app.static_folder, 'index.html')
 
 #!------------------ Login ------------------
