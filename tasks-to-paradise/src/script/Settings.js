@@ -9,7 +9,7 @@ import {
 
 import ModalSequence from "../components/ModalSequence";
 
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 class Settings extends Component {
   constructor(props) {

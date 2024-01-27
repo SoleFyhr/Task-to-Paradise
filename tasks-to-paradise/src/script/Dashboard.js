@@ -11,7 +11,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 // Use theme (optional)
 am4core.useTheme(am4themes_animated);
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 class Dashboard extends Component {
   constructor(props) {

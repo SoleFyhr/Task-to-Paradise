@@ -9,7 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 
 const Login = ({ onLogin }) => {

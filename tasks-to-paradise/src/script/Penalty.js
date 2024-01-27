@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ModalPenalty from "../components/ModalPenalty";
 
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 class Penalty extends Component {
   constructor(props) {

@@ -5,7 +5,7 @@ import starIcon from "../svg/star.svg";
 import CustomCheckbox from "../components/CustomCheckbox";
 
 
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 class Tasks extends Component {
   constructor(props) {

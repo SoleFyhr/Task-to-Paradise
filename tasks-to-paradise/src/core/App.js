@@ -21,7 +21,7 @@ import Settings from "../script/Settings";
 import Login from "../script/Login";
 import backgroundImage from "../imgs/dark.jpg"; // Adjust the path according to your project structure
 
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = process.env.API_URL || '';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
