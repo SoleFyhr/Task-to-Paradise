@@ -21,6 +21,8 @@ import Settings from "../script/Settings";
 import Login from "../script/Login";
 import backgroundImage from "../imgs/dark.jpg"; // Adjust the path according to your project structure
 
+const apiUrl = process.env.REACT_APP_API_URL || '';
+
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const { setColorMode } = useColorMode();
@@ -45,7 +47,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    fetch("http://127.0.0.1:5000/logout")
+    fetch(`${apiUrl}/logout`)
       .then((response) => {
         if (response.ok) {
           return response.json();

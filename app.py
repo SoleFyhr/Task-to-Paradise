@@ -50,12 +50,9 @@ CORS(app,supports_credentials=True, resources={r"/*": {"origins": "http://localh
 @app.route('/<path:path>')
 def serve(path):
     full_path = os.path.join(app.static_folder, path)
-    print("Full path being served:", full_path)
     if path != "" and os.path.exists(full_path):
-        print("Serving:", full_path)
         return send_from_directory(app.static_folder, path)
     else:
-        print("Serving index.html from:", app.static_folder)
         return send_from_directory(app.static_folder, 'index.html')
 #!------------------ Login ------------------
 
