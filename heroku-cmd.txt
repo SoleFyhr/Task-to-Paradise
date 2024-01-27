@@ -10,3 +10,5 @@ git push heroku deployment:master
 voir les logs : 
 
 heroku logs --tail
+
+Oublie pas de npm run build si tu veux voir tes changements abruti
