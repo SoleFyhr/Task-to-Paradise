@@ -11,6 +11,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 // Use theme (optional)
 am4core.useTheme(am4themes_animated);
+const apiUrl = process.env.REACT_APP_API_URL || '';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -104,7 +105,7 @@ class Dashboard extends Component {
   refreshList = () => {
     this.post_method(
       "",
-      "http://127.0.0.1:5000/get_dashboard_tasks",
+      `${apiUrl}/get_dashboard_tasks`,
       (data) => {
         // Concatenate the arrays using the spread operator
         const concatenatedList = [...data.daily, ...data.habits, ...data.once];
@@ -120,12 +121,12 @@ class Dashboard extends Component {
     );
     this.post_method(
       "",
-      "http://127.0.0.1:5000/button_get_active_penalty",
+      `${apiUrl}/button_get_active_penalty`,
       (data) => {
         this.setState({ activePenaltyList: data.active });
       }
     );
-    this.post_method("", "http://127.0.0.1:5000/button_get_points", (data) => {
+    this.post_method("", `${apiUrl}/button_get_points`, (data) => {
       this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
     });
   };
@@ -188,7 +189,7 @@ class Dashboard extends Component {
     let body_content = JSON.stringify(item);
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_task_completion",
+      `${apiUrl}/button_task_completion`,
       (data) => {
         this.refreshList();
       }
@@ -200,7 +201,7 @@ class Dashboard extends Component {
     setTimeout(() => {
       this.post_method(
         body_content,
-        "http://127.0.0.1:5000/button_remove_active_penalty",
+        `${apiUrl}/button_remove_active_penalty`,
         (data) => {
           this.refreshList();
         }
@@ -218,7 +219,7 @@ class Dashboard extends Component {
     setTimeout(() => {
       this.post_method(
         body_content,
-        "http://127.0.0.1:5000/button_task_completion",
+        `${apiUrl}/button_task_completion`,
         (data) => {
           this.refreshList();
         }

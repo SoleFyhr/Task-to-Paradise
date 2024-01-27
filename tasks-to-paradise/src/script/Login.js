@@ -9,6 +9,9 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
+const apiUrl = process.env.REACT_APP_API_URL || '';
+
+
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const toast = useToast();
@@ -18,7 +21,7 @@ const Login = ({ onLogin }) => {
 
     const bodyContent = JSON.stringify({ username });
 
-    fetch('http://127.0.0.1:5000/login', {
+    fetch(`${apiUrl}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,11 +2,11 @@
     "tasks": {
         "once": [
             {
-                "id": "66f100e9-0fe6-4522-9b52-a32f5fe6d5e8",
-                "title": "Oncy",
+                "id": "04d186d9-2c60-4238-90ff-e5b383d93e9f",
+                "title": "ONcy",
                 "content": "",
                 "task_type": "once",
-                "expiration_time": "2024-01-26",
+                "expiration_time": "2024-01-27",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -14,14 +14,27 @@
                 "frequency_coming_back": ""
             }
         ],
-        "daily": [],
+        "daily": [
+            {
+                "id": "2a11d88b-2d11-4708-a4c0-c0f308aa565b",
+                "title": "Test?",
+                "content": "",
+                "task_type": "daily",
+                "expiration_time": "",
+                "difficulty": "easy",
+                "importance": 5.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
+        ],
         "habits": [
             {
                 "id": "413060bd-bf78-40b5-b086-ca93ff4a6e27",
                 "title": "Habitsss",
                 "content": "",
                 "task_type": "habits",
-                "expiration_time": "2024-01-26",
+                "expiration_time": "2024-01-29",
                 "difficulty": "easy",
                 "importance": 5.0,
                 "penalty_induced": null,
@@ -84,7 +97,12 @@
                 "content": "d"
             }
         ],
-        "active": []
+        "active": [
+            {
+                "id": "b4a5ce61-502c-4446-8fbf-64079cdaa4b2",
+                "content": "Douche Froidi"
+            }
+        ]
     },
     "reward": {
         "daily": [
@@ -119,8 +137,8 @@
     "historic": [],
     "penalty_points": {
         "daily": 0,
-        "weekly": 0,
-        "monthly": 0
+        "weekly": 10,
+        "monthly": 10
     },
     "reward_points": {
         "daily": 0,
@@ -149,5 +167,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-26"
+    "last_date": "2024-01-27"
 }

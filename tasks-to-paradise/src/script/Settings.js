@@ -9,6 +9,8 @@ import {
 
 import ModalSequence from "../components/ModalSequence";
 
+const apiUrl = process.env.REACT_APP_API_URL || '';
+
 class Settings extends Component {
   constructor(props) {
     super(props);
@@ -30,12 +32,12 @@ class Settings extends Component {
   }
 
   refreshList = () => {
-    this.post_method("", "http://127.0.0.1:5000/button_get_pause", (data) => {
+    this.post_method("", `${apiUrl}/button_get_pause`, (data) => {
       this.setState({
         pause: data.pause,
       });
     });
-    this.post_method("", "http://127.0.0.1:5000/button_get_scaling", (data) => {
+    this.post_method("", `${apiUrl}/button_get_scaling`, (data) => {
       this.setState({
         difficultyScaling: data.difficulty,
         importanceScaling: data.importance,
@@ -126,7 +128,7 @@ class Settings extends Component {
     let body_content = JSON.stringify({ content: content, type: type });
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_remove_active_reward",
+      `${apiUrl}/button_remove_active_reward`,
       (data) => {
         this.refreshList();
       }
@@ -135,7 +137,7 @@ class Settings extends Component {
 
   // Submit an item
   handleChangePause = () => {
-    this.post_method("", "http://127.0.0.1:5000/change_pause", (data) => {
+    this.post_method("", `${apiUrl}/change_pause`, (data) => {
       this.refreshList();
     });
   };
@@ -148,7 +150,7 @@ class Settings extends Component {
     });
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/change_scaling",
+      `${apiUrl}/change_scaling`,
       (data) => {
         this.refreshList();
       }

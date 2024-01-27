@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import Modal from "../components/Modal";
 import ModalCompletion from "../components/ModalCompletion";
 import starIcon from "../svg/star.svg";
-
 import CustomCheckbox from "../components/CustomCheckbox";
+
+
+const apiUrl = process.env.REACT_APP_API_URL || '';
 
 class Tasks extends Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class Tasks extends Component {
   }
 
   refreshList = () => {
-    this.post_method("", "http://127.0.0.1:5000/get_tasks", (data) => {
+    this.post_method("", `${apiUrl}/get_tasks`, (data) => {
       this.setState({
         once: data.once,
         daily: data.daily,
@@ -114,7 +116,7 @@ class Tasks extends Component {
     let body_content = JSON.stringify(item);
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_task_completion",
+      `${apiUrl}/button_task_completion`,
       (data) => {
         this.refreshList();
       }
@@ -145,7 +147,7 @@ class Tasks extends Component {
     });
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_delete_task",
+      `${apiUrl}/button_delete_task`,
       (data) => {
         this.refreshList();
       }
@@ -158,7 +160,7 @@ class Tasks extends Component {
     let body_content = JSON.stringify(item);
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_create_task",
+      `${apiUrl}/button_create_task`,
       (data) => {
         this.refreshList();
       }

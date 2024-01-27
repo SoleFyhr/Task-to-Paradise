@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ModalPenalty from "../components/ModalPenalty";
 
+const apiUrl = process.env.REACT_APP_API_URL || '';
+
 class Penalty extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,7 @@ class Penalty extends Component {
   }
 
   refreshList = () => {
-    this.post_method("", "http://127.0.0.1:5000/button_get_penalty", (data) => {
+    this.post_method("", `${apiUrl}/button_get_penalty`, (data) => {
       this.setState({
         penaltyDaily: data.daily,
       });
@@ -110,7 +112,7 @@ class Penalty extends Component {
     let body_content = JSON.stringify({ id: id, type: type });
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_remove_penalty",
+      `${apiUrl}/button_remove_penalty`,
       (data) => {
         this.refreshList();
       }
@@ -123,7 +125,7 @@ class Penalty extends Component {
     let body_content = JSON.stringify(item);
     this.post_method(
       body_content,
-      "http://127.0.0.1:5000/button_create_penalty",
+      `${apiUrl}/button_create_penalty`,
       (data) => {
         this.refreshList();
       }

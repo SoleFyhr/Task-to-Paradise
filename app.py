@@ -9,16 +9,22 @@ import enum_list as enu
 import manager as man
 import other_stuff as other
 import os
+from dotenv import load_dotenv
+import os
  
 app = Flask(__name__, static_folder='./tasks-to-paradise/build')
 app.secret_key = 'your_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 app.config['SESSION_COOKIE_NAME'] = 'your_session_cookie_name'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
+
+load_dotenv()
+
 if os.getenv('FLASK_ENV') == 'production':
     app.config['SESSION_COOKIE_SECURE'] = True
 
 else:
+    print(os.getenv('FLASK_ENV'))
     app.config['SESSION_COOKIE_SECURE'] = False
 
 
