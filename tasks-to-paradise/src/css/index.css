@@ -293,6 +293,7 @@ li.prohibited {
   scroll-snap-type: y mandatory;
   overflow-y: auto; /* Allows scrolling */
   height: 100vh;
+  scroll-behavior: smooth;
 }
 
 /* Making scrollbar transparent */

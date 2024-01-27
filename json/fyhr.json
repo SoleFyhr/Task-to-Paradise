@@ -1,144 +1,51 @@
 {
     "tasks": {
         "once": [
-            {
-                "id": "04d186d9-2c60-4238-90ff-e5b383d93e9f",
-                "title": "ONcy",
-                "content": "",
-                "task_type": "once",
-                "expiration_time": "2024-01-27",
-                "difficulty": "easy",
-                "importance": 5.0,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            }
         ],
         "daily": [
-            {
-                "id": "2a11d88b-2d11-4708-a4c0-c0f308aa565b",
-                "title": "Test?",
-                "content": "",
-                "task_type": "daily",
-                "expiration_time": "",
-                "difficulty": "easy",
-                "importance": 5.0,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            }
+            
         ],
         "habits": [
-            {
-                "id": "413060bd-bf78-40b5-b086-ca93ff4a6e27",
-                "title": "Habitsss",
-                "content": "",
-                "task_type": "habits",
-                "expiration_time": "2024-01-29",
-                "difficulty": "easy",
-                "importance": 5.0,
-                "penalty_induced": null,
-                "time_to_completion": "3",
-                "frequency_coming_back": "3"
-            }
+            
         ],
         "prohibited": [
-            {
-                "id": "bce5f8ed-4b1f-4ef4-8fe2-407e1ecda50f",
-                "title": "Test",
-                "content": "Prohibited",
-                "task_type": "prohibited",
-                "expiration_time": "",
-                "difficulty": "easy",
-                "importance": 5.0,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            },
-            {
-                "id": "164b9ebe-3995-4159-98b2-293bf5606ab0",
-                "title": "Prohi",
-                "content": "",
-                "task_type": "prohibited",
-                "expiration_time": "",
-                "difficulty": "easy",
-                "importance": 20.0,
-                "penalty_induced": null,
-                "time_to_completion": "",
-                "frequency_coming_back": ""
-            }
+            
         ]
     },
     "projects": [],
     "penalty": {
         "daily": [
-            {
-                "id": "238e7e9e-8bb7-4d39-852a-232308299358",
-                "content": "Douche Froidi"
-            },
-            {
-                "id": "3fab5b1c-a0dd-4dd1-9cc0-8739c9925306",
-                "content": "Oahio"
-            },
-            {
-                "id": "1607182e-2a33-4b87-b16e-2c296596ff21",
-                "content": "Not this one"
-            }
+            
         ],
         "weekly": [
-            {
-                "id": "238e7e9e-8bb7-4d12-852a-734508299358",
-                "content": "Douche Froido"
-            }
+            
         ],
         "monthly": [
-            {
-                "id": "b6b00b00-a48a-433c-aff0-72e86ecedbc0",
-                "content": "d"
-            }
+           
         ],
         "active": [
-            {
-                "id": "b4a5ce61-502c-4446-8fbf-64079cdaa4b2",
-                "content": "Douche Froidi"
-            }
+            
         ]
     },
     "reward": {
         "daily": [
-            {
-                "id": "eaeb878a-d52c-4cca-817b-39ed8898e5d3",
-                "content": "1"
-            },
-            {
-                "id": "6a4383bc-47f0-498e-b874-6b871e52dfc9",
-                "content": "TestReward"
-            }
+            
         ],
         "weekly": [
-            {
-                "id": "fdd4cd15-386c-4d2c-997f-dbbb3bf4c370",
-                "content": "Tests"
-            }
+            
         ],
         "monthly": [
-            {
-                "id": "e4267cde-fae0-4b85-86b2-cca5caf0ff19",
-                "content": "FF"
-            }
+            
         ],
         "active": [
-            {
-                "id": "876ded80-eefc-482f-8526-471fbf68c43e",
-                "content": "TestReward"
-            }
+            
         ]
     },
     "historic": [],
     "penalty_points": {
         "daily": 0,
-        "weekly": 10,
-        "monthly": 10
+        "weekly": 0,
+        "monthly": 0
     },
     "reward_points": {
         "daily": 0,
