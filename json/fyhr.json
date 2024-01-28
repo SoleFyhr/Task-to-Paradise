@@ -1,56 +1,140 @@
 {
     "tasks": {
         "once": [
+            {
+                "id": "0e53386a-cb65-4cfd-bb09-b4924cbe2fcd",
+                "title": "Once",
+                "content": "details once",
+                "task_type": "once",
+                "expiration_time": "2024-01-31",
+                "difficulty": "easy",
+                "importance": 5.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
         ],
         "daily": [
-            
+            {
+                "id": "04f03250-362b-48b4-ab4c-890b24ebcdba",
+                "title": "Daily",
+                "content": "",
+                "task_type": "daily",
+                "expiration_time": "",
+                "difficulty": "medium",
+                "importance": 20.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
         ],
         "habits": [
-            
+            {
+                "id": "f5def399-1152-4e73-9989-42679cd6c901",
+                "title": "Habits",
+                "content": "habits details",
+                "task_type": "habits",
+                "expiration_time": "2024-02-09",
+                "difficulty": "medium",
+                "importance": 13.0,
+                "penalty_induced": null,
+                "time_to_completion": "5",
+                "frequency_coming_back": "7"
+            }
         ],
         "prohibited": [
-            
+            {
+                "id": "e09ddfa0-3153-4331-92da-d23f314b01b6",
+                "title": "Prohibited example",
+                "content": "details",
+                "task_type": "prohibited",
+                "expiration_time": "",
+                "difficulty": "easy",
+                "importance": 13.0,
+                "penalty_induced": null,
+                "time_to_completion": "",
+                "frequency_coming_back": ""
+            }
         ]
     },
     "projects": [],
     "penalty": {
         "daily": [
-            
+            {
+                "id": "e3b6c9a3-80c1-447f-888c-4c5342d333c1",
+                "content": "Penalty Daily 1"
+            },
+            {
+                "id": "edaa6dd0-c8d4-4ede-b75c-0705ee25fcbd",
+                "content": "Pen 2"
+            }
         ],
         "weekly": [
-            
+            {
+                "id": "078ad9ef-8763-4918-ba3f-7e45813bd7d7",
+                "content": "Pen weekly?"
+            }
         ],
         "monthly": [
-           
+            {
+                "id": "3b07a5cd-eaed-40e6-a628-86552f54e8c1",
+                "content": "Pen Month example"
+            }
         ],
-        "active": [
-            
-        ]
+        "active": []
     },
     "reward": {
         "daily": [
-            
+            {
+                "id": "9de25e21-ee5e-4b22-8fd3-2a6986ad3b18",
+                "content": "rew daily"
+            },
+            {
+                "id": "a10ce474-3e08-42fc-b3d3-967ab272061a",
+                "content": "daily"
+            },
+            {
+                "id": "6ba3db25-ce26-472c-843b-3f239ad44418",
+                "content": "Worst"
+            }
         ],
         "weekly": [
-            
+            {
+                "id": "c94d1c27-e31f-48da-be9e-e1fdfaa2751e",
+                "content": "rew week"
+            }
         ],
         "monthly": [
-            
+            {
+                "id": "ca9e6414-a8b3-4418-87d2-54b574aa393e",
+                "content": "rew monthly"
+            }
         ],
-        "active": [
-            
-        ]
+        "active": []
     },
-    "historic": [],
+    "historic": [
+        {
+            "id": "11a720d8-8c8e-4862-bc64-4c1d9ea4495f",
+            "title": "Dailyyyy",
+            "content": "test",
+            "task_type": "daily",
+            "expiration_time": "",
+            "difficulty": "easy",
+            "importance": 5.0,
+            "penalty_induced": null,
+            "time_to_completion": "",
+            "frequency_coming_back": ""
+        }
+    ],
     "penalty_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 0
+        "daily": 13,
+        "weekly": 13,
+        "monthly": 13
     },
     "reward_points": {
-        "daily": 0,
-        "weekly": 0,
-        "monthly": 0
+        "daily": 3.0,
+        "weekly": 3.0,
+        "monthly": 3.0
     },
     "scaling": {
         "difficulty": [
@@ -74,5 +158,5 @@
     },
     "reward_unlocking_steps": 0,
     "pause": "no",
-    "last_date": "2024-01-27"
+    "last_date": "2024-01-28"
 }

@@ -1,5 +1,5 @@
 import json
-import json_manager
+import database_manager
 import enum_list as enu
 import uuid
 
@@ -8,9 +8,9 @@ class Task:
         self.id = str(id) if id is not None else str(uuid.uuid4())
         self.title = title
         self.content = content
-        self.task_type = task_type #daily/oncy/habits
+        self.task_type = task_type.value #daily/oncy/habits
         self.expiration_time = expiration_time
-        self.difficulty = difficulty
+        self.difficulty = difficulty.value
         self.importance = importance
         self.penalty_induced = penalty_induced
         self.time_to_completion = time_to_completion
@@ -41,34 +41,32 @@ class Task:
     
 
 
-def create_new_task(user,title,content, type, expiration_time,difficulty=enu.Difficulty.EASY, importance=0,penalty_induced=None,time_to_completion="",frequency_coming_back=""):
+def create_new_task(user_id, title, content, task_type, expiration_time, difficulty=enu.Difficulty.EASY, importance=0, penalty_induced=None, time_to_completion="", frequency_coming_back=""):
     
-    new_task = Task(title,content,type,expiration_time,difficulty,importance,penalty_induced,time_to_completion,frequency_coming_back)
-    task_json = new_task.to_json()
+    new_task = Task(title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back)
     
-    json_manager.add_task_to_json(user, task_json,json_manager.JSONCategory.TASK,type)
-    return task_json
-
+    # Directly pass the Task object to the database manager
+    database_manager.add_task_to_db(user_id, new_task)
 
  
-def delete_task(id,user):
-    json_manager.delete_task_by_id(user,id)
+def delete_task(id,user_id):
+    database_manager.delete_task_by_id(user_id,id)
 
-def get_all_tasks(user):
-    return json_manager.get_all_things(json_manager.JSONCategory.TASK,user)
+def get_all_tasks(user_id):
+    return database_manager.get_all_things(database_manager.JSONCategory.TASK,user_id)
 
-def get_all_tasks_sorted(user):
-    return json_manager.get_all_tasks_by_type(user)
+def get_all_tasks_sorted(user_id):
+    return database_manager.get_all_tasks_by_type(user_id)
 
-def get_all_tasks_sorted_with_historic(user):
-    return json_manager.get_all_tasks_by_type_with_historic(user)
-
-
-def get_importance_values(user):
-    return json_manager.retrieve_scaling(user,enu.Scaling_Cat.IMPORTANCE)
-
-def get_completion_values(user):
-    return json_manager.retrieve_scaling(user,enu.Scaling_Cat.COMPLETION)
+def get_all_tasks_sorted_with_historic(user_id):
+    return database_manager.get_all_tasks_by_type_with_historic(user_id)
 
 
-#create_new_task("SuperTest","",enu.TaskType.HABITS,"2024-02-11",difficulty=enu.Difficulty.HARD,importance=10,time_to_completion=7,frequency_coming_back=3)
+def get_importance_values(user_id):
+    return database_manager.retrieve_scaling(user_id,enu.Scaling_Cat.IMPORTANCE)
+
+def get_completion_values(user_id):
+    return database_manager.retrieve_scaling(user_id,enu.Scaling_Cat.COMPLETION)
+
+
+#create_new_task(1,"SuperTes","",enu.TaskType.HABITS,"2024-02-05",difficulty=enu.Difficulty.EASY,importance=10,time_to_completion=5,frequency_coming_back=7)

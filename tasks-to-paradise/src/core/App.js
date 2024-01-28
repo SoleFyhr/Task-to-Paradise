@@ -180,11 +180,13 @@ function App() {
 
 export default App;
 
-//4 Deploy sur heroku
+
+//Adapter la putain de database
 //5 Ajouter add on pour scheduler la daily routine tous les jours.
 
 
 //S'occuper du scaling des weekly et company
+//enlever les rewards daily. Que weekly and monthly
 //Faire penalty induced
 //Corriger problème d'alignement entre menu et titre
 //rendre le details hoverable urgeamment
@@ -197,6 +199,11 @@ export default App;
 //Rendre le responsive plus beau ? (settings...)
 //mot de passe 
 //Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
+
+//make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
+//Do projects
+//Do achievements
+//Add authentification with google or smth not crackable
 
 //SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard
 //rendre plus joli tasks penlatys et rewards

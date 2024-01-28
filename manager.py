@@ -1,4 +1,4 @@
-import json_manager as js
+import database_manager as js
 import json
 import tasks as ta
 import penalty as pen
@@ -100,7 +100,7 @@ def update_reward_unlocking(user,time):
 
 
 def check_if_new_day(user): 
-    date = js.get_all_things(js.JSONCategory.DATE,user) 
+    date = js.retrieve_date_field(user) 
     current_date = datetime.datetime.now().date().strftime('%Y-%m-%d')
 
     if date != current_date:
