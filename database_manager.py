@@ -7,6 +7,7 @@ import psycopg2.extras
 
 
 
+#TODO dégager ca et tester toutes les fonctions de json
 
 json_path = "./json/"
 file_ext = ".json"
@@ -16,19 +17,21 @@ file_ext = ".json"
 class JSONCategory(Enum):
     TASK = "tasks"
     PROJECT = "projects"
-    PENALTY = "penalty"
-    REWARD = "reward"
+    PENALTY = "penalties"
+    REWARD = "rewards"
     HISTORIC = "historic"
-
     PPOINTS = "penalty_points"
     RPOINTS = "reward_points"
     SCALING = "scaling"
+
+
+
     REWARD_UNLOCKING_STEP ="reward_unlocking_steps"
     PAUSE ="pause"
     DATE ="last_date"
 
 #!----------------- GENERAL --------------------------
-
+#TODO Remove when done
 def init_check_procedure(user_id):
     # Read the existing data from the file
     try:
@@ -51,7 +54,67 @@ def get_db_connection():
     )
     return conn
 
+
+#TODO to change references with 'get_all_field' below
+def get_all_things(category,user_id):
+    data = init_check_procedure(user_id)
+    if data is None:
+        raise ValueError("Initial check failed or no data found for user.")
+    return data[category.value]
+
+
+def get_all_field(user_id,table):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = f"SELECT * FROM {table.value} WHERE user_id = %s"
+    cursor.execute(sql, (user_id,))
+    bundle = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return bundle
+
+
+def get_one_field(user_id,table,field):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = f"SELECT {field} FROM {table.value} WHERE user_id = %s"
+    cursor.execute(sql, (user_id,))
+    fieldd = cursor.fetchone()[field]
+
+    cursor.close()
+    conn.close()
+    return fieldd
+
+def get_one_thing_by_id(user_id,table,id):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = f"SELECT * FROM {table} WHERE user_id = %s AND id = %s"
+    cursor.execute(sql, (user_id,id))
+    fieldd = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return fieldd
+
+
+def update_one_field_by_id(user_id,table,parameter,value,id):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    sql = f"UPDATE {table} SET {parameter} = %s WHERE user_id = %s AND id = %s"
+
+    cursor.execute(sql, (value,user_id,id))
+
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+
 #!----------------- USERS --------------------------
+
+
 
 def add_user_to_db(user):
     conn = get_db_connection()
@@ -85,12 +148,6 @@ def get_user_id_by_username(username):
     else:
         return None  # Or an appropriate value/exception if the user is not found
 
-def get_all_things(category,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-    return data[category.value]
-
 def get_one_field_from_users(user_id,field):
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -103,29 +160,9 @@ def get_one_field_from_users(user_id,field):
     return fieldd
 
 
-def get_one_field(user_id,table,field):
-    conn = get_db_connection()
-    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql = f"SELECT {field} FROM {table} WHERE user_id = %s"
-    cursor.execute(sql, (user_id,))
-    fieldd = cursor.fetchone()[field]
+#!----------------- TASKS --------------------------
 
-    cursor.close()
-    conn.close()
-    return fieldd
 
-def get_all_field(user_id,table,field):
-    conn = get_db_connection()
-    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql = f"SELECT {field} FROM {table} WHERE user_id = %s"
-    cursor.execute(sql, (user_id,))
-    fieldd = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-    return fieldd
-
-#----------------- TASKS --------------------------
 
 def add_task_to_db(user_id, new_task):
     conn = get_db_connection()
@@ -262,28 +299,12 @@ def delete_task_by_id(user_id, task_id):
 #         json.dump(data, file, indent=4)
 
 def change_one_field_of_given_task(user_id, task_id, parameter, new_value):
-    conn = get_db_connection()
-    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    sql = f"UPDATE tasks SET {parameter} = %s WHERE user_id = %s AND id = %s"
-    cursor.execute(sql, (new_value, user_id, task_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
+    update_one_field_by_id(user_id,JSONCategory.TASK.value,parameter,new_value,task_id)
+  
         
 def get_thing_by_id(user_id, task_id):
-    conn = get_db_connection()
-    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-    cursor.execute("""
-        SELECT * FROM tasks WHERE user_id = %s AND id = %s
-    """, (user_id, task_id))
-
-    task = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
+    task = get_one_thing_by_id(user_id,JSONCategory.TASK.value,task_id)
 
     if task:
         return task
@@ -586,44 +607,81 @@ def get_active(category,active_category,user_id):
 #----------------- PPOINTS - RPOINTS --------------------------
 
 
+def add_rppoints_to_user(user_id,daily,weekly,monthly,category):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-def change_value(value, category, time_period,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")    
-    data[category.value][time_period.value] = value
+    # Use a dynamic SQL query to update the correct column
+    sql = f"INSERT INTO {category.value} (user_id,daily,weekly,monthly) VALUES (%s,%s, %s, %s)"
+    
+    cursor.execute(sql, (user_id,daily,weekly,monthly))
 
-    with open(json_path + user_id +file_ext, 'w') as file:
-        json.dump(data, file, indent=4)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+def change_value(user_id,value, category, time_period):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-def get_value(category, time_period,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")    
-    return data[category.value][time_period.value]
+    # Use a dynamic SQL query to update the correct column
+    sql = f"UPDATE {category.value} SET {time_period.value} = %s WHERE user_id = %s"
+    cursor.execute(sql, (value, user_id))
 
-def get_points_category(category,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")    
-    return data[category.value]
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    
+
+def get_value(user_id,category, time_period):
+    rppoint = get_one_field(user_id,category,time_period.value)
+    return rppoint
+
+def get_points_category(user_id,category):
+    values = get_all_field(user_id,category)[0]
+    values.pop(0)
+    return values
+
+#add_rppoints_to_user(3,2,3,4,JSONCategory.PPOINTS)
+# print(get_points_category(3,JSONCategory.PPOINTS))
+# change_value(3,4,JSONCategory.PPOINTS,enu.TimeEnum.DAILY)
+# print(get_points_category(3,JSONCategory.PPOINTS))
+# print(get_value(3,JSONCategory.PPOINTS,enu.TimeEnum.DAILY))
 
 
-  
-
-
-#----------------- SCALING --------------------------
+#----------------- SCALING ---------------------
 
 #A task completed, will earn X points if it's easy, X points if meidum... x level of completion
 #A task failed, will penalize X points if it's not so important, X points if it's important...
 
-#TODO to test and by the way to generalize the 'update' to everyone else, ad shown above. Change the 'id' in 'users' into 'user_id' too.
-def add_sequence_to_scaling(user_id, sequence,category):
+def add_scaling_to_user(user_id, difficulty, completion,importance):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    difficulty_pg_array = '{' + ','.join(map(str, difficulty)) + '}'
+    completion_pg_array = '{' + ','.join(map(str, completion)) + '}'
+
+    importance_pg_array = '{' + ','.join(map(str,importance)) + '}'
+
+
+    # Use a dynamic SQL query to update the correct column
+    sql = "INSERT INTO scaling (user_id,difficulty,completion,importance) VALUES (%s,%s, %s, %s)"
+    
+    cursor.execute(sql, (user_id,difficulty_pg_array,completion_pg_array,importance_pg_array))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+#add_scaling_to_user(3,[1,2,3],[1,2,3],[1,2,3])
+                        
+def update_sequence_to_scaling(user_id, sequence,category):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Convert Python list to PostgreSQL array format
     sequence_pg_array = '{' + ','.join(map(str, sequence)) + '}'
 
     # Use a dynamic SQL query to update the correct column
@@ -634,20 +692,21 @@ def add_sequence_to_scaling(user_id, sequence,category):
     cursor.close()
     conn.close()
 
-#TODO Ajouter à chaque user le scaling de base lors de la création.
+#update_sequence_to_scaling(3,[3.8,2,3,5,7],enu.Scaling_Cat.COMPLETION)
+
 def retrieve_value_in_scaling(user_id, category,number):
-    value = get_one_field(user_id,JSONCategory.SCALING,category.value)
-    return value
+    values = get_one_field(user_id,JSONCategory.SCALING,category.value)
+    print(values)
+    print(values[number])
+    return values[number]
 
-
-#TODO Test cette fonction pour voir comment ca marche les chaines
+#retrieve_value_in_scaling(3,enu.Scaling_Cat.COMPLETION,0)
 
 def retrieve_scaling(user_id, category):
-    scalings = get_all_field(user_id,JSONCategory.SCALING.value,category.value)
-    for scaling in scalings:
-        print(scaling) #TODO
-    # return data["scaling"][category.value]
+    scalings = get_one_field(user_id,JSONCategory.SCALING,category.value)
+    return scalings
 
+#retrieve_scaling(3,enu.Scaling_Cat.COMPLETION)
 
 
 #----------------- PAUSE --------------------------
@@ -662,9 +721,7 @@ def change_pause(user_id):
     if retrieve_pause_field(user_id) == "yes":
         variable = "no"
 
-    sql = f"UPDATE public.users
-        SET {JSONCategory.PAUSE.value} = %s
-        WHERE id = %s"
+    sql = f"UPDATE public.users SET {JSONCategory.PAUSE.value} = %s WHERE id = %s"
 
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -698,7 +755,7 @@ def change_date(user_id, new_date):
 
 
 
-#----------------- USERS --------------------------
+#----------------- USERS.TXT --------------------------
 
 
 def read_usernames_from_file(file_path):

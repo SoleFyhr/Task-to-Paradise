@@ -88,13 +88,13 @@ def check_if_penalty_completed(user):
 #Activate as much penalty from the daily etc categories than the points
 #unlocking is 10points =1rst penalty /20 points = second /30/40...
 def update_penalties_unlocking(user,time):
-    number_penalties = js.get_value(js.JSONCategory.PPOINTS,time,user)
+    number_penalties = js.get_value(user,js.JSONCategory.PPOINTS,time)
     number_iteration = int(number_penalties)//10
     pen.activate_penalty(user,time,number_iteration)
 
 
 def update_reward_unlocking(user,time):
-    number_reward = js.get_value(js.JSONCategory.RPOINTS,time,user)
+    number_reward = js.get_value(user,js.JSONCategory.RPOINTS,time)
     number_iteration = int(number_reward)//10
     rew.activate_reward(user,time,number_iteration)
 

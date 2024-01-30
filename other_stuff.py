@@ -26,8 +26,8 @@ def get_pause_field(user):
 
 #!--------------------Points-------------------
 def get_ppoints_rpoints(user):
-    rpoints = database_manager.get_points_category(database_manager.JSONCategory.RPOINTS,user)
-    ppoints = database_manager.get_points_category(database_manager.JSONCategory.PPOINTS,user)
+    rpoints = database_manager.get_points_category(user,database_manager.JSONCategory.RPOINTS)
+    ppoints = database_manager.get_points_category(user,database_manager.JSONCategory.PPOINTS)
 
     return rpoints,ppoints
 

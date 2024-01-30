@@ -41,11 +41,11 @@ def add_reward_to_all(value,user):
     time = [enu.TimeEnum.DAILY,enu.TimeEnum.WEEKLY,enu.TimeEnum.MONTHLY]
 
     for i in range(len(time)):
-        ancient_value = database_manager.get_value(category,time[i],user)
-        database_manager.change_value(value+ancient_value,category,time[i],user)
+        ancient_value = database_manager.get_value(user,category,time[i])
+        database_manager.change_value(user,value+ancient_value,category,time[i])
 
 def reset_total_value(user,time):
-    database_manager.change_value(0,database_manager.JSONCategory.RPOINTS,time,user)
+    database_manager.change_value(user,0,database_manager.JSONCategory.RPOINTS,time)
 
 
 def activate_reward(user,time,number_iteration):
