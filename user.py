@@ -27,7 +27,7 @@ def create_new_user(username):
     database_manager.add_user_to_db(new_user)
     id = database_manager.get_user_id_by_username(username)
 
-    #TODO create levels of difficulty and not hardcode this shit like this
+    #TODO create levels of difficulty and not hardcode/magic numbers shit like this
 
     difficulty= [1.0,3.0,6.0,10.0]
     completion= [0.25,0.5,0.8,1.0,1.5]
@@ -37,6 +37,9 @@ def create_new_user(username):
     database_manager.add_rppoints_to_user(id, 0,0,0,database_manager.JSONCategory.PPOINTS)
     database_manager.add_rppoints_to_user(id, 0,0,0,database_manager.JSONCategory.RPOINTS)
 
+def get_user_id_from_username(username):
+    return database_manager.get_user_id_by_username(username)
 
+#create_new_user('Aotrix')
 
-#create_new_user('test_userv2')
+# ALTER SEQUENCE users_id_seq RESTART WITH 1;

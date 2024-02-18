@@ -52,8 +52,9 @@ def create_new_task(user_id, title, content, task_type, expiration_time, difficu
 def delete_task(id,user_id):
     database_manager.delete_task_by_id(user_id,id)
 
-def get_all_tasks(user_id):
-    return database_manager.get_all_things(database_manager.JSONCategory.TASK,user_id)
+def get_all_tasks(username):
+    id = database_manager.get_user_id_by_username(username)
+    return database_manager.get_all_field(id,database_manager.JSONCategory.TASK)
 
 def get_all_tasks_sorted(user_id):
     return database_manager.get_all_tasks_by_type(user_id)
@@ -69,4 +70,7 @@ def get_completion_values(user_id):
     return database_manager.retrieve_scaling(user_id,enu.Scaling_Cat.COMPLETION)
 
 
-#create_new_task(1,"SuperTes","",enu.TaskType.HABITS,"2024-02-05",difficulty=enu.Difficulty.EASY,importance=10,time_to_completion=5,frequency_coming_back=7)
+# create_new_task(2,"SuperTes","",enu.TaskType.HABITS,"2024-02-05",difficulty=enu.Difficulty.EASY,importance=10,time_to_completion=5,frequency_coming_back=7)
+# create_new_task(2,"ooononcy","",enu.TaskType.ONCE,"2024-02-05",difficulty=enu.Difficulty.HARD,importance=10)
+# create_new_task(2,"prohiiii","",enu.TaskType.PROHIBITED,"2024-02-05",difficulty=enu.Difficulty.MEDIUM,importance=10)
+# create_new_task(2,"dailyy","",enu.TaskType.DAILY,"2024-02-05",difficulty=enu.Difficulty.MEDIUM,importance=10)

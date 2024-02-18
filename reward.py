@@ -25,16 +25,34 @@ class Reward:
     
 
 #type = in daily scale, place= 2nd rank
-def create_new_reward(user,content,type,place): 
+def create_new_reward(user_id,content,type,place): 
     new_reward = Reward(content) #cold shower
-    reward_json = new_reward.to_json()
-    database_manager.add_penalty_reward_to_db(user, reward_json,database_manager.JSONCategory.REWARD,type,place)
+    database_manager.add_penalty_reward_to_db(user_id, new_reward,database_manager.JSONCategory.REWARD,type,place)
+
+#create_new_reward(2,'Test & DOdo',enu.TimeEnum.MONTHLY,1)
+# create_new_reward(2,'1Tesssst',enu.TimeEnum.DAILY,1)
+
+# create_new_reward(2,'2Tesssst',enu.TimeEnum.DAILY,2)
+# create_new_reward(2,'3Tesssst',enu.TimeEnum.DAILY,3)
 
 
-def get_all_reward_sorted(user):
-    data = database_manager.get_all_things(database_manager.JSONCategory.REWARD,user)
-    return data['daily'], data['weekly'], data['monthly']
+# create_new_reward(2,'WTesssst',enu.TimeEnum.WEEKLY,0)
+# create_new_reward(2,'ATesssst',enu.Active.ACTIVE,0)
 
+
+
+def get_all_reward_sorted(user_id):
+
+
+    daily = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.DAILY)
+    weekly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.WEEKLY)
+    monthly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.MONTHLY)
+
+
+    return daily,weekly,monthly
+
+
+# print(get_all_reward_sorted(2)[1][0]['content'])
 
 def add_reward_to_all(value,user):
     category = database_manager.JSONCategory.RPOINTS
@@ -44,25 +62,27 @@ def add_reward_to_all(value,user):
         ancient_value = database_manager.get_value(user,category,time[i])
         database_manager.change_value(user,value+ancient_value,category,time[i])
 
+
+
 def reset_total_value(user,time):
     database_manager.change_value(user,0,database_manager.JSONCategory.RPOINTS,time)
 
+# add_reward_to_all(3,2)
+# reset_total_value(2,enu.TimeEnum.MONTHLY)
 
 def activate_reward(user,time,number_iteration):
-
     contents =  database_manager.penalty_reward_iterate(user,database_manager.JSONCategory.REWARD,time,number_iteration)
     for content in contents:
-        json_rew =Reward(content).to_json()
-        database_manager.add_penalty_reward_to_db(user,json_rew,database_manager.JSONCategory.REWARD,enu.Active.ACTIVE,-1)
+        create_new_reward(user,content,enu.Active.ACTIVE,0)
 
-def remove_active_reward(user,id):
-    database_manager.remove_penalty_reward_in_active(user,id,database_manager.JSONCategory.REWARD)
-    
-def remove_reward(user,id,type):
-    database_manager.delete_penalty_reward_by_id(user,id,database_manager.JSONCategory.REWARD,type)
+#activate_reward(2,enu.TimeEnum.DAILY,4)
+
+def remove_reward(user,id):
+    database_manager.delete_penalty_reward_by_id(user,id,database_manager.JSONCategory.REWARD)
+
 
 def get_active_reward(user):
-    return database_manager.get_active(database_manager.JSONCategory.REWARD,enu.Active.ACTIVE,user)
+    return database_manager.get_active(database_manager.JSONCategory.REWARD,user)
 
 
 #create_new_reward('fyhr',"Meditate",enu.TimeEnum.DAILY,1)

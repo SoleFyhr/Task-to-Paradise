@@ -166,7 +166,7 @@ def function_task_completion():
 
     if(type == enu.TaskType.PROHIBITED):
         if(data.get('penalty_induced') != None): #test this
-            pe.activate_penalty_through_content(username,data.get('penalty_induced'))
+            pe.create_new_penalty(username,data.get('penalty_induced'),enu.Active.ACTIVE,0)
         man.penalty_task_done(username,id)
         response_data = {"message": "Task treated successfully","action":"reactivate"}
  
@@ -212,8 +212,7 @@ def function_remove_penalty_cative():
 
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
-    type = enu.Active.ACTIVE
-    pe.remove_penalty(username,id,type)
+    pe.remove_penalty(username,id)
     response_data = {"message": "Penalty removed successfully"}
     return jsonify(response_data)
 
@@ -228,8 +227,8 @@ def function_remove_penalty():
 
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
-    type = enu.TimeEnum.from_string(data.get('type'))
-    pe.remove_penalty(username,id,type)
+    # type = enu.TimeEnum.from_string(data.get('type'))
+    pe.remove_penalty(username,id)
     response_data = {"message": "Penalty removed successfully"}
     return jsonify(response_data)
 
@@ -290,8 +289,8 @@ def function_remove_reward_active():
 
     data = request.json  # This will contain the data sent from the JavaScript
     content = data.get('content')
-    type = enu.TimeEnum.from_string(data.get('type'))
-    rew.remove_reward(username,content,type)
+    # type = enu.TimeEnum.from_string(data.get('type'))
+    rew.remove_reward(username,content)
     response_data = {"message": "Reward removed successfully"}
     return jsonify(response_data)
 
@@ -305,8 +304,8 @@ def function_remove_reward():
 
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
-    type = enu.TimeEnum.from_string(data.get('type'))
-    rew.remove_reward(username,id,type)
+    # type = enu.TimeEnum.from_string(data.get('type'))
+    rew.remove_reward(username,id)
     response_data = {"message": "Reward removed successfully"}
     return jsonify(response_data)
 

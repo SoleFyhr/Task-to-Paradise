@@ -6,12 +6,6 @@ import psycopg2
 import psycopg2.extras
 
 
-
-#TODO dégager ca et tester toutes les fonctions de json
-
-json_path = "./json/"
-file_ext = ".json"
-
 #----------------- ENUM --------------------------
 
 class JSONCategory(Enum):
@@ -31,18 +25,6 @@ class JSONCategory(Enum):
     DATE ="last_date"
 
 #!----------------- GENERAL --------------------------
-#TODO Remove when done
-def init_check_procedure(user_id):
-    # Read the existing data from the file
-    try:
-        with open(json_path+user_id +file_ext, 'r') as file:
-            data = json.load(file)
-            
-    except FileNotFoundError:
-        print("File not found.")
-        return
-    
-    return data
 
 def get_db_connection():
     conn = psycopg2.connect(
@@ -53,14 +35,6 @@ def get_db_connection():
         port="5432"
     )
     return conn
-
-
-#TODO to change references with 'get_all_field' below
-def get_all_things(category,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-    return data[category.value]
 
 
 def get_all_field(user_id,table):
@@ -76,6 +50,10 @@ def get_all_field(user_id,table):
 
 
 def get_one_field(user_id,table,field):
+
+
+    field = field.value if isinstance(field, Enum) else field
+
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     sql = f"SELECT {field} FROM {table.value} WHERE user_id = %s"
@@ -86,12 +64,28 @@ def get_one_field(user_id,table,field):
     conn.close()
     return fieldd
 
+
+def get_with_one_condition(user_id,table,condition_name,condition_field):
+
+
+    condition_field = condition_field.value if isinstance(condition_field, Enum) else condition_field
+
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = f"SELECT * FROM {table.value} WHERE user_id = %s AND {condition_name} = %s"
+    cursor.execute(sql, (user_id,condition_field))
+    data = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return data
+
 def get_one_thing_by_id(user_id,table,id):
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     sql = f"SELECT * FROM {table} WHERE user_id = %s AND id = %s"
     cursor.execute(sql, (user_id,id))
-    fieldd = cursor.fetchone()
+    fieldd = cursor.fetchall()
 
     cursor.close()
     conn.close()
@@ -342,7 +336,6 @@ def get_thing_by_id(user_id, task_id):
 #         json.dump(data, file, indent=4)
 
 
-#TODO manage once and prohibited
 def move_task_to_historic(user_id, tasks_to_move):
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -354,15 +347,32 @@ def move_task_to_historic(user_id, tasks_to_move):
     for task_id in tasks_to_move:
         # Move each task to the historic table (can be an INSERT followed by DELETE or an UPDATE, depending on your schema)
         cursor.execute("""
+            SELECT task_type FROM tasks WHERE user_id = %s AND id = %s
+        """, (user_id, task_id))
+        type = cursor.fetchone()[0]
+
+        
+
+        if(type in [enu.TaskType.ONCE.value,enu.TaskType.PROHIBITED.value]):
+            cursor.execute("""
+            DELETE FROM tasks WHERE user_id = %s AND id = %s
+            """, (user_id, task_id))
+            continue
+
+        cursor.execute("""
             INSERT INTO historic (SELECT * FROM tasks WHERE user_id = %s AND id = %s)
         """, (user_id, task_id))
+
         cursor.execute("""
             DELETE FROM tasks WHERE user_id = %s AND id = %s
         """, (user_id, task_id))
+        
 
     conn.commit()
     cursor.close()
     conn.close()
+
+#move_task_to_historic(2,['1f96f9ee-e368-43ea-aed1-310922fc13e2','101c1f69-4ed1-45be-b77d-f29eeadc0496','9e8e0753-c368-40bd-81e0-d4fde1465884','9691e410-33e1-4f96-b5d6-a82ebaa64d73'])
 
 # def clean_historic(user):
 #     data = init_check_procedure(user)
@@ -469,140 +479,97 @@ def change_reward_unlocking_steps(user_id,value):
     conn.close()
 
 #----------------- PENALTY & REWARD  --------------------------
-#TODO need to alter table to add the place and index in type in both rewards and penalty
 def add_penalty_reward_to_db(user_id, penalty,category,type,place):
-    # data = init_check_procedure( user_id)
-    # if data is None:
-    #     raise ValueError("Initial check failed or no data found for user.")
-    # data[category.value][type.value].insert(int(place)-1,json.loads(penalty_json))
-
-    # with open(json_path + user_id +file_ext, 'w') as file:
-    #     json.dump(data, file, indent=4)
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    
-
-    # Build and execute the INSERT SQL statement
-    sql = f"""
-        INSERT INTO {category.value} 
-        (user_id,id, content,type,place) 
-        VALUES (%s,%s, %s, %s, %s)
+    sql_previous = f"""
+        SELECT * FROM {category.value} WHERE user_id = %s AND type = %s AND place = {place}        
     """
-    cursor.execute(sql, (
-        user_id,
-        penalty.id,
-        penalty.content, 
-        type,
-        place  
-    ))
+    cursor.execute(sql_previous, (user_id,type.value))
+    value = cursor.fetchone()
+    if not value:
+        # Build and execute the INSERT SQL statement
+        sql = f"""
+            INSERT INTO {category.value} 
+            (user_id,id, content,type,place) 
+            VALUES (%s,%s, %s, %s, %s)
+        """
+        cursor.execute(sql, (
+            user_id,
+            penalty.id,
+            penalty.content, 
+            type.value,
+            place  
+        ))
+    else:
+        sql = f"""
+            UPDATE {category.value} SET CONTENT = %s WHERE user_id = %s and type = %s and place = {place}
+        """
+        cursor.execute(sql, (penalty.content,user_id,type.value))
 
     conn.commit()
     cursor.close()
     conn.close()
 
-
-def is_there_this_penalty_or_reward_in_active(user,id_target,category):
-    data = init_check_procedure(user)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-
-    for thing in data[category.value]['active']:
-        if thing["id"] == id_target:
-            return True
-    return False
-
-def penalty_reward_iterate(user, category,time, num_iterations):
+#If num_iterations = 3, returns 0,1,2 in place (idk if this is the right thing but this is what this function does)
+def penalty_reward_iterate(user_id, category, time, num_iterations):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-    data = init_check_procedure(user)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
-
-    lists = data[category.value][time.value]
-    list_range = list(range(0, num_iterations))
-
-    if(category==JSONCategory.REWARD): #If reward, we check how many we unlocked today.
-        value_to_start = get_reward_unlocking_steps(user)//10 #if 20, we unlcoked 2 steps, so 2
-        list_range = list(range(value_to_start, num_iterations))#0,1 are excluded, since we took 20
-        change_reward_unlocking_steps(user,(num_iterations)*10)
-    contents = []
-
-    for i in list_range:
-        if i < len(lists):
-        #if not is_there_this_penalty_or_reward_in_active(user,lists[i]["id"],category):
-        #Vu qu'on fait que une fois par jour le unlocking de penalty, pas besoin de check si on a deja unlock le seuil de 10 points etc.
-            contents.append(lists[i]["content"])
-        else:
-            break
+    value_to_start = 0
+    # if category == JSONCategory.REWARD:
+    #     # Assuming there's a function or a way to get the current unlocking steps for the user
+    #     value_to_start = get_reward_unlocking_steps(user_id) // 10
+    #     # Optionally update the unlocking steps, if necessary
+    #     change_reward_unlocking_steps(user_id, (num_iterations + value_to_start) * 10)
+    
+    # Adjust the SQL query based on the category to select only the relevant items
+    # and order them by 'place'. Limit the results to 'num_iterations' starting from 'value_to_start'.
+    
+    sql = f"""
+        SELECT content
+        FROM {category.value}
+        WHERE user_id = %s AND type = %s
+        ORDER BY place
+        OFFSET %s LIMIT %s
+    """
+    cursor.execute(sql, (user_id, time.value, value_to_start, num_iterations))
+    rows = cursor.fetchall()
+    
+    # Extract the 'content' from each row
+    contents = [row['content'] for row in rows]
+    
+    cursor.close()
+    conn.close()
 
     return contents
 
-
-
-def remove_penalty_reward_in_active(user,id,category):
-    data = init_check_procedure(user)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
+#print(penalty_reward_iterate(2,JSONCategory.PENALTY,enu.TimeEnum.DAILY,3))
     
-    new_active_list = [item for item in data[JSONCategory.PENALTY.value]["active"] if item["id"] != id]
 
-    # Update the data
-    data[category.value]["active"] = new_active_list
-
-
-    with open(json_path + user +file_ext, 'w') as file:
-        json.dump(data, file, indent=4)
-
-#Only for penalty
-def double_penalty_in_activate(user):
-    data = init_check_procedure(user)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
+def delete_penalty_reward_by_id(user_id, pen_rew_id,category):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-    new_active_list = [] 
-    if bool(data[JSONCategory.PENALTY.value]['active']): #Double penlaties only if there is anything in active
-        for things in data[JSONCategory.PENALTY.value]['active']:
-            # Duplicate the entire dictionary, not just the content string
-            duplicated_things = things.copy()
-            duplicated_things["id"] = things["id"]#TODO with id, create a new penalty
-            new_active_list.append(duplicated_things)
-            new_active_list.append(duplicated_things.copy())  # Duplicate it again
 
-    data[JSONCategory.PENALTY.value]['active'] = new_active_list
-    with open(json_path + user + file_ext, 'w') as file:
-        json.dump(data, file, indent=4)
-
-
-def delete_penalty_reward_by_id(user_id, id,category,type):
+    # Build and execute the INSERT SQL statement
+    sql = f"""
+        DELETE FROM {category.value} WHERE user_id = %s AND id = %s
+    """
+    cursor.execute(sql, (
+        user_id,
+        pen_rew_id,
+    ))
     
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    #print("Pen or Rew deleted successfully.")
 
-
-    pen_or_rew_to_delete = None
-    for pen_or_rew in data[category.value][type.value]:
-        if pen_or_rew["id"] == id:
-            pen_or_rew_to_delete = pen_or_rew
-            break
-
-    if pen_or_rew_to_delete is None:
-        print("Pen or Rew not found.")
-        return False
-
-    data[category.value][type.value].remove(pen_or_rew_to_delete)
-
-    # Write the updated data back to the file
-    with open(json_path + user_id +file_ext,'w') as file:
-        json.dump(data, file, indent=4)
-
-    print("Pen or Rew deleted successfully.")
-
-def get_active(category,active_category,user_id):
-    data = init_check_procedure(user_id)
-    if data is None:
-        raise ValueError("Initial check failed or no data found for user.")    
-    return data[category.value][active_category.value]
+def get_active(category,user_id):
+    active = get_with_one_condition(user_id,category,"type","active")
+    return active
 
 #----------------- PPOINTS - RPOINTS --------------------------
 
