@@ -103,12 +103,14 @@ def update_reward_unlocking(user,time):
 
 def check_if_new_day(user): 
     date = js.retrieve_date_field(user) 
-    current_date = datetime.datetime.now().date().strftime('%Y-%m-%d')
+    current_date = datetime.datetime.now().date()
 
     if date != current_date:
         js.change_date(user,current_date)
         return True
     return False
+
+check_if_new_day(1)
 
 def task_completed(user, id,completion):
     task = js.get_thing_by_id(user,id)

@@ -63,7 +63,6 @@ def login():
     # Check if username == None exists in users.txt
     if other.do_user_exist(username):
         user_id = user.get_user_id_from_username(username)
-        print(user_id)
         session['user_id'] = user_id
         session['username'] = username
         session.permanent = True  # Make the session persistent
