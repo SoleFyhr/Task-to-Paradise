@@ -1,6 +1,6 @@
 pour voir la structure du truc sur heroku :
 
-(faire dans un folderdifferent que le root pck j'ai deja ma react app qui s'appelle comme ca)
+(faire dans un folder different que le root pck j'ai deja ma react app qui s'appelle comme ca)
 heroku git:clone tasks-to-paradise
 
 push sur heroku (useless pck automatic deploy)
