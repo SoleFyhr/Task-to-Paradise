@@ -73,7 +73,7 @@ def login():
         return jsonify({'message': 'User not found'}), 404
     
 @app.route('/logout')
-def logout():
+def logout(): 
     # Clear the session
     session.clear()
     return jsonify({'message': 'Logged out successfully'}), 200
