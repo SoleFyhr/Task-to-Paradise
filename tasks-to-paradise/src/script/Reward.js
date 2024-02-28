@@ -74,7 +74,7 @@ class Reward extends Component {
         key={item.id}
         className={`list-group-item d-flex justify-content-between align-items-center ${item.difficulty}`}
       >
-        <span>{(index + 1) * 10}</span>
+        <span>{(item.place) * 10}</span>
         <span>{item.content}</span>
         <span>
           <button

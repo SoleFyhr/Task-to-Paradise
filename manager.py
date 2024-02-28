@@ -1,6 +1,7 @@
 import database_manager as js
 import json
 import tasks as ta
+import user as us
 import penalty as pen
 import reward as rew
 import enum_list as enum
@@ -9,10 +10,11 @@ import datetime
 #Function to run everytime someone connects
 def daily_routine():
 
-    if check_if_new_day('fyhr'): #hard coded because I am the user that will always be there
+    if check_if_new_day(1): #hard coded because I am the user that will always be there
 
         users = js.read_usernames_from_file('users.txt')
-
+        for i in range(len(users)):
+            users[i] = us.get_user_id_from_username(users[i])
         for user in users:
             print(user)
             if(js.retrieve_pause_field(user)=="no"):
@@ -110,27 +112,26 @@ def check_if_new_day(user):
 
 def task_completed(user, id,completion):
     task = js.get_thing_by_id(user,id)
-    difficulty = enum.Difficulty.from_string(ta.Task.from_json(task).difficulty)
+    difficulty = enum.Difficulty.from_string(task[0]['difficulty'])
     completion_scaling = ta.get_completion_values(user)
     
     value_completion = enum.Completion.value_completion(completion,completion_scaling)
     value_of_task = js.retrieve_value_in_scaling(user,enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
     rew.add_reward_to_all(value_completion*value_of_task,user)
-    task = ta.Task.from_json(task)
+    
     # if(task.task_type==enum.TaskType.HABITS.value): Commented because then the counter starts when i do the task. like if I want a task every week, and i do it the wednesday it will come back next wednesday
     
     #     current_date = datetime.datetime.now().date()
     #     js.change_one_field_of_given_task(user,enum.TaskType.HABITS,task.id,"expiration_time",current_date.strftime('%Y-%m-%d'))
 
-
-    js.move_task_to_historic(user,task)
+    js.move_task_to_historic(user,task[0]['id'])
     update_reward_unlocking(user,enum.TimeEnum.DAILY) #Choice of doing it only daily. If you do a hard task during your day, I want it to be rewarded. As for the week or the month, I prefer to have it done at the end of the week or end of the month.
     
 
 def penalty_task_done(user,id):
-    task = ta.Task.from_json(js.get_thing_by_id(user,id))
+    task = js.get_thing_by_id(user,id)
     try:
-        importance_value = int(task.importance)
+        importance_value = int(task[0]['importance'])
     except ValueError as e:
                 print("error Invalid input. Sequence values must be integers.")
 
@@ -146,7 +147,7 @@ def user_process(user):
         print("user found")
         #go dailyroutine from there
     else:
-       js.create_json_from_template('./json/'+user+'.json') 
+       #js.create_json_from_template('./json/'+user+'.json') 
        js.add_user_to_user_file('users.txt',user)
        check_if_new_day(user)#update the date in the json file created
 

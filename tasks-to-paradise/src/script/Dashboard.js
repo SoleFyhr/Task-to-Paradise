@@ -8,6 +8,7 @@ import exclamation from "../svg/exclamationRed.svg";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import { each } from "@amcharts/amcharts4/.internal/core/utils/Iterator";
 
 // Use theme (optional)
 am4core.useTheme(am4themes_animated);
@@ -107,6 +108,7 @@ class Dashboard extends Component {
       "",
       `${apiUrl}/get_dashboard_tasks`,
       (data) => {
+
         // Concatenate the arrays using the spread operator
         const concatenatedList = [...data.daily, ...data.habits, ...data.once];
 
@@ -271,7 +273,9 @@ class Dashboard extends Component {
   };
 
   renderTasks = (newItems) => {
+   
     return newItems.map((item) => (
+          
       <li
         key={item.id}
         className={`task-grid basic ${

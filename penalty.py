@@ -31,7 +31,7 @@ def create_new_penalty(user_id,content,type,place):
     new_penalty = Penalty(content) #cold shower
 
     database_manager.add_penalty_reward_to_db(user_id, new_penalty,database_manager.JSONCategory.PENALTY,type,place)
-    return new_penalty
+
 
 
 # create_new_penalty(2,'accc',enu.Active.ACTIVE,3)

@@ -6,7 +6,7 @@ import enum_list as enu
 #!--------------------Scaling-------------------
 
 def new_sequence(user,sequence,category):
-    database_manager.add_sequence_to_scaling(user,sequence,category)
+    database_manager.update_sequence_to_scaling(user,sequence,category)
 
 def get_scaling_parameters(user):
     difficulty = database_manager.retrieve_scaling(user,enu.Scaling_Cat.DIFFICULTY)

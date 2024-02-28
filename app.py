@@ -8,6 +8,7 @@ import reward as rew
 import enum_list as enu
 import manager as man
 import other_stuff as other
+import user
 import os
 from dotenv import load_dotenv
 import os
@@ -61,6 +62,9 @@ def login():
     username = request.json.get('username')
     # Check if username == None exists in users.txt
     if other.do_user_exist(username):
+        user_id = user.get_user_id_from_username(username)
+        print(user_id)
+        session['user_id'] = user_id
         session['username'] = username
         session.permanent = True  # Make the session persistent
         man.daily_routine()
@@ -77,21 +81,23 @@ def logout():
 #!------------------ TASK ------------------
 def get_logged_in_user():
     """Check if a user is logged in and return their username."""
+    #print(session.get('user_id'))
     if os.getenv('FLASK_ENV') == 'production':
         username = session.get('username')
+        user_id = session.get('user_id')
         if not username:
             return False  # or raise an exception, based on your design choice
-        return username 
+        return user_id 
 
     else:
-        return 'fyhr'
+        return 2
 
     
 
 @app.route('/button_create_task', methods=['POST'])
 def my_function():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -102,7 +108,7 @@ def my_function():
     type =  enu.TaskType.from_string(data.get('type'))
    
     expiration_time = data.get('expiration_time')
-    values = ta.get_importance_values(username)
+    values = ta.get_importance_values(user_id)
    
     importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
@@ -110,36 +116,36 @@ def my_function():
     time_to_completion = data.get('time_to_completion')
     frequency_coming_back = data.get('frequency_coming_back')
     
-    task_feedback = ta.create_new_task(username,title=title, content=content,type=type, expiration_time=expiration_time,difficulty= difficulty, importance=importance,penalty_induced=penalty_induced,time_to_completion=time_to_completion,frequency_coming_back=frequency_coming_back)
+    task_feedback = ta.create_new_task(user_id,title=title, content=content,task_type=type, expiration_time=expiration_time,difficulty= difficulty, importance=importance,penalty_induced=penalty_induced,time_to_completion=time_to_completion,frequency_coming_back=frequency_coming_back)
     response_data = {"message": "Task added successfully","task":task_feedback}
     return jsonify(response_data)
 
 @app.route('/get_dashboard_tasks', methods=['POST'])
 def all_dashboard_tasks():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
-    man.daily_routine()
-    once, daily, habits, prohibited = ta.get_all_tasks_sorted(username)
+    #man.daily_routine()
+    once, daily, habits, prohibited = ta.get_all_tasks_sorted(user_id)
     response_data = {"message": "Task sent successfully","once":once, "daily":daily, "habits":habits, "prohibited":prohibited}
     return jsonify(response_data)
 
 @app.route('/get_tasks', methods=['POST'])
 def all_tasks():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
-    once, daily, habits, prohibited = ta.get_all_tasks_sorted_with_historic(username)
+    once, daily, habits, prohibited = ta.get_all_tasks_sorted_with_historic(user_id)
     response_data = {"message": "Task sent successfully","once":once, "daily":daily, "habits":habits, "prohibited":prohibited}
     return jsonify(response_data)
 
 @app.route('/button_delete_task', methods=['POST'])
 def function_task_deleting():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -147,15 +153,15 @@ def function_task_deleting():
     id = data.get('id')
     
 
-    ta.delete_task(id,username)
+    ta.delete_task(id,user_id)
     response_data = {"message": "Task deleted successfully"}
     return jsonify(response_data) #if it's once or habits, it should be erased (for habits it will just appear again the next day/week...)
 
 
 @app.route('/button_task_completion', methods=['POST'])
 def function_task_completion():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -166,14 +172,14 @@ def function_task_completion():
 
     if(type == enu.TaskType.PROHIBITED):
         if(data.get('penalty_induced') != None): #test this
-            pe.create_new_penalty(username,data.get('penalty_induced'),enu.Active.ACTIVE,0)
-        man.penalty_task_done(username,id)
+            pe.create_new_penalty(user_id,data.get('penalty_induced'),enu.Active.ACTIVE,0)
+        man.penalty_task_done(user_id,id)
         response_data = {"message": "Task treated successfully","action":"reactivate"}
  
 
     else: #Not a prohibited task
         completion = enu.Completion.from_string(data.get('completion'))
-        man.task_completed(username,id,completion)
+        man.task_completed(user_id,id,completion)
         #remove task from pending (delete once or move to trash, and move habits and daily in other compartiments)        
         response_data = {"message": "Task treated successfully","action":"erase"}
 
@@ -185,8 +191,8 @@ def function_task_completion():
 
 @app.route('/button_create_penalty', methods=['POST'])
 def function_create_penalty():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -196,15 +202,15 @@ def function_create_penalty():
     content = data.get('content')
     place_in_scale = data.get('place')
     type = enu.TimeEnum.from_string(data.get('type'))
-    penalty_feedback = pe.create_new_penalty(username,content,type,place_in_scale)
-    response_data = {"message": "Penalty added successfully","penalty":penalty_feedback}
+    penalty_feedback = pe.create_new_penalty(user_id,content,type,place_in_scale)
+    response_data = {"message": "Penalty added successfully"}
     return jsonify(response_data)
 
 
 @app.route('/button_remove_active_penalty', methods=['POST'])
 def function_remove_penalty_cative():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -212,14 +218,14 @@ def function_remove_penalty_cative():
 
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
-    pe.remove_penalty(username,id)
+    pe.remove_penalty(user_id,id)
     response_data = {"message": "Penalty removed successfully"}
     return jsonify(response_data)
 
 @app.route('/button_remove_penalty', methods=['POST'])
 def function_remove_penalty():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -228,33 +234,33 @@ def function_remove_penalty():
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
     # type = enu.TimeEnum.from_string(data.get('type'))
-    pe.remove_penalty(username,id)
+    pe.remove_penalty(user_id,id)
     response_data = {"message": "Penalty removed successfully"}
     return jsonify(response_data)
 
 @app.route('/button_get_penalty', methods=['POST'])
 def function_get_penalty():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
 
-    daily,weekly,monthly = pe.get_all_penalty_sorted(username)
+    daily,weekly,monthly = pe.get_all_penalty_sorted(user_id)
     response_data = {"message": "Penalty captured successfully","daily":daily,"weekly":weekly,"monthly":monthly}
     return jsonify(response_data)
 
 @app.route('/button_get_active_penalty', methods=['POST'])
 def function_get_active_penalty():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-
-    active = pe.get_active_penalty(username)
+    #print("active penalty and ", user_id)
+    active = pe.get_active_penalty(user_id)
     response_data = {"message": "Penalty captured successfully","active": active}
     return jsonify(response_data)
 
@@ -264,8 +270,8 @@ def function_get_active_penalty():
 
 @app.route('/button_create_reward', methods=['POST'])
 def function_create_reward():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -274,15 +280,15 @@ def function_create_reward():
     content = data.get('content')
     place_in_scale = data.get('place')
     type = enu.TimeEnum.from_string(data.get('type'))
-    rew.create_new_reward(username,content,type,place_in_scale)
+    rew.create_new_reward(user_id,content,type,place_in_scale)
     response_data = {"message": "Reward added successfully"}
     return jsonify(response_data)
 
 
 @app.route('/button_remove_active_reward', methods=['POST'])
 def function_remove_reward_active():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -290,14 +296,14 @@ def function_remove_reward_active():
     data = request.json  # This will contain the data sent from the JavaScript
     content = data.get('content')
     # type = enu.TimeEnum.from_string(data.get('type'))
-    rew.remove_reward(username,content)
+    rew.remove_reward(user_id,content)
     response_data = {"message": "Reward removed successfully"}
     return jsonify(response_data)
 
 @app.route('/button_remove_reward', methods=['POST'])
 def function_remove_reward():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -305,19 +311,19 @@ def function_remove_reward():
     data = request.json  # This will contain the data sent from the JavaScript
     id = data.get('id')
     # type = enu.TimeEnum.from_string(data.get('type'))
-    rew.remove_reward(username,id)
+    rew.remove_reward(user_id,id)
     response_data = {"message": "Reward removed successfully"}
     return jsonify(response_data)
 
 @app.route('/button_get_reward', methods=['POST'])
 def function_get_reward():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-    daily,weekly,monthly = rew.get_all_reward_sorted(username)
+    daily,weekly,monthly = rew.get_all_reward_sorted(user_id)
     response_data = {"message": "Reward captured successfully","daily":daily,"weekly":weekly,"monthly":monthly}
     return jsonify(response_data)
 
@@ -326,13 +332,13 @@ def function_get_reward():
 #!------------------ Points ------------------
 @app.route('/button_get_points', methods=['POST'])
 def function_get_points():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-    rpoints,ppoints = other.get_ppoints_rpoints(username)
+    rpoints,ppoints = other.get_ppoints_rpoints(user_id)
     response_data = {"message": "points captured successfully","rpoints":rpoints,"ppoints":ppoints}
     return jsonify(response_data)
 
@@ -340,13 +346,13 @@ def function_get_points():
 
 @app.route('/button_get_scaling', methods=['POST'])
 def function_get_scaling():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-    difficulty,importance,completion = other.get_scaling_parameters(username)
+    difficulty,importance,completion = other.get_scaling_parameters(user_id)
     response_data = {"message": "Scaling captured successfully","difficulty":difficulty,"importance":importance,"completion":completion}
     return jsonify(response_data)
 
@@ -354,8 +360,8 @@ def function_get_scaling():
 
 @app.route('/change_scaling', methods=['POST'])
 def function_change_scaling():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
@@ -376,7 +382,7 @@ def function_change_scaling():
             else:
                 return jsonify({"error": f"Missing {num_key} in sequence."}), 400
 
-        other.new_sequence(username, true_sequence, category)
+        other.new_sequence(user_id, true_sequence, category)
     except ValueError as e:
         return jsonify({"error": "Invalid input. Sequence values must be integers."}), 400
 
@@ -388,25 +394,25 @@ def function_change_scaling():
 
 @app.route('/button_get_pause', methods=['POST'])
 def function_get_pause():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-    pause = other.get_pause_field(username)
+    pause = other.get_pause_field(user_id)
     response_data = {"message": "Pause captured successfully","pause":pause}
     return jsonify(response_data)
 
 @app.route('/change_pause', methods=['POST'])
 def function_change_pause():
-    username = get_logged_in_user()
-    if username == None:
+    user_id = get_logged_in_user()
+    if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
     
 
-    other.change_pause_field(username)
+    other.change_pause_field(user_id)
     response_data = {"message": "pause changed successfully"}
     return jsonify(response_data)
 

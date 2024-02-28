@@ -73,4 +73,4 @@ def get_completion_values(user_id):
 # create_new_task(2,"SuperTes","",enu.TaskType.HABITS,"2024-02-05",difficulty=enu.Difficulty.EASY,importance=10,time_to_completion=5,frequency_coming_back=7)
 # create_new_task(2,"ooononcy","",enu.TaskType.ONCE,"2024-02-05",difficulty=enu.Difficulty.HARD,importance=10)
 # create_new_task(2,"prohiiii","",enu.TaskType.PROHIBITED,"2024-02-05",difficulty=enu.Difficulty.MEDIUM,importance=10)
-# create_new_task(2,"dailyy","",enu.TaskType.DAILY,"2024-02-05",difficulty=enu.Difficulty.MEDIUM,importance=10)
+#create_new_task(2,"dailyy","",enu.TaskType.DAILY,"2024-02-05",difficulty=enu.Difficulty.MEDIUM,importance=10)
