@@ -319,44 +319,16 @@ def move_task_to_historic(user_id, tasks_to_move):
 
 #move_task_to_historic(2,['1f96f9ee-e368-43ea-aed1-310922fc13e2','101c1f69-4ed1-45be-b77d-f29eeadc0496','9e8e0753-c368-40bd-81e0-d4fde1465884','9691e410-33e1-4f96-b5d6-a82ebaa64d73'])
 
-# def clean_historic(user):
-#     data = init_check_procedure(user)
-#     if data is None:
-#         raise ValueError("Initial check failed or no data found for user.")
-#     historic = data[JSONCategory.HISTORIC.value]
-#     tasks_to_remove=[]
-#     for task in historic :
-#         if task["task_type"] == enu.TaskType.DAILY.value:
-#             data[JSONCategory.TASK.value][enu.TaskType.DAILY.value].append(task)
-#             tasks_to_remove.append(task)
-        
-#         elif task["task_type"] == enu.TaskType.HABITS.value:
-#             current_date = datetime.datetime.now().date()
-#             expiration_date = datetime.datetime.strptime(task["expiration_time"], '%Y-%m-%d').date()
-#             frequency_coming_back = int(task["frequency_coming_back"])
-#             new_expiration_date = expiration_date + datetime.timedelta(days=frequency_coming_back)
-            
-#             if current_date == new_expiration_date:
-#                 time_to_completion = int(task["time_to_completion"])
-#                 new_expiration_date = current_date + datetime.timedelta(days=time_to_completion)
-#                 task["expiration_time"] = new_expiration_date.strftime('%Y-%m-%d')               
-#                 data[JSONCategory.TASK.value][enu.TaskType.HABITS.value].append(task)
-#                 tasks_to_remove.append(task)
-                
-    
-#     for tasks in tasks_to_remove:
-#         data[JSONCategory.HISTORIC.value].remove(tasks)
-
-#     with open(json_path + user + file_ext, 'w') as file:
-#         json.dump(data, file, indent=4)
-
 def clean_historic(user_id):
     with get_db_connection() as conn:
 
         with conn.cursor() as cursor:
-
-
             current_date = datetime.datetime.now().date()
+
+            sql = f"UPDATE {JSONCategory.HISTORIC.value} SET expiration_time = %s WHERE user_id = %s AND task_type =%s"
+
+            cursor.execute(sql, (current_date,user_id,enu.TaskType.DAILY.value))
+
             cursor.execute("""
                 INSERT INTO tasks (id, user_id, title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back)
                 SELECT id, user_id, title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back
@@ -649,7 +621,8 @@ def change_pause(user_id):
     
 
     conn.commit()
-   
+
+
 #----------------- DATE --------------------------
 
 def retrieve_date_field(user_id):
@@ -671,7 +644,7 @@ def change_date(user_id, new_date):
 
         conn.commit()
    
-
+#change_date(1,datetime.datetime.now().date() - datetime.timedelta(days=int(1)))
 
 
 #----------------- USERS.TXT --------------------------

@@ -1,5 +1,4 @@
 import database_manager as js
-import json
 import tasks as ta
 import user as us
 import penalty as pen
@@ -16,8 +15,10 @@ def daily_routine():
         for i in range(len(users)):
             users[i] = us.get_user_id_from_username(users[i])
         for user in users:
-            print(user)
             if(js.retrieve_pause_field(user)=="no"):
+                current_date = datetime.datetime.now().date()
+                js.change_date(user,current_date)
+
                 check_if_penalty_completed(user) #If we are a new day, if there are any penalties in 'active', we double them
                 check_tasks_expiration(user) #Remove expired tasks, add penalties to ppoints
                 update_penalties_unlocking(user,enum.TimeEnum.DAILY) #Given points in the ppoints,activate penalties from the precedent day
@@ -42,7 +43,6 @@ def daily_routine():
                 #     rew.reset_total_value(user,enum.TimeEnum.MONTHLY) 
         
 
-
 #Iterate over tasks and manage if they expired
 def check_tasks_expiration(user):    
     current_date = datetime.datetime.now().date()
@@ -60,16 +60,16 @@ def check_tasks_expiration(user):
        
         if current_date > expiration_date:
             if task["task_type"] == "habits":
-                try: 
+                try: #TODO a changer pck pour l'instant la tache habits reste tant qu'on l'a pas fait. idéalement ca devrait aller dans l'historique je trouve c'est mieux. Et revenir quand c'est le moment.
                     time_to_completion = int(task["time_to_completion"])
                     new_expiration_date = expiration_date + datetime.timedelta(days=time_to_completion)
-                    js.change_one_field_of_given_task(user,enum.TaskType.HABITS,task["id"],"expiration_time",new_expiration_date.strftime('%Y-%m-%d'))
+                    js.change_one_field_of_given_task(user,task["id"],"expiration_time",new_expiration_date.strftime('%Y-%m-%d'))
                 except ValueError as e:
                     print("Error: Invalid 'time_to_completion'. It must be an integer")
 
             else: 
-                task2 = json.dumps(task)
-                tasks_to_move.append(ta.Task.from_json(task2))  
+                
+                tasks_to_move.append(task["id"])  
             try: 
                 value = int(task["importance"])
                 total_penalty += value
@@ -110,7 +110,6 @@ def check_if_new_day(user):
         return True
     return False
 
-check_if_new_day(1)
 
 def task_completed(user, id,completion):
     task = js.get_thing_by_id(user,id)

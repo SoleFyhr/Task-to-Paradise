@@ -181,7 +181,6 @@ function App() {
 export default App;
 
 
-//Adapter la putain de database
 //5 Ajouter add on pour scheduler la daily routine tous les jours.
 
 
@@ -194,6 +193,8 @@ export default App;
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
+//ajouter une belle emote d'icone d'app
+//Ajouter un bouton pour download un user_manual.
 //ajouter un marqueur pour dire quand c'est checké que c'est bien pris en compte.
 //Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //Rendre le responsive plus beau ? (settings...)
