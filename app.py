@@ -66,7 +66,7 @@ def login():
         session['user_id'] = user_id
         session['username'] = username
         session.permanent = True  # Make the session persistent
-        man.daily_routine()
+        #man.daily_routine()
         return jsonify({'message': 'Logged in successfully'}), 200
     else:
         return jsonify({'message': 'User not found'}), 404
