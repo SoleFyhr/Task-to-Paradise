@@ -5,6 +5,8 @@ import penalty as pen
 import reward as rew
 import enum_list as enum
 import datetime
+import sys
+
 
 #Function to run everytime someone connects
 def daily_routine():
@@ -156,3 +158,13 @@ def user_process(user):
 #daily_routine()
 #user_process('aotrix')
 #ta.create_new_task("Sampe Task","test task", enum.TaskType.ONCE,"2023-12-20",enum.Difficulty.MEDIUM,enum.Importance.NSIMPORTANT)
+    
+if __name__ == '__main__':
+    if len(sys.argv) > 1:  # Check if any command line arguments were provided
+        command = sys.argv[1]  # sys.argv[0] is the script name, so we take the next argument
+        if command == 'daily':
+            daily_routine()
+        else:
+            print(f'Command {command} not recognized.')
+    else:
+        print('No command provided.')
