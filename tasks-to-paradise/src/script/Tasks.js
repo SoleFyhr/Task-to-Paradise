@@ -20,7 +20,7 @@ class Tasks extends Component {
         time_to_completion: "",
         frequency_coming_back: "",
         importance: "",
-        penalty_induced: null,
+        penalty_induced: "false",
         type: "",
       },
       activeItemCompletion: {

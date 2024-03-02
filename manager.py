@@ -55,12 +55,18 @@ def check_tasks_expiration(user):
     for task in daily: #If there is any task in daily, it means they weren't completed on the day so -> failed
         value = int(task["importance"])
         total_penalty += value
+        penalty_induced_manager(task,user)
+        js.change_one_field_of_given_task(user,task["id"],"expiration_time",current_date.strftime('%Y-%m-%d'))
+
     
     list_task = once + habits
     for task in list_task:
         expiration_date = datetime.datetime.strptime(task["expiration_time"], '%Y-%m-%d').date()
        
         if current_date > expiration_date:
+            
+            penalty_induced_manager(task,user)
+            
             if task["task_type"] == "habits":
                 try: #TODO a changer pck pour l'instant la tache habits reste tant qu'on l'a pas fait. idéalement ca devrait aller dans l'historique je trouve c'est mieux. Et revenir quand c'est le moment.
                     time_to_completion = int(task["time_to_completion"])
@@ -88,6 +94,16 @@ def check_tasks_expiration(user):
 
 def check_if_penalty_completed(user):
     pen.double_penalty(user)
+
+
+def penalty_induced_manager(task,user):
+
+    penalty_induced = task["penalty_induced"]
+
+    #The field penalty induced contains either "false" or the content of the penalty
+    if(penalty_induced != "false"):
+        pen.create_new_penalty(user,penalty_induced,enum.Active.ACTIVE,0)
+
 
 #Activate as much penalty from the daily etc categories than the points
 #unlocking is 10points =1rst penalty /20 points = second /30/40...
@@ -153,7 +169,6 @@ def user_process(user):
        #js.create_json_from_template('./json/'+user+'.json') 
        js.add_user_to_user_file('users.txt',user)
        check_if_new_day(user)#update the date in the json file created
-
 
 #daily_routine()
 #user_process('aotrix')

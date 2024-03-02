@@ -414,7 +414,7 @@ def add_penalty_reward_to_db(user_id, penalty,category,type,place):
             """
             cursor.execute(sql_previous, (user_id,type.value))
             value = cursor.fetchone()
-            if not value:
+            if not value or type == enu.Active.ACTIVE:
                 # Build and execute the INSERT SQL statement
                 sql = f"""
                     INSERT INTO {category.value} 

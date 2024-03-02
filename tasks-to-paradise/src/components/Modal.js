@@ -20,7 +20,7 @@ class CustomModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: this.props.activeItem,
+      activeItem: { ...this.props.activeItem, penalty_induced_content: "" }, // Add penalty_induced_content to the state
       validationErrors: {},
     };
     this.fieldConfig = {
@@ -32,7 +32,7 @@ class CustomModal extends Component {
         "importance",
         "penalty_induced",
       ],
-      prohibited: ["title", "content", "type","importance" ],
+      prohibited: ["title", "content", "type", "importance","penalty_induced"],
       once: [
         "title",
         "content",
@@ -59,9 +59,15 @@ class CustomModal extends Component {
 
   // changes handler to check if a checkbox is checked or not
   handleChange = (e) => {
-    let { name, value } = e.target;
-    if (e.target.type === "checkbox") {
-      value = e.target.checked;
+    let { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      value = checked; // Store boolean value for checkbox
+      // Reset penalty_induced_content if checkbox is unchecked
+      if (!checked) {
+        this.setState((prevState) => ({
+          activeItem: { ...prevState.activeItem, penalty_induced_content: "" },
+        }));
+      }
     }
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
@@ -80,7 +86,16 @@ class CustomModal extends Component {
 
   handleSave = () => {
     if (this.validateForm()) {
-      this.props.onSave(this.state.activeItem);
+      // Before saving, adjust the penalty_induced value based on the checkbox and input field
+      const { penalty_induced, penalty_induced_content, ...rest } =
+        this.state.activeItem;
+      const activeItemToSave = {
+        ...rest,
+        penalty_induced: penalty_induced
+          ? penalty_induced_content || "false"
+          : "false",
+      };
+      this.props.onSave(activeItemToSave);
     }
   };
 
@@ -225,6 +240,17 @@ class CustomModal extends Component {
             >
               Penalty induced
             </Checkbox>
+            {activeItem.penalty_induced && (
+              <Input
+                mt={4}
+                id="penalty_induced_content"
+                type="text"
+                name="penalty_induced_content"
+                value={activeItem.penalty_induced_content}
+                onChange={this.handleChange}
+                placeholder="Enter penalty induced content"
+              />
+            )}
           </FormControl>
         );
 

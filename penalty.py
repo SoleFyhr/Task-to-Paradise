@@ -81,7 +81,7 @@ def double_penalty(user):
     contents = []
     for content in active:
         contents +=[content["content"]]
-    
+        
     for content in contents:
         create_new_penalty(user,content,enu.Active.ACTIVE,0)
 

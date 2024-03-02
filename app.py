@@ -111,7 +111,8 @@ def my_function():
    
     importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
-    penalty_induced = data.get('penalty_induced')# title of the penalty
+    penalty_induced = data.get('penalty_induced') # TODO put in react that if it's not marked it is send to false, and else the title of the penalty
+    
     time_to_completion = data.get('time_to_completion')
     frequency_coming_back = data.get('frequency_coming_back')
     
@@ -170,7 +171,7 @@ def function_task_completion():
  
 
     if(type == enu.TaskType.PROHIBITED):
-        if(data.get('penalty_induced') != None): #test this
+        if(data.get('penalty_induced') != "false"): #test this
             pe.create_new_penalty(user_id,data.get('penalty_induced'),enu.Active.ACTIVE,0)
         man.penalty_task_done(user_id,id)
         response_data = {"message": "Task treated successfully","action":"reactivate"}
