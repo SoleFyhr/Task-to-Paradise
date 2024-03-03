@@ -6,6 +6,7 @@ import {
   PopoverArrow,
   PopoverBody,
   Button,
+  Textarea,
 } from "@chakra-ui/react";
 
 import ModalSequence from "../components/ModalSequence";
@@ -18,6 +19,8 @@ class Settings extends Component {
     this.state = {
       pause: "",
       activeCategory: "",
+      userComments: '',
+
       numberOfInputs: 3,
       importanceScaling: [],
       difficultyScaling: [],
@@ -154,6 +157,16 @@ class Settings extends Component {
     });
   };
 
+  handleSendComments = () => {
+    const { userComments } = this.state;
+    let body_content = JSON.stringify({
+      Comment: userComments,
+    });
+    this.post_method(body_content, `${apiUrl}/send_comments`, (data) => {
+      this.refreshList();this.setState({ userComments: '' });
+    });
+  };
+
   render() {
     return (
       <>
@@ -265,6 +278,25 @@ class Settings extends Component {
                 Download User Manual
               </Button>
             </div>
+            <div className="outer-flex-container text-center  ">
+              <div className="inner-flex-container">
+            <div className="text-center my-4">
+              <Textarea
+                placeholder="Your comments here..."
+                size="sm"
+                value={this.state.userComments}
+                onChange={(e) => this.setState({ userComments: e.target.value })} // Update state on change
+              />
+              <Button
+                colorScheme="blue"
+                onClick={this.handleSendComments}
+                mt={4}
+              >
+                Send
+              </Button>
+            </div>
+          </div>
+          </div>
           </div>
 
           {this.state.modal ? (

@@ -12,6 +12,10 @@ import user
 import os
 from dotenv import load_dotenv
 import os
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
  
 app = Flask(__name__, static_folder='./tasks-to-paradise/build')
 app.secret_key = 'your_secret_key'
@@ -76,6 +80,38 @@ def logout():
     # Clear the session
     session.clear()
     return jsonify({'message': 'Logged out successfully'}), 200
+
+
+@app.route('/send_comments', methods=['POST'])
+def send_comments():
+    username = session['username']
+
+    data = request.json
+    userComments = data.get('Comment')
+
+    # Email settings
+    sender_email = "rousseaunico77330@gmail.com"
+    receiver_email = "rousseaunico@free.fr"
+    password = "zuyi yjox uoxg bunw"  # Use the app password you generated
+
+    # Setup the MIME
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = "New User Comment"
+    
+    # The body and the attachments for the mail
+    message.attach(MIMEText(f"Name: {username}\n\n\nComments: {userComments}", "plain"))
+    
+    # Create SMTP session for sending the mail
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+            return jsonify({'message': 'Comment sent successfully'}), 200
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return jsonify({'message': 'Failed to send comment'}), 500
 
 #!------------------ TASK ------------------
 def get_logged_in_user():

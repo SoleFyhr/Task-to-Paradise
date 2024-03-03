@@ -664,7 +664,7 @@ def add_user_to_user_file(file_path, new_user):
 
 #!alert
 #//code crossed
-#?query
+#?
 #TODO to do stuff
 #*highlited
 
