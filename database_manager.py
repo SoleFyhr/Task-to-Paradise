@@ -154,8 +154,14 @@ def add_task_to_db(user_id, new_task):
     
             # Prepare data for insertion
             expiration_time = new_task.expiration_time
-            if expiration_time:
+           
+            if new_task.task_type == enu.TaskType.HABITS.value:
+                current_date = datetime.datetime.now().date()
+                expiration_time = current_date + datetime.timedelta(days=int(new_task.time_to_completion))
+
+            elif expiration_time:
                 expiration_time = datetime.datetime.strptime(expiration_time, "%Y-%m-%d")
+
             else:
                 expiration_time = None  # Use None for NULL in SQL
 

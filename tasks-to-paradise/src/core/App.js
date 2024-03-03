@@ -180,13 +180,14 @@ function App() {
 
 export default App;
 
-//Ajouter un bouton pour download un user_manual et ecrire le user manual
-//S'occuper du scaling des weekly et company
-//enlever les rewards daily. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
-//ajouter une belle emote d'icone d'app
-//Faire une zone de report de bugs ou d'amélioration de fonctionnalités
+//define all the functions of project
+//?S'occuper du scaling des weekly et company
+//?enlever les rewards daily. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+
 //Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
-//Do projects
+//Code project 
+//Test project
+
 //faire que le pause mode empeche tout 
 //S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)
 //make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"

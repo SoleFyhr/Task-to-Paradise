@@ -46,7 +46,6 @@ class CustomModal extends Component {
         "title",
         "content",
         "type",
-        "expiration_time",
         "time_to_completion",
         "frequency_coming_back",
         "difficulty",
