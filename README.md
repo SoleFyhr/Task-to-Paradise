@@ -40,13 +40,13 @@ Example : I add a task 'cleaning the shower' with the penalty induced 'cleaning 
 
 There are 4 types of tasks : 
 
-Daily (purple) : it comes back everyday. You have to complete during the day . It doesn't have an expiration date. If you don't want it anymore just delete it. 
+- Daily (purple) : it comes back everyday. You have to complete during the day . It doesn't have an expiration date. If you don't want it anymore just delete it. 
 
-Habits (light blue) : comes back every 'frequency of coming back', and to be completed under a 'time to completion'. You first set a date of expiration, and even if you complete it before this time, it will come back at the date of the date of expiration + $(the frequency of coming back) days. The new date of expiration will be then this date of coming back + $(time of completion) days. 
+- Habits (light blue) : comes back every 'frequency of coming back', and to be completed under a 'time to completion'. The date of expiration by default is $(the day of creation of the task) + $(time of completion) days. Even if you complet it before this time of expiration, it will only come back at the date of $(the initial date of expiration) + $(the frequency of coming back) days. The new date of expiration will be then this $(date of coming back) + $(time of completion) days. 
 
-Once (dark blue) : Have an expiration date, don't come back after. You have to complete it before the expiration date. 
+- Once (dark blue) : Have an expiration date, don't come back after. You have to complete it before the expiration date. 
 
-Prohibited (red): A special type of tasks, not displayed in the same section as other tasks. This task contains no expiration date, or difficulty points. Only a title, an importance, and if needed a penalty induced. It's purpose is to forbid to do certain actions. Example, I don't want to spend more than 20 minutes of twitter by day. I create a prohibited task named 'Spending 20 minutes of twitter per day'. Then if I do spend this much time on twitter, I will mark this task as done, which will result in penalty points, and the task will not disappear. So you can click on it as much as you want, it will just generates penalty points. 
+- Prohibited (red): A special type of tasks, not displayed in the same section as other tasks. This task contains no expiration date, or difficulty points. Only a title, an importance, and if needed a penalty induced. It's purpose is to forbid to do certain actions. Example, I don't want to spend more than 20 minutes of twitter by day. I create a prohibited task named 'Spending 20 minutes of twitter per day'. Then if I do spend this much time on twitter, I will mark this task as done, which will result in penalty points, and the task will not disappear. So you can click on it as much as you want, it will just generates penalty points. 
 
 Disclaimer : The system of the 'prohibited' task is not the same as other tasks, and rely on the honesty of the user. For other tasks, if you do nothing, they will expire and you will get penalty points. They require active cheating (mark them completed even though you didn't) to derive from their purposes. The prohibited task is the reverse way. You need to actively say that you did something wrong (in general we don't like to admit our errors) in order to get penalized. So its efficiency depends of your commitment and sincerity to tasks of paradise.
 
