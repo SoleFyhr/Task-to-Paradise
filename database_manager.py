@@ -585,8 +585,6 @@ def update_sequence_to_scaling(user_id, sequence,category):
         conn.commit()
    
 
-#update_sequence_to_scaling(3,[3.8,2,3,5,7],enu.Scaling_Cat.COMPLETION)
-
 def retrieve_value_in_scaling(user_id, category,number):
     values = get_one_field(user_id,JSONCategory.SCALING,category.value)
     return values[number]

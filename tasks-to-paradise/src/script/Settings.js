@@ -5,11 +5,12 @@ import {
   PopoverContent,
   PopoverArrow,
   PopoverBody,
+  Button,
 } from "@chakra-ui/react";
 
 import ModalSequence from "../components/ModalSequence";
 
-const apiUrl = process.env.API_URL || '';
+const apiUrl = process.env.API_URL || "";
 
 class Settings extends Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class Settings extends Component {
         "Content-Type": "application/json",
       },
       body: body_content,
-      credentials: 'include',
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -148,13 +149,9 @@ class Settings extends Component {
       category: category,
       sequence: sequence,
     });
-    this.post_method(
-      body_content,
-      `${apiUrl}/change_scaling`,
-      (data) => {
-        this.refreshList();
-      }
-    );
+    this.post_method(body_content, `${apiUrl}/change_scaling`, (data) => {
+      this.refreshList();
+    });
   };
 
   render() {
@@ -163,99 +160,112 @@ class Settings extends Component {
         <main className="content scroll-container">
           {/* <h2 className="text-uppercase text-center my-4">Settings</h2> */}
           <div className="scroll-section-tasks">
-          <div className="outer-flex-container text-center">
-            <div className="inner-flex-container">
-            
-              <div>
-                <strong>Pause mode</strong>: {this.state.pause}
+            <div className="outer-flex-container text-center">
+              <div className="inner-flex-container">
+                <div>
+                  <strong>Pause mode</strong>: {this.state.pause}
+                </div>
+                <span>
+                  <button
+                    onClick={() => this.handleChangePause()}
+                    className="btn btn-info btn-spacing"
+                  >
+                    Change
+                  </button>
+                </span>
               </div>
-              <span>
-                <button
-                  onClick={() => this.handleChangePause()}
-                  className="btn btn-info btn-spacing"
-                >
-                  Change
-                </button>
-              </span>
             </div>
-          </div>
-          
-          <div className="outer-flex-container text-center  ">
-            <div className="inner-flex-container">
-              <div>
-                <Popover
-                  isLazy
-                  isOpen={this.state.isOpen}
-                  onClose={this.closePopover}
-                >
-                  {this.renderPopoverTrigger()}
-                  <PopoverContent>
-                    <PopoverArrow />
 
-                    <PopoverBody>
-                      Importance determines how much point you lose if you fail
-                      to complete a task.
-                      <br></br>
-                      <br></br>
-                      There are 3 degrees : not so important / important / very
-                      important.
-                      <br></br>
-                      <br></br>A not so important task penalizes less than a
-                      very important for example.
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-                : {this.renderScale(this.state.importanceScaling)}
-              </div>
-              <span>
-                <button
-                  onClick={() =>
-                    this.handleButtonClickSequence(3, "importance")
-                  }
-                  className="btn btn-info btn-spacing"
-                >
-                  Add New Sequence
-                </button>
-              </span>
-            </div>
-          </div>
-          <div className="outer-flex-container text-center  ">
-            <div className="inner-flex-container">
-              <div>
-                Difficulty: {this.renderScale(this.state.difficultyScaling)}
-              </div>
-              <span>
-                <button
-                  onClick={() =>
-                    this.handleButtonClickSequence(4, "difficulty")
-                  }
-                  className="btn btn-info btn-spacing"
-                >
-                  Add New Sequence
-                </button>
-              </span>
-            </div>
-          </div>
+            <div className="outer-flex-container text-center  ">
+              <div className="inner-flex-container">
+                <div>
+                  <Popover
+                    isLazy
+                    isOpen={this.state.isOpen}
+                    onClose={this.closePopover}
+                  >
+                    {this.renderPopoverTrigger()}
+                    <PopoverContent>
+                      <PopoverArrow />
 
-          <div className="outer-flex-container text-center  ">
-            <div className="inner-flex-container">
-              <div>
-                Completion: {this.renderScale(this.state.completionScaling)}
+                      <PopoverBody>
+                        Importance determines how much point you lose if you
+                        fail to complete a task.
+                        <br></br>
+                        <br></br>
+                        There are 3 degrees : not so important / important /
+                        very important.
+                        <br></br>
+                        <br></br>A not so important task penalizes less than a
+                        very important for example.
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                  : {this.renderScale(this.state.importanceScaling)}
+                </div>
+                <span>
+                  <button
+                    onClick={() =>
+                      this.handleButtonClickSequence(3, "importance")
+                    }
+                    className="btn btn-info btn-spacing"
+                  >
+                    Add New Sequence
+                  </button>
+                </span>
               </div>
-              <span>
-                <button
-                  onClick={() =>
-                    this.handleButtonClickSequence(5, "completion")
-                  }
-                  className="btn btn-info btn-spacing"
-                >
-                  Add New Sequence
-                </button>
-              </span>
+            </div>
+            <div className="outer-flex-container text-center  ">
+              <div className="inner-flex-container">
+                <div>
+                  Difficulty: {this.renderScale(this.state.difficultyScaling)}
+                </div>
+                <span>
+                  <button
+                    onClick={() =>
+                      this.handleButtonClickSequence(4, "difficulty")
+                    }
+                    className="btn btn-info btn-spacing"
+                  >
+                    Add New Sequence
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div className="outer-flex-container text-center  ">
+              <div className="inner-flex-container">
+                <div>
+                  Completion: {this.renderScale(this.state.completionScaling)}
+                </div>
+                <span>
+                  <button
+                    onClick={() =>
+                      this.handleButtonClickSequence(5, "completion")
+                    }
+                    className="btn btn-info btn-spacing"
+                  >
+                    Add New Sequence
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div className="text-center my-4">
+              <Button
+                colorScheme="blue"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = `${process.env.PUBLIC_URL}/user_manual.pdf`; // Use PUBLIC_URL to get the correct path
+                  link.download = "user_manual.pdf";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                Download User Manual
+              </Button>
             </div>
           </div>
-          </div>
-          
 
           {this.state.modal ? (
             <ModalSequence

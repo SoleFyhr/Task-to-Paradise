@@ -180,39 +180,31 @@ function App() {
 
 export default App;
 
-
-//5 Ajouter add on pour scheduler la daily routine tous les jours.
-
-
+//Ajouter un bouton pour download un user_manual et ecrire le user manual
 //S'occuper du scaling des weekly et company
-//enlever les rewards daily. Que weekly and monthly
-//Faire penalty induced
-//Corriger problème d'alignement entre menu et titre
+//enlever les rewards daily. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+//ajouter une belle emote d'icone d'app
+//Faire une zone de report de bugs ou d'amélioration de fonctionnalités
+//Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
+//Do projects
+//faire que le pause mode empeche tout 
+//S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)
+//make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
+//Mettre les popover dans settings
+
+
 //rendre le details hoverable urgeamment
 //Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
+//Corriger problème d'alignement entre menu et titre
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
-//ajouter une belle emote d'icone d'app
-//Ajouter un bouton pour download un user_manual.
-//ajouter un marqueur pour dire quand c'est checké que c'est bien pris en compte.
-//Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
-//Rendre le responsive plus beau ? (settings...)
-//mot de passe 
-//Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
-
-//make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
-//Do projects
 //Do achievements
-//Add authentification with google or smth not crackable
-
-//SideQuest :Faire le edit (voir en dessous) dans task, faire des hovers pour voir le content dans tasks, et meme dans le dashboard
-//rendre plus joli tasks penlatys et rewards
-//S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)
-//Mettre les popover dans settings
-//Faire les projects
-//Faire un beau dark mode.
+//Rajouter mode compact vs mode aéré dans les settings. #FF
 //Prohibited : The deduction could be a fixed amount or vary based on the severity or frequency of the violation.
+//mot de passe  - Add authentification with google or smth not crackable
+
+
 
 //Comprehensive Scoring System: Develop a scoring system that integrates completion levels, task importance, and prohibitions. This system should be transparent and easily understandable to the users.
 //Dynamic Thresholds for Rewards/Penalties: Adjust weekly and monthly reward/penalty thresholds based on average task difficulty, completion levels, and prohibitions. This makes the system more adaptive and personalized.
@@ -221,5 +213,15 @@ export default App;
 //Feedback Loop: Use these insights to adjust the point system dynamically, encouraging improvement in weaker areas.
 //2. Performance-based Multipliers Good Week/Month Bonus: If a user has an exceptionally good week or month (e.g., completing a high percentage of tasks), apply a multiplier to their reward points. This emphasizes the quality of performance over the period.
 //Consecutive Achievements: If users hit their targets consecutively (like achieving the weekly reward several weeks in a row), provide a bonus multiplier to reward consistency.
+//Special Bonuses: Introduce surprise bonuses for extraordinary achievements, like completing all tasks in a month or hitting the highest threshold multiple times in a row.
 
-//Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+
+
+
+//ajouter une petite alerte/message ephémère pour dire quand c'est checké que c'est bien pris en compte.
+//Rendre le responsive plus beau ? (settings...)
+//rendre plus joli tasks penlatys et rewards
+//Faire un beau dark mode.
+
+
+

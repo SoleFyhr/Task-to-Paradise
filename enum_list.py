@@ -54,7 +54,6 @@ class Scaling_Cat(Enum):
 
 class Completion(Enum):
     MOTION = "went through the motion"
-    FORGOT = "forgot to put the task"
     AVERAGE = "average" 
     GOOD = "good"
     PERFECT = "perfect"
@@ -68,10 +67,10 @@ class Completion(Enum):
     
     @staticmethod
     def value_completion(completion,values):
-        #values = [0.25,0.5,0.8,1,1.5]
+        #values = [0.25,0.8,1,1.5]
         return values[list(Completion).index(completion)]
 
-# values = [0.25,0.5,0.8,1,1.5]
+# values = [0.25,0.8,1,1.5]
 # print(Completion.value_completion(Completion.AVERAGE,values))
 
 

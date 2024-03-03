@@ -30,7 +30,7 @@ def create_new_user(username):
     #TODO create levels of difficulty and not hardcode/magic numbers shit like this
 
     difficulty= [1.0,3.0,6.0,10.0]
-    completion= [0.25,0.5,0.8,1.0,1.5]
+    completion= [0.25,0.8,1.0,1.5]
     importance= [5.0,13.0,20.0]
 
     database_manager.add_scaling_to_user(id, difficulty,completion,importance)
