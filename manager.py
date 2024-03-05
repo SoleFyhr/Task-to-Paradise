@@ -160,15 +160,6 @@ def penalty_task_done(user,id):
 def manage_historic(user):
     js.clean_historic(user)
 
-def user_process(user):
-    #Check if the user doesn't exist
-    if(user in js.read_usernames_from_file('users.txt')):
-        print("user found")
-        #go dailyroutine from there
-    else:
-       #js.create_json_from_template('./json/'+user+'.json') 
-       js.add_user_to_user_file('users.txt',user)
-       check_if_new_day(user)#update the date in the json file created
 
 #daily_routine()
 #user_process('aotrix')

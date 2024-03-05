@@ -24,6 +24,7 @@ class User:
 
 def create_new_user(username):
     new_user = User(username)
+    user_process(username)
     database_manager.add_user_to_db(new_user)
     id = database_manager.get_user_id_by_username(username)
 
@@ -40,6 +41,16 @@ def create_new_user(username):
 def get_user_id_from_username(username):
     return database_manager.get_user_id_by_username(username)
 
-#create_new_user('Aotrix')
 
+def user_process(user):
+    #Check if the user doesn't exist
+    if(user in database_manager.read_usernames_from_file('users.txt')):
+        print("user found")
+        #go dailyroutine from there
+    else:
+       #database_manager.create_json_from_template('./json/'+user+'.json') 
+       database_manager.add_user_to_user_file('users.txt',user)
+       
+#")
+#create_new_user('-_-')
 # ALTER SEQUENCE users_id_seq RESTART WITH 1;
