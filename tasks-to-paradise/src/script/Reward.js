@@ -12,6 +12,7 @@ class Reward extends Component {
         content: "",
         place: "",
         type: "",
+        id:"",
       },
       rewardDaily: [],
       rewardWeekly: [],
@@ -78,7 +79,7 @@ class Reward extends Component {
         <span>{item.content}</span>
         <span>
           <button
-            onClick={() => console.log("yo en travaux")}
+            onClick={() => this.editItem(item)}
             className="btn btn-info btn-spacing"
           >
             Edit
@@ -104,6 +105,21 @@ class Reward extends Component {
       content: "",
       place: "1",
       type: "daily",
+      id:"",
+    };
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
+
+  editItem = (reward) => {
+    //const currentDate = new Date();
+    //const formattedDate = currentDate.toISOString().split("T")[0]; // Formats the date to 'YYYY-MM-DD'
+
+    const item = {
+      
+      content: reward.content,
+      place: reward.place,
+      type: reward.type,
+      id:reward.id,
     };
     this.setState({ activeItem: item, modal: !this.state.modal });
   };

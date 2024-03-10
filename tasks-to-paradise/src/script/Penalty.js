@@ -12,6 +12,7 @@ class Penalty extends Component {
         content: "",
         place: "",
         type: "",
+        id:"",
       },
       penaltyDaily: [],
       penaltyWeekly: [],
@@ -78,7 +79,7 @@ class Penalty extends Component {
         <span>{item.content}</span>
         <span>
           <button
-            onClick={() => console.log("yo en travaux")}
+            onClick={() => this.editItem(item)}
             className="btn btn-info btn-spacing"
           >
             Edit
@@ -104,6 +105,21 @@ class Penalty extends Component {
       content: "",
       place: "1",
       type: "daily",
+      id:""
+    };
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
+
+  editItem = (penalty) => {
+    //const currentDate = new Date();
+    //const formattedDate = currentDate.toISOString().split("T")[0]; // Formats the date to 'YYYY-MM-DD'
+
+    const item = {
+      
+      content: penalty.content,
+      place: penalty.place,
+      type: penalty.type,
+      id:penalty.id,
     };
     this.setState({ activeItem: item, modal: !this.state.modal });
   };

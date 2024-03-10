@@ -63,7 +63,7 @@ def get_one_field(user_id,table,field):
             return fieldd
 
 
-def get_with_one_condition(user_id,table,condition_name,condition_field):
+def get_with_one_condition(user_id,table,condition_name,condition_field,order_by = "id"):
 
 
     condition_field = condition_field.value if isinstance(condition_field, Enum) else condition_field
@@ -71,7 +71,7 @@ def get_with_one_condition(user_id,table,condition_name,condition_field):
     with get_db_connection() as conn:
 
         with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
-            sql = f"SELECT * FROM {table.value} WHERE user_id = %s AND {condition_name} = %s"
+            sql = f"SELECT * FROM {table.value} WHERE user_id = %s AND {condition_name} = %s ORDER BY {order_by} ASC"
             cursor.execute(sql, (user_id,condition_field))
             data = serialize_task_data(cursor.fetchall())
             
@@ -151,39 +151,91 @@ def add_task_to_db(user_id, new_task):
     with get_db_connection() as conn:
 
         with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
-    
-            # Prepare data for insertion
-            expiration_time = new_task.expiration_time
-           
-            if new_task.task_type == enu.TaskType.HABITS.value:
-                current_date = datetime.datetime.now().date()
-                expiration_time = current_date + datetime.timedelta(days=int(new_task.time_to_completion))
+            
 
-            elif expiration_time:
-                expiration_time = datetime.datetime.strptime(expiration_time, "%Y-%m-%d")
+            sql_previous = f"""
+                SELECT task_type, time_to_completion, frequency_coming_back,expiration_time FROM {JSONCategory.TASK.value} WHERE user_id = %s AND id = %s
+                UNION
+                SELECT task_type, time_to_completion, frequency_coming_back, expiration_time FROM {JSONCategory.HISTORIC.value}
+                WHERE user_id = %s AND id = %s
+            """
+            cursor.execute(sql_previous, (user_id,new_task.id,user_id,new_task.id))
+            value = cursor.fetchone()
+
+            expiration_time = new_task.expiration_time
+        
+            
+            if not value:
+                
+                if new_task.task_type == enu.TaskType.HABITS.value:
+                    current_date = datetime.datetime.now().date()
+                    expiration_time = current_date + datetime.timedelta(days=int(new_task.time_to_completion))
+
+                elif expiration_time:
+                    expiration_time = datetime.datetime.strptime(expiration_time, "%Y-%m-%d")
+
+                else:
+                    expiration_time = None  # Use None for NULL in SQL
+
+                # Build and execute the INSERT SQL statement
+                sql = """
+                    INSERT INTO tasks 
+                    (user_id,id, title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back) 
+                    VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(sql, (
+                    user_id,
+                    new_task.id,
+                    new_task.title, 
+                    new_task.content, 
+                    new_task.task_type,  
+                    expiration_time, 
+                    new_task.difficulty, 
+                    new_task.importance, 
+                    new_task.penalty_induced, 
+                    new_task.time_to_completion, 
+                    new_task.frequency_coming_back
+                ))
 
             else:
-                expiration_time = None  # Use None for NULL in SQL
+                task_type, time_to_completion, frequency_coming_back,expiration_time = value
+                
+                #Voir si en changeant le type d'une task ca casse pas tout
+                if new_task.task_type == enu.TaskType.HABITS.value:    
+                    current_date = datetime.datetime.now().date()
+                    expiration_time = expiration_time + datetime.timedelta(days=int(new_task.time_to_completion-time_to_completion))
+                    expiration_time = expiration_time.strftime('%Y-%m-%d')
 
-            # Build and execute the INSERT SQL statement
-            sql = """
-                INSERT INTO tasks 
-                (user_id,id, title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back) 
-                VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            cursor.execute(sql, (
-                user_id,
-                new_task.id,
-                new_task.title, 
-                new_task.content, 
-                new_task.task_type,  
-                expiration_time, 
-                new_task.difficulty, 
-                new_task.importance, 
-                new_task.penalty_induced, 
-                new_task.time_to_completion, 
-                new_task.frequency_coming_back
-            ))
+            
+
+                sql_update = """
+                UPDATE tasks
+                SET user_id = %s,
+                    title = %s,
+                    content = %s,
+                    task_type = %s,
+                    expiration_time = %s,
+                    difficulty = %s,
+                    importance = %s,
+                    penalty_induced = %s,
+                    time_to_completion = %s,
+                    frequency_coming_back = %s
+                WHERE id = %s
+                """
+                cursor.execute(sql_update, (
+                    user_id,
+                    new_task.title, 
+                    new_task.content, 
+                    new_task.task_type, 
+                    expiration_time, 
+                    new_task.difficulty, 
+                    new_task.importance, 
+                    new_task.penalty_induced, 
+                    new_task.time_to_completion, 
+                    new_task.frequency_coming_back,
+                    new_task.id  
+                ))
+
 
         conn.commit()
    
@@ -415,30 +467,70 @@ def add_penalty_reward_to_db(user_id, penalty,category,type,place):
     with get_db_connection() as conn:
 
         with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
-            sql_previous = f"""
-                SELECT * FROM {category.value} WHERE user_id = %s AND type = %s AND place = {place}        
+            sql_previous_previous = f"""
+                SELECT place, type FROM {category.value} WHERE user_id = %s AND id = %s 
             """
-            cursor.execute(sql_previous, (user_id,type.value))
+            cursor.execute(sql_previous_previous, (user_id,penalty.id))
             value = cursor.fetchone()
-            if not value or type == enu.Active.ACTIVE:
-                # Build and execute the INSERT SQL statement
-                sql = f"""
-                    INSERT INTO {category.value} 
-                    (user_id,id, content,type,place) 
-                    VALUES (%s,%s, %s, %s, %s)
+            if not value :
+                sql_previous = f"""
+                    SELECT * FROM {category.value} WHERE user_id = %s AND type = %s AND place = {place}        
                 """
-                cursor.execute(sql, (
-                    user_id,
-                    penalty.id,
-                    penalty.content, 
-                    type.value,
-                    place  
-                ))
+                cursor.execute(sql_previous, (user_id,type.value))
+                value = cursor.fetchone()
+                if not value or type == enu.Active.ACTIVE:
+                    # Build and execute the INSERT SQL statement
+                    sql = f"""
+                        INSERT INTO {category.value} 
+                        (user_id,id, content,type,place) 
+                        VALUES (%s,%s, %s, %s, %s)
+                    """
+                    cursor.execute(sql, (
+                        user_id,
+                        penalty.id,
+                        penalty.content, 
+                        type.value,
+                        place  
+                    ))
+                else:
+                    sql = f"""
+                        UPDATE {category.value} SET CONTENT = %s WHERE user_id = %s and type = %s and place = {place}
+                    """
+                    cursor.execute(sql, (penalty.content,user_id,type.value))
             else:
-                sql = f"""
-                    UPDATE {category.value} SET CONTENT = %s WHERE user_id = %s and type = %s and place = {place}
+                old_place, old_type = value
+                
+                #if different place or type, we need to delete this one as the user chose to edit its place or type, meaning it doesn't want it to be here
+                if place != old_place or old_type != type.value:
+                    delete_penalty_reward_by_id(user_id,penalty.id, category)
+                
+                #check if there is already a penalty in the new type, or place of the penalty
+                sql_previous = f"""
+                    SELECT * FROM {category.value} WHERE user_id = %s AND type = %s AND place = {place}        
                 """
-                cursor.execute(sql, (penalty.content,user_id,type.value))
+                cursor.execute(sql_previous, (user_id,type.value))
+                value = cursor.fetchone()
+                
+                #needs to insert
+                if not value:
+                    sql = f"""
+                        INSERT INTO {category.value} 
+                        (user_id,id, content,type,place) 
+                        VALUES (%s,%s, %s, %s, %s)
+                    """
+                    cursor.execute(sql, (
+                        user_id,
+                        penalty.id,
+                        penalty.content, 
+                        type.value,
+                        place 
+                    ))
+                else:
+                    sql = f"""
+                        UPDATE {category.value} SET CONTENT = %s WHERE user_id = %s and type = %s and place = {place}
+                    """
+                    cursor.execute(sql, (penalty.content,user_id,type.value))
+
 
         conn.commit()
    

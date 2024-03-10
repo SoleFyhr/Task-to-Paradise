@@ -20,7 +20,7 @@ class CustomModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: { ...this.props.activeItem, penalty_induced_content: "" }, // Add penalty_induced_content to the state
+      activeItem: { ...this.props.activeItem, penalty_induced_content: ""}, // Add penalty_induced_content to the state
       validationErrors: {},
     };
     this.fieldConfig = {

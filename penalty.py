@@ -27,8 +27,8 @@ class Penalty:
 
 
 #type = in daily scale, place= 2nd rank
-def create_new_penalty(user_id,content,type,place): 
-    new_penalty = Penalty(content) #cold shower
+def create_new_penalty(user_id,content,type,place,id=None): 
+    new_penalty = Penalty(content,id) #cold shower
 
     database_manager.add_penalty_reward_to_db(user_id, new_penalty,database_manager.JSONCategory.PENALTY,type,place)
 
@@ -45,9 +45,9 @@ def create_new_penalty(user_id,content,type,place):
 
 def get_all_penalty_sorted(user_id):
 
-    daily = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.DAILY)
-    weekly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.WEEKLY)
-    monthly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.MONTHLY)
+    daily = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.DAILY,order_by="place")
+    weekly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.WEEKLY,order_by="place")
+    monthly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.PENALTY,'type',enu.TimeEnum.MONTHLY,order_by="place")
 
 
     return daily,weekly,monthly

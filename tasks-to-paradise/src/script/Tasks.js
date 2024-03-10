@@ -22,6 +22,7 @@ class Tasks extends Component {
         importance: "",
         penalty_induced: "false",
         type: "",
+        id:"",
       },
       activeItemCompletion: {
         title: "",
@@ -137,6 +138,26 @@ class Tasks extends Component {
       importance: "not so important",
       penalty_induced: null,
       type: "once",
+      id:"",
+    };
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
+
+  editItem = (task) => {
+    //const currentDate = new Date();
+    //const formattedDate = currentDate.toISOString().split("T")[0]; // Formats the date to 'YYYY-MM-DD'
+
+    const item = {
+      title: task.title,
+      content: task.content,
+      difficulty: task.difficulty,
+      expiration_time: task.expiration_time, // Set to current date
+      time_to_completion: task.time_to_completion,
+      frequency_coming_back: task.frequency_coming_back,
+      importance: task.importance,
+      penalty_induced: task.penalty_induced,
+      type: task.task_type,
+      id:task.id,
     };
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
@@ -265,7 +286,7 @@ class Tasks extends Component {
         </div>
         <div className="button-group">
           <button
-            onClick={() => console.log("Edit:", item.title)}
+            onClick={() => this.editItem(item)}
             className="btn btn-info btn-spacing"
           >
             Edit

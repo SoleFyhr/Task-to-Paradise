@@ -40,10 +40,10 @@ class Task:
         return Task(**task_dict)
     
 
-
-def create_new_task(user_id, title, content, task_type, expiration_time, difficulty=enu.Difficulty.EASY, importance=0, penalty_induced=None, time_to_completion="", frequency_coming_back=""):
+#Add id to the mix, a 'try data.get("id") et ajouter id dans les tasks de Tasks.js
+def create_new_task(user_id, title, content, task_type, expiration_time, difficulty=enu.Difficulty.EASY, importance=0, penalty_induced=None, time_to_completion="", frequency_coming_back="",id=None):
     
-    new_task = Task(title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back)
+    new_task = Task(title, content, task_type, expiration_time, difficulty, importance, penalty_induced, time_to_completion, frequency_coming_back,id)
     
     # Directly pass the Task object to the database manager
     database_manager.add_task_to_db(user_id, new_task)

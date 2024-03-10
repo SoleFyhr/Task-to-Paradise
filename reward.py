@@ -25,8 +25,8 @@ class Reward:
     
 
 #type = in daily scale, place= 2nd rank
-def create_new_reward(user_id,content,type,place): 
-    new_reward = Reward(content) #cold shower
+def create_new_reward(user_id,content,type,place,id=None): 
+    new_reward = Reward(content,id) #cold shower
     database_manager.add_penalty_reward_to_db(user_id, new_reward,database_manager.JSONCategory.REWARD,type,place)
 
 #create_new_reward(2,'Test & DOdo',enu.TimeEnum.MONTHLY,1)
@@ -44,9 +44,9 @@ def create_new_reward(user_id,content,type,place):
 def get_all_reward_sorted(user_id):
 
 
-    daily = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.DAILY)
-    weekly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.WEEKLY)
-    monthly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.MONTHLY)
+    daily = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.DAILY,order_by="place")
+    weekly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.WEEKLY,order_by="place")
+    monthly = database_manager.get_with_one_condition(user_id,database_manager.JSONCategory.REWARD,'type',enu.TimeEnum.MONTHLY,order_by="place")
 
 
     return daily,weekly,monthly

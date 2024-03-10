@@ -144,15 +144,21 @@ def my_function():
    
     expiration_time = data.get('expiration_time')
     values = ta.get_importance_values(user_id)
-   
-    importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
+    try:
+        importance = int(data.get("importance"))
+    except:
+
+        importance = enu.Importance.value_importance(enu.Importance.from_string(data.get('importance')),values)
     difficulty = enu.Difficulty.from_string(data.get('difficulty')) # if penalty task, the js put this at 0.
-    penalty_induced = data.get('penalty_induced') # TODO put in react that if it's not marked it is send to false, and else the title of the penalty
+    penalty_induced = data.get('penalty_induced')
     
     time_to_completion = data.get('time_to_completion')
     frequency_coming_back = data.get('frequency_coming_back')
+    id = None
+    if data.get("id")!="":
+        id = data.get("id")
     
-    task_feedback = ta.create_new_task(user_id,title=title, content=content,task_type=type, expiration_time=expiration_time,difficulty= difficulty, importance=importance,penalty_induced=penalty_induced,time_to_completion=time_to_completion,frequency_coming_back=frequency_coming_back)
+    task_feedback = ta.create_new_task(user_id,title=title, content=content,task_type=type, expiration_time=expiration_time,difficulty= difficulty, importance=importance,penalty_induced=penalty_induced,time_to_completion=time_to_completion,frequency_coming_back=frequency_coming_back,id=id)
     response_data = {"message": "Task added successfully","task":task_feedback}
     return jsonify(response_data)
 
@@ -238,7 +244,12 @@ def function_create_penalty():
     content = data.get('content')
     place_in_scale = data.get('place')
     type = enu.TimeEnum.from_string(data.get('type'))
-    penalty_feedback = pe.create_new_penalty(user_id,content,type,place_in_scale)
+    id = None
+    if data.get("id")!="":
+        id = data.get("id")
+    if(int(place_in_scale)!=0):
+        pe.create_new_penalty(user_id,content,type,place_in_scale,id)
+
     response_data = {"message": "Penalty added successfully"}
     return jsonify(response_data)
 
@@ -316,7 +327,11 @@ def function_create_reward():
     content = data.get('content')
     place_in_scale = data.get('place')
     type = enu.TimeEnum.from_string(data.get('type'))
-    rew.create_new_reward(user_id,content,type,place_in_scale)
+    id = None
+    if data.get("id")!="":
+        id = data.get("id")
+    if(int(place_in_scale)!=0):
+        rew.create_new_reward(user_id,content,type,place_in_scale,id)
     response_data = {"message": "Reward added successfully"}
     return jsonify(response_data)
 

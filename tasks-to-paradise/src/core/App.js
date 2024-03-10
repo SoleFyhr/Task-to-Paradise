@@ -180,21 +180,23 @@ function App() {
 
 export default App;
 
-//define all the functions of project
+
+//TODO faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
 //?S'occuper du scaling des weekly et company
-//?enlever les rewards daily. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+//?enlever les rewards daily?. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
 
 //Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //Code project 
 //Test project
 
 //faire que le pause mode empeche tout 
-//S'occuper du edit (faire apparaitre modal avec active item, mais surtout dans le back end)
+//Régler problème importance dans edit de task
 //make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
 //Mettre les popover dans settings
-
+//Rajouter dans le modèle pour custom complétion etc, le nom des catégories (good, average...) en fonction du nom de la variable.
 
 //rendre le details hoverable urgeamment
+//Rendre la penalty induced d'une task hoverable dans le dashboard avec un popover avec le content de la penalty induced et avec genre une étoile rouge en mode asterix.
 //Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Corriger problème d'alignement entre menu et titre
