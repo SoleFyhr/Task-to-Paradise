@@ -92,15 +92,8 @@ function App() {
 
           @media screen and (max-width: 1024px) {
             #root {
-              min-height: 100%;
-              display: flex;
-              flex-direction: column;
-              background-image: url(${backgroundImage});
               background-attachment: scroll; /* Change to scroll for iOS */
               background-size: cover; /* Adjust size as needed for better fit */
-              background-blend-mode: overlay;
-              background-repeat: no-repeat;
-
             }
         `}
       />
