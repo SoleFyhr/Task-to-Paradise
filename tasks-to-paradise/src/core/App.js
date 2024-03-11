@@ -89,6 +89,12 @@ function App() {
             background-repeat: no-repeat;
             background-size: cover;
           }
+
+          @media screen and (max-width: 1024px) {
+            #root {
+              background-attachment: scroll; /* Change to scroll for iOS */
+              background-size: auto 100vh; /* Adjust size as needed for better fit */
+            }
         `}
       />
 
