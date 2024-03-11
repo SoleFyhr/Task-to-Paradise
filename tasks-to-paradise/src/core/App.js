@@ -75,7 +75,6 @@ function App() {
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden;
             color: white;
           }
 
@@ -180,24 +179,28 @@ function App() {
 
 export default App;
 
-
+//TODO faire le mode compact, voir le screen sur discord + titre trop sur la guache alors que les jours restants prennent une enorme place pour rien (les mettre au dessus de difficulté?) + (text size custom si tel detecté? + enelevr la marge sur tel dans dashboard)
+//TODO Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //TODO faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
+//TODO Régler problème importance dans edit de task + penalty induced.
 //?S'occuper du scaling des weekly et company
 //?enlever les rewards daily?. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
 
-//Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
 //Code project 
 //Test project
 
-//faire que le pause mode empeche tout 
-//Régler problème importance dans edit de task
-//make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
-//Mettre les popover dans settings
-//Rajouter dans le modèle pour custom complétion etc, le nom des catégories (good, average...) en fonction du nom de la variable.
-
+//Fonction extend de tache qui consomme la moitié des points d'importance le dernier jour, et qui prolonge d'un jour mais en faisant x1.5 les points d'importance. Edit possible d'une tache jusqu'à 2 jours avant la complétion de la tache.
+//Pouvoir avoir plusieurs penalties sur de meme place, et en activer certaines (que une active possible)
 //rendre le details hoverable urgeamment
 //Rendre la penalty induced d'une task hoverable dans le dashboard avec un popover avec le content de la penalty induced et avec genre une étoile rouge en mode asterix.
 //Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
+
+
+//faire que le pause mode empeche tout 
+//make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
+//Mettre les popover dans settings
+//Rajouter dans le modal quand on veut un setting (soit complétion, soit importance etc), le nom des catégories (good, average...) en fonction de ce qu'on a décidé de changer (faire des listes contenants le nom des variables dans le modal, comme dans le modal pour task) et mettre l'ancienne valeur directement dans le modal comme j'ai pu faire dans le edit de penalties etc
+
 //Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Corriger problème d'alignement entre menu et titre
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger

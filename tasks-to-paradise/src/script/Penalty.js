@@ -151,12 +151,11 @@ class Penalty extends Component {
   render() {
     return (
       <>
-        <main className="content scroll-container">
+        <main className="content">
           {/* <h2 className="text-uppercase text-center my-4">Penalty</h2> */}
           <div className="row ">
             <div className="col-md-6 col-sm-10 mx-auto p-0">
-            <div className="scroll-section taskZone">
-              <div className="scroll-section-inner">
+            <div className="add_Task taskZone">
                   <div className="addTask">
                     <button
                       onClick={this.createItem}
@@ -173,11 +172,9 @@ class Penalty extends Component {
                       {this.renderItems(this.state.penaltyDaily, "daily")}
                     </ul>
                   </div>
-                  </div>
                 </div>
                 
-                <div className="scroll-section taskZone">
-                  <div className="scroll-section-inner">
+                <div className="between_section taskZone">
                     <h4 className="text-uppercase  my-4">Weekly</h4>
                     <div className="card penaltyGroup">
                       {/* {this.renderTabList()} */}
@@ -185,10 +182,8 @@ class Penalty extends Component {
                         {this.renderItems(this.state.penaltyWeekly, "weekly")}
                       </ul>
                     </div>
-                  </div>
                 </div>
-                <div className="scroll-section taskZone">
-                  <div className="scroll-section-inner">
+                <div className="between_section taskZone">
                     <h4 className="text-uppercase  my-4">Monthly</h4>
                     <div className="card penaltyGroup">
                       {/* {this.renderTabList()} */}
@@ -196,7 +191,6 @@ class Penalty extends Component {
                         {this.renderItems(this.state.penaltyMonthly, "monthly")}
                       </ul>
                     </div>
-                  </div>
                 </div>
                 </div>
              

@@ -57,7 +57,7 @@ font-family: "Playfair Display", serif;
 }
 
 .content {
-  margin-bottom: 10%;
+  margin-bottom: 35%;
 }
 
 .penaltyGroup {
@@ -70,7 +70,7 @@ font-family: "Playfair Display", serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2%;
+  margin-top: 4%;
 }
 
 .inner-flex-container {
@@ -288,15 +288,36 @@ li.prohibited {
 }
 
 /*! -----------SCROLL------------ */
+.scroll-section-title {
+  scroll-snap-align: start;
+  height: 100vh;
+  padding-top: 40vh;
+}
 
+.padding_top_section {
+  height: 100vh;
+  padding-top: 40vh;
+}
+.big_section {
+  height: 100vh;
+}
+
+.between_section {
+  padding-top: 10vh;
+}
+
+.add_Task{
+  padding-top: 10vh;
+}
+
+/* 
 .scroll-container {
   scroll-snap-type: y mandatory;
-  overflow-y: auto; /* Allows scrolling */
+  overflow-y: auto; 
   height: 100vh;
   scroll-behavior: smooth;
 }
 
-/* Making scrollbar transparent */
 .scroll-container::-webkit-scrollbar {
   width: 0.1em;
 }
@@ -323,12 +344,12 @@ li.prohibited {
   scroll-snap-align: start;
   
 
-  overflow: hidden; /* Prevents outer container from scrolling */
+  overflow: hidden; 
 }
 
 .scroll-section-inner {
   max-height: 100vh;
-  overflow-y: auto; /* Allows scrolling within the section */
+  overflow-y: auto; 
   padding-top: 10vh;
 }
-
+*/

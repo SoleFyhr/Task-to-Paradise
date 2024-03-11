@@ -361,8 +361,7 @@ class Dashboard extends Component {
 
   renderSection(title, renderFunction = null, args = null) {
     return (
-      <div className="scroll-section">
-      <div className="scroll-section-inner">
+      <div className="padding_top_section">
         <div className="col-md-6 col-sm-10 mx-auto p-0 ">
           {this.renderTabList(title)}
           <div className=" p-3 ">
@@ -371,15 +370,15 @@ class Dashboard extends Component {
             ) : null}
           </div>
         </div>
-      </div>
+      
       </div>
     );
   }
 
   render() {
     return (
-      <>
-        <main className="content scroll-container">
+      <>  
+      <main className="content">
           <div className="scroll-section-title center">
             <h1 className="title">TASKS TO PARADISE</h1>
           </div>
@@ -396,7 +395,6 @@ class Dashboard extends Component {
             this.renderProhibited,
             this.state.prohibitedList
           )}
-          <div className="scroll-section-tasks">
             <div className="col-md-6 col-sm-10 mx-auto p-0 ">
               {this.renderTabList("Penalty")}
               <div className=" p-3 ">
@@ -405,8 +403,7 @@ class Dashboard extends Component {
                 </ul>
               </div>
             </div>
-          </div>
-          <div className="scroll-section-tasks">
+          <div className="between_section">
             <div className="col-md-6 col-sm-10 mx-auto p-0 ">
               {this.renderTabList("Reward")}
               <div className=" p-3 ">
@@ -415,8 +412,9 @@ class Dashboard extends Component {
                 </ul>
               </div>
             </div>
-          </div>
+            </div>
 
+          
 
 
           {/* <div
@@ -430,7 +428,7 @@ class Dashboard extends Component {
               onSave={this.handleCompletion}
             />
           ) : null}
-        </main>
+          </main>
       </>
     );
   }

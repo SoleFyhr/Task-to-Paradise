@@ -170,9 +170,9 @@ class Settings extends Component {
   render() {
     return (
       <>
-        <main className="content scroll-container">
+        <main className="content">
           {/* <h2 className="text-uppercase text-center my-4">Settings</h2> */}
-          <div className="scroll-section-tasks">
+          <div className="add_Task">
             <div className="outer-flex-container text-center">
               <div className="inner-flex-container">
                 <div>

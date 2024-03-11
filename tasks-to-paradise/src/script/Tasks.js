@@ -304,13 +304,11 @@ class Tasks extends Component {
 
   render() {
     return (
-      <>
-        <main className="content  scroll-container">
+      <>  <main className="content">
           {/* <h2 className="text-uppercase text-center my-4">Tasks</h2> */}
-          <div className="row ">
+          <div className="row">
             <div className="col-md-6 col-sm-10 mx-auto p-0">
-              <div className="scroll-section taskZone">
-               <div className="scroll-section-inner">
+              <div className="add_Task taskZone">
               <div className="addTask">
                 <button onClick={this.createItem} className="btn btn-primary">
                   Add Task
@@ -335,10 +333,8 @@ class Tasks extends Component {
 
               </div>
 
-              </div>
 
-              <div className="scroll-section taskZone">
-               <div className="scroll-section-inner">
+              <div className="between_section taskZone">
               <h4 className="text-uppercase  my-4">Habits</h4>
 
               <div className="card penaltyGroup">
@@ -354,7 +350,6 @@ class Tasks extends Component {
                 <ul className="list-group list-group-flush">
                   {this.renderItems(this.state.prohibited)}
                 </ul>
-              </div>
               </div>
               </div>
             </div>
@@ -375,7 +370,7 @@ class Tasks extends Component {
               onSave={this.handleCompletion}
             />
           ) : null}
-        </main>
+          </main>
       </>
     );
   }
