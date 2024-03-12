@@ -42,7 +42,7 @@ const iosStyle = css`
     height: 100%;
     z-index: -1;
     background-image: url(${backgroundImage});
-    background-color: var(--second-bg-color); /* Assuming you have this variable defined */
+    background-color: var(--second-bg-color);
     background-blend-mode: overlay;
     background-repeat: no-repeat;
     background-size: cover;
@@ -70,6 +70,7 @@ const defaultStyle = css`
   }
 `;
 function App() {
+  
   const [loggedInUser, setLoggedInUser] = useState(null);
   const { setColorMode } = useColorMode();
 
@@ -84,6 +85,19 @@ function App() {
       setLoggedInUser(storedUser);
     }
   }, []);
+
+  useEffect(() => {
+    if (isIOSDevice) {
+      const handleScroll = () => {
+        const offset = window.pageYOffset;
+        document.getElementById('root').style.setProperty('--bg-position', `0px ${offset}px`);
+      };
+
+      window.addEventListener('scroll', handleScroll);
+
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [isIOSDevice]);
 
   const handleLogin = (username) => {
     setLoggedInUser(username);
