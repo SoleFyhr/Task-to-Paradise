@@ -21,8 +21,54 @@ import Settings from "../script/Settings";
 import Login from "../script/Login";
 import backgroundImage from "../imgs/dark.jpg"; // Adjust the path according to your project structure
 
+
+const isIOS = () => {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+const isIOSDevice = isIOS(); // Call the utility function
 const apiUrl = process.env.API_URL || '';
 
+const iosStyle = css`
+  #root::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url(${backgroundImage});
+    background-color: var(--second-bg-color); /* Assuming you have this variable defined */
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+`;
+const defaultStyle = css`
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: white;
+  }
+
+  #root {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-image: url(${backgroundImage});
+    background-color: var(--second-bg-color);
+    background-blend-mode: overlay;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat;
+    background-size: cover !important;
+  }
+`;
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const { setColorMode } = useColorMode();
@@ -68,29 +114,7 @@ function App() {
 
   return (
     <>
-      <Global
-        styles={css`
-          html,
-          body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            color: white;
-          }
-
-          #root {
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-            background-image: url(${backgroundImage}); /* Replace with your image path */
-            background-color: var(--second-bg-color);
-            background-blend-mode: overlay; /* Blend the background color with the image */
-            background-attachment: fixed !important; 
-            background-repeat: no-repeat;
-            background-size: cover !important;
-          }
-        `}
-      />
+      <Global styles={isIOSDevice ? iosStyle : defaultStyle} />
 
       <header>
         <Router>
