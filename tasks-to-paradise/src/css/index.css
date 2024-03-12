@@ -296,18 +296,18 @@ li.prohibited {
 
 .padding_top_section {
   height: 100vh;
-  padding-top: 40vh;
+  margin-top: 40vh;
 }
 .big_section {
   height: 100vh;
 }
 
 .between_section {
-  padding-top: 10vh;
+  margin-top: 10vh;
 }
 
 .add_Task{
-  padding-top: 10vh;
+  margin-top: 10vh;
 }
 
 /* 

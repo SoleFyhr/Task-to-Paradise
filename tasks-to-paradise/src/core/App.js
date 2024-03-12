@@ -85,9 +85,9 @@ function App() {
             background-image: url(${backgroundImage}); /* Replace with your image path */
             background-color: var(--second-bg-color);
             background-blend-mode: overlay; /* Blend the background color with the image */
-            background-attachment: fixed;
+            background-attachment: fixed !important; 
             background-repeat: no-repeat;
-            background-size: cover;
+            background-size: cover !important;
           }
         `}
       />
