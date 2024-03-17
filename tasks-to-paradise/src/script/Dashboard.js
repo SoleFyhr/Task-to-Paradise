@@ -267,8 +267,8 @@ class Dashboard extends Component {
       const timeDiff = dueDate - currentDate;
       const isMobile = this.isMobileDevice();
       number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
-      if (number === 1) number = `1 day ${isMobile ? "left" : ""}`;
-      else number = number === 0 ? "Today" : number + ` days ${isMobile ? "left" : ""} `;
+      if (number === 1) number = `1 day ${isMobile ? "" : "left"}`;
+      else number = number === 0 ? "Today" : number + ` days ${isMobile ? "" : "left"} `;
     }
     return number;
   };
