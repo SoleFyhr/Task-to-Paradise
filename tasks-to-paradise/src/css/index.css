@@ -245,12 +245,13 @@ li.prohibited {
   transform: scale(1.03);
 }
 
+/* FIX THIS, for now it is the same as the other */
 .task-grid.penalty {
-  grid-template-columns: auto min-content 8fr 3fr 1fr;
+  grid-template-columns: auto min-content 8fr 2fr 2fr;
 }
 
 .task-grid.no-penalty {
-  grid-template-columns: min-content 3fr 2fr 1fr;
+  grid-template-columns: auto min-content 8fr 2fr 2fr;
 }
 
 /*!----------- TASK-------------- */

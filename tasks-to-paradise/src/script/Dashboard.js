@@ -177,6 +177,11 @@ class Dashboard extends Component {
       });
   }
 
+  isMobileDevice = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+  }
+
   toggle = () => {
     //add this after modal creation
     if (this.state.modal === true) {
@@ -260,9 +265,10 @@ class Dashboard extends Component {
       const currentDate = new Date();
       const dueDate = new Date(expirationDate);
       const timeDiff = dueDate - currentDate;
+      const isMobile = this.isMobileDevice();
       number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
-      if (number === 1) number = "1 day left";
-      else number = number === 0 ? "Today" : number + " days left";
+      if (number === 1) number = `1 day ${isMobile ? "left" : ""}`;
+      else number = number === 0 ? "Today" : number + ` days ${isMobile ? "left" : ""} `;
     }
     return number;
   };
@@ -292,7 +298,7 @@ class Dashboard extends Component {
       <li
         key={item.id}
         className={`task-grid ${this.state.isCompact ==="yes" ? 'compact' : ''} basic ${
-          item.penalty_induced ? "penalty" : "no-penalty"
+          item.penalty_induced === "false" ? "no-penalty" : "penalty"
         } ${item.task_type}`}
       >
         {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
