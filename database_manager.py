@@ -24,6 +24,7 @@ class JSONCategory(Enum):
 
     REWARD_UNLOCKING_STEP ="reward_unlocking_steps"
     PAUSE ="pause"
+    COMPACT ="compact"
     DATE ="last_date"
 
 #!----------------- GENERAL --------------------------
@@ -717,6 +718,29 @@ def change_pause(user_id):
     
 
     conn.commit()
+
+#----------------- COMPACT --------------------------
+
+
+def retrieve_compact_field(user_id):
+    compact = get_one_field_from_users(user_id,JSONCategory.COMPACT.value)
+    return compact
+
+def change_compact(user_id):
+    variable = "yes"
+    if retrieve_compact_field(user_id) == "yes":
+        variable = "no"
+
+    sql = f"UPDATE public.users SET {JSONCategory.COMPACT.value} = %s WHERE id = %s"
+
+    with get_db_connection() as conn:
+
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+            cursor.execute(sql, (variable,user_id))
+    
+
+    conn.commit()
+
 
 
 #----------------- DATE --------------------------

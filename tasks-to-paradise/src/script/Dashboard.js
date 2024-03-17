@@ -8,7 +8,6 @@ import exclamation from "../svg/exclamationRed.svg";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import { each } from "@amcharts/amcharts4/.internal/core/utils/Iterator";
 
 // Use theme (optional)
 am4core.useTheme(am4themes_animated);
@@ -34,6 +33,7 @@ class Dashboard extends Component {
       activePenaltyList: [],
       ppoints: [],
       rpoints: [],
+      isCompact:"",
     };
   }
 
@@ -106,6 +106,17 @@ class Dashboard extends Component {
   refreshList = () => {
     this.post_method(
       "",
+      `${apiUrl}/button_get_setting`,
+      (data) => {
+        this.setState({ isCompact: data.compact });
+      }
+    );
+    this.post_method("", `${apiUrl}/button_get_points`, (data) => {
+      this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
+    });
+    
+    this.post_method(
+      "",
       `${apiUrl}/get_dashboard_tasks`,
       (data) => {
 
@@ -131,6 +142,8 @@ class Dashboard extends Component {
     this.post_method("", `${apiUrl}/button_get_points`, (data) => {
       this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
     });
+
+    
   };
 
   post_method(body_content, path, return_func) {
@@ -265,7 +278,7 @@ class Dashboard extends Component {
 
     for (let i = 0; i < stars[difficulty]; i++) {
       starElements.push(
-        <img key={i} src={starIcon} alt="star" className="star-icon" />
+        <img key={i} src={starIcon} alt="star" className={`star-icon ${this.state.isCompact ==="yes" ? 'compact' : ''}`}/>
       );
     }
 
@@ -278,7 +291,7 @@ class Dashboard extends Component {
           
       <li
         key={item.id}
-        className={`task-grid basic ${
+        className={`task-grid ${this.state.isCompact ==="yes" ? 'compact' : ''} basic ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -306,7 +319,7 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.id}
-        className={` task-grid basic ${
+        className={` task-grid basic ${this.state.isCompact ==="yes" ? 'compact' : ''} ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -328,7 +341,7 @@ class Dashboard extends Component {
 
     return this.state.activePenaltyList.map((item, index) => (
       
-      <li key={item.id} className={` task-grid basic no-penalty`}>
+      <li key={item.id} className={` task-grid ${this.state.isCompact ==="yes" ? 'compact' : ''} basic no-penalty`}>
         <CustomCheckbox
           onCheck={() => this.handleCompletionActive(item.id)}
         />
@@ -366,7 +379,7 @@ class Dashboard extends Component {
           {this.renderTabList(title)}
           <div className=" p-3 ">
             {renderFunction ? (
-              <ul className=" list-group-flush">{renderFunction(args)}</ul>
+              <ul className="list-group-flush no-pad">{renderFunction(args)}</ul>
             ) : null}
           </div>
         </div>

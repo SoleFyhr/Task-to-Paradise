@@ -18,6 +18,7 @@ class Settings extends Component {
     super(props);
     this.state = {
       pause: "",
+      compact:"",
       activeCategory: "",
       userComments: '',
 
@@ -36,9 +37,10 @@ class Settings extends Component {
   }
 
   refreshList = () => {
-    this.post_method("", `${apiUrl}/button_get_pause`, (data) => {
+    this.post_method("", `${apiUrl}/button_get_setting`, (data) => {
       this.setState({
         pause: data.pause,
+        compact : data.compact
       });
     });
     this.post_method("", `${apiUrl}/button_get_scaling`, (data) => {
@@ -140,8 +142,10 @@ class Settings extends Component {
   };
 
   // Submit an item
-  handleChangePause = () => {
-    this.post_method("", `${apiUrl}/change_pause`, (data) => {
+  handleChange = (setting) => {
+    let body_content = JSON.stringify({ setting : setting });
+
+    this.post_method(body_content, `${apiUrl}/change_settings`, (data) => {
       this.refreshList();
     });
   };
@@ -180,7 +184,23 @@ class Settings extends Component {
                 </div>
                 <span>
                   <button
-                    onClick={() => this.handleChangePause()}
+                    onClick={() => this.handleChange("pause")}
+                    className="btn btn-info btn-spacing"
+                  >
+                    Change
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div className="outer-flex-container text-center">
+              <div className="inner-flex-container">
+                <div>
+                  <strong>Compact mode</strong>: {this.state.compact}
+                </div>
+                <span>
+                  <button
+                    onClick={() => this.handleChange("compact")}
                     className="btn btn-info btn-spacing"
                   >
                     Change

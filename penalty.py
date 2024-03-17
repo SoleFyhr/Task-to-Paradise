@@ -76,7 +76,7 @@ def reset_total_value(user,time):
 
 def double_penalty(user):
     active = database_manager.get_active(database_manager.JSONCategory.PENALTY,user)
-    if (len(active)==0):
+    if (len(active)==0 or len(active) >= 10):
         return
     contents = []
     for content in active:

@@ -443,28 +443,36 @@ def function_change_scaling():
 
 #!------------------ Pause ------------------
 
-@app.route('/button_get_pause', methods=['POST'])
-def function_get_pause():
+@app.route('/button_get_setting', methods=['POST'])
+def function_get_setting():
     user_id = get_logged_in_user()
     if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
-
-    
 
     pause = other.get_pause_field(user_id)
-    response_data = {"message": "Pause captured successfully","pause":pause}
+    compact = other.get_compact_field(user_id)
+
+    response_data = {"message": "Setting captured successfully","pause":pause,"compact":compact}
     return jsonify(response_data)
 
-@app.route('/change_pause', methods=['POST'])
-def function_change_pause():
+
+@app.route('/change_settings', methods=['POST'])
+def function_change_setting():
     user_id = get_logged_in_user()
     if user_id == None:
         return jsonify({'message': 'Unauthorized'}), 401
 
-    
+    data = request.json
+    setting = data.get("setting")
 
-    other.change_pause_field(user_id)
-    response_data = {"message": "pause changed successfully"}
+    if setting == "pause":
+        other.change_pause_field(user_id)
+        response_data = {"message": "pause changed successfully"}
+    
+    if setting == "compact":
+        other.change_compact_field(user_id)
+        response_data = {"message": "compact changed successfully"}
+    
     return jsonify(response_data)
 
 

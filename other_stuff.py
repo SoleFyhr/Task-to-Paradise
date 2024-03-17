@@ -24,6 +24,14 @@ def get_pause_field(user):
     return database_manager.retrieve_pause_field(user)
 
 
+#!--------------------Compact-------------------
+
+def change_compact_field(user):
+    database_manager.change_compact(user)
+
+def get_compact_field(user):
+    return database_manager.retrieve_compact_field(user)
+
 #!--------------------Points-------------------
 def get_ppoints_rpoints(user):
     rpoints = database_manager.get_points_category(user,database_manager.JSONCategory.RPOINTS)
