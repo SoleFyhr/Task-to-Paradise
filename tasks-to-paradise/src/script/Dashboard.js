@@ -33,7 +33,7 @@ class Dashboard extends Component {
       activePenaltyList: [],
       ppoints: [],
       rpoints: [],
-      isCompact:"",
+      isEfficient:"",
     };
   }
 
@@ -108,7 +108,7 @@ class Dashboard extends Component {
       "",
       `${apiUrl}/button_get_setting`,
       (data) => {
-        this.setState({ isCompact: data.compact });
+        this.setState({ isEfficient: data.efficient });
       }
     );
     this.post_method("", `${apiUrl}/button_get_points`, (data) => {
@@ -284,7 +284,7 @@ class Dashboard extends Component {
 
     for (let i = 0; i < stars[difficulty]; i++) {
       starElements.push(
-        <img key={i} src={starIcon} alt="star" className={`star-icon ${this.state.isCompact ==="yes" ? 'compact' : ''}`}/>
+        <img key={i} src={starIcon} alt="star" className={`star-icon ${this.state.isEfficient ==="yes" ? 'efficient' : ''}`}/>
       );
     }
 
@@ -297,7 +297,7 @@ class Dashboard extends Component {
           
       <li
         key={item.id}
-        className={`task-grid ${this.state.isCompact ==="yes" ? 'compact' : ''} basic ${
+        className={`task-grid ${this.state.isEfficient ==="yes" ? 'efficient' : ''} basic ${
           item.penalty_induced === "false" ? "no-penalty" : "penalty"
         } ${item.task_type}`}
       >
@@ -325,7 +325,7 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.id}
-        className={` task-grid basic ${this.state.isCompact ==="yes" ? 'compact' : ''} ${
+        className={` task-grid basic ${this.state.isEfficient ==="yes" ? 'efficient' : ''} ${
           item.penalty_induced ? "penalty" : "no-penalty"
         } ${item.task_type}`}
       >
@@ -347,7 +347,7 @@ class Dashboard extends Component {
 
     return this.state.activePenaltyList.map((item, index) => (
       
-      <li key={item.id} className={` task-grid ${this.state.isCompact ==="yes" ? 'compact' : ''} basic no-penalty`}>
+      <li key={item.id} className={` task-grid ${this.state.isEfficient ==="yes" ? 'efficient' : ''} basic no-penalty`}>
         <CustomCheckbox
           onCheck={() => this.handleCompletionActive(item.id)}
         />
@@ -398,9 +398,10 @@ class Dashboard extends Component {
     return (
       <>  
       <main className="content">
+          {this.state.isEfficient ==="yes" ? false :
           <div className="scroll-section-title center">
             <h1 className="title">TASKS TO PARADISE</h1>
-          </div>
+          </div>}
           {this.state.activePenaltyList.length === 0
             ? ""
             : this.renderSection("Do it or it doubles", this.renderActive)}

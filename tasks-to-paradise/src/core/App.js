@@ -199,10 +199,9 @@ function App() {
 
 export default App;
 
-//TODO faire le mode compact, voir le screen sur discord + titre trop sur la guache alors que les jours restants prennent une enorme place pour rien (les mettre au dessus de difficulté?) + (text size custom si tel detecté? + enelevr la marge sur tel dans dashboard)
-//TODO Corriger bug de quand y'a trop de tasks c'est un enfer de scroll a cause du smooth scrolling et ca overflow cette merde
+//TODO Bug margin bottom, et rajouter un task-grid spécialement pour prhibited pour pas que la date prenne de l'espace alors qu'elle n'exsite pas.
 //TODO faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
-//TODO Régler problème importance dans edit de task + penalty induced.
+//TODO Régler problème importance quand on souhaite edit une task + régler le bu de penalty induced similairement.
 //?S'occuper du scaling des weekly et company
 //?enlever les rewards daily?. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
 
@@ -214,6 +213,9 @@ export default App;
 //rendre le details hoverable urgeamment
 //Rendre la penalty induced d'une task hoverable dans le dashboard avec un popover avec le content de la penalty induced et avec genre une étoile rouge en mode asterix.
 //Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
+//bug du margin bottom ou y'en pas du tout sur toutes les pages
+//Peut etre le bouton add task dans dashboard aussi ?
+// mettre le menu en sticky ?
 
 //faire que le pause mode empeche tout
 //make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
@@ -225,7 +227,7 @@ export default App;
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
 //Do achievements
-//Rajouter mode compact vs mode aéré dans les settings. #FF
+//Rajouter mode efficient vs mode aéré dans les settings. #FF
 //Prohibited : The deduction could be a fixed amount or vary based on the severity or frequency of the violation.
 //mot de passe  - Add authentification with google or smth not crackable
 

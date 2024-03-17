@@ -24,13 +24,13 @@ def get_pause_field(user):
     return database_manager.retrieve_pause_field(user)
 
 
-#!--------------------Compact-------------------
+#!--------------------Efficient-------------------
 
-def change_compact_field(user):
-    database_manager.change_compact(user)
+def change_efficient_field(user):
+    database_manager.change_efficient(user)
 
-def get_compact_field(user):
-    return database_manager.retrieve_compact_field(user)
+def get_efficient_field(user):
+    return database_manager.retrieve_efficient_field(user)
 
 #!--------------------Points-------------------
 def get_ppoints_rpoints(user):

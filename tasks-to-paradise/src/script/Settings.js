@@ -18,7 +18,7 @@ class Settings extends Component {
     super(props);
     this.state = {
       pause: "",
-      compact:"",
+      efficient:"",
       activeCategory: "",
       userComments: '',
 
@@ -40,7 +40,7 @@ class Settings extends Component {
     this.post_method("", `${apiUrl}/button_get_setting`, (data) => {
       this.setState({
         pause: data.pause,
-        compact : data.compact
+        efficient : data.efficient
       });
     });
     this.post_method("", `${apiUrl}/button_get_scaling`, (data) => {
@@ -196,11 +196,11 @@ class Settings extends Component {
             <div className="outer-flex-container text-center">
               <div className="inner-flex-container">
                 <div>
-                  <strong>Compact mode</strong>: {this.state.compact}
+                  <strong>Efficient UI</strong>: {this.state.efficient}
                 </div>
                 <span>
                   <button
-                    onClick={() => this.handleChange("compact")}
+                    onClick={() => this.handleChange("efficient")}
                     className="btn btn-info btn-spacing"
                   >
                     Change

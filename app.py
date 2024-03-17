@@ -450,9 +450,9 @@ def function_get_setting():
         return jsonify({'message': 'Unauthorized'}), 401
 
     pause = other.get_pause_field(user_id)
-    compact = other.get_compact_field(user_id)
+    efficient = other.get_efficient_field(user_id)
 
-    response_data = {"message": "Setting captured successfully","pause":pause,"compact":compact}
+    response_data = {"message": "Setting captured successfully","pause":pause,"efficient":efficient}
     return jsonify(response_data)
 
 
@@ -469,9 +469,9 @@ def function_change_setting():
         other.change_pause_field(user_id)
         response_data = {"message": "pause changed successfully"}
     
-    if setting == "compact":
-        other.change_compact_field(user_id)
-        response_data = {"message": "compact changed successfully"}
+    if setting == "efficient":
+        other.change_efficient_field(user_id)
+        response_data = {"message": "efficient changed successfully"}
     
     return jsonify(response_data)
 

@@ -236,7 +236,7 @@ li.prohibited {
   border: 0.5px solid rgba(223, 210, 210, 0.421);
 }
 
-.task-grid.compact {
+.task-grid.efficient {
     padding: 4px 10px 4px 11px;
     margin-bottom: 1.5%;
 }
@@ -263,7 +263,7 @@ li.prohibited {
   min-width:25px;
 }
 
-.star-icon.compact {
+.star-icon.efficient {
   width: 1.5vw;
   height: auto;
   max-width: 30px;
@@ -314,7 +314,7 @@ li.prohibited {
 
 .padding_top_section {
   height: 100vh;
-  margin-top: 40vh;
+  margin-top: 8vh;
 }
 .big_section {
   height: 100vh;

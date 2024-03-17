@@ -24,7 +24,7 @@ class JSONCategory(Enum):
 
     REWARD_UNLOCKING_STEP ="reward_unlocking_steps"
     PAUSE ="pause"
-    COMPACT ="compact"
+    COMPACT ="efficient"
     DATE ="last_date"
 
 #!----------------- GENERAL --------------------------
@@ -722,13 +722,13 @@ def change_pause(user_id):
 #----------------- COMPACT --------------------------
 
 
-def retrieve_compact_field(user_id):
-    compact = get_one_field_from_users(user_id,JSONCategory.COMPACT.value)
-    return compact
+def retrieve_efficient_field(user_id):
+    efficient = get_one_field_from_users(user_id,JSONCategory.COMPACT.value)
+    return efficient
 
-def change_compact(user_id):
+def change_efficient(user_id):
     variable = "yes"
-    if retrieve_compact_field(user_id) == "yes":
+    if retrieve_efficient_field(user_id) == "yes":
         variable = "no"
 
     sql = f"UPDATE public.users SET {JSONCategory.COMPACT.value} = %s WHERE id = %s"
