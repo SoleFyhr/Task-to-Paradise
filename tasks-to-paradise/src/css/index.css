@@ -313,8 +313,9 @@ li.prohibited {
 }
 
 .padding_top_section {
-  height: 100vh;
   margin-top: 8vh;
+  max-height: 100%;
+  margin-bottom: 100px;
 }
 .big_section {
   height: 100vh;
