@@ -19,9 +19,14 @@ import {
 class CustomModal extends Component {
   constructor(props) {
     super(props);
+    const penaltyInducedAsBoolean =
+      this.props.activeItem.penalty_induced !== "";
+    console.log("ayo");
+    console.log(penaltyInducedAsBoolean);
     this.state = {
-      activeItem: { ...this.props.activeItem, penalty_induced_content: ""}, // Add penalty_induced_content to the state
+      activeItem: { ...this.props.activeItem },
       validationErrors: {},
+      checked_penalty: penaltyInducedAsBoolean,
     };
     this.fieldConfig = {
       daily: [
@@ -32,7 +37,7 @@ class CustomModal extends Component {
         "importance",
         "penalty_induced",
       ],
-      prohibited: ["title", "content", "type", "importance","penalty_induced"],
+      prohibited: ["title", "content", "type", "importance", "penalty_induced"],
       once: [
         "title",
         "content",
@@ -64,12 +69,17 @@ class CustomModal extends Component {
       // Reset penalty_induced_content if checkbox is unchecked
       if (!checked) {
         this.setState((prevState) => ({
-          activeItem: { ...prevState.activeItem, penalty_induced_content: "" },
+          activeItem: { ...prevState.activeItem, penalty_induced: "" },
         }));
       }
+
+      this.setState({
+        checked_penalty: checked,
+      });
+    } else {
+      const activeItem = { ...this.state.activeItem, [name]: value };
+      this.setState({ activeItem });
     }
-    const activeItem = { ...this.state.activeItem, [name]: value };
-    this.setState({ activeItem });
   };
 
   validateForm = () => {
@@ -86,25 +96,25 @@ class CustomModal extends Component {
   handleSave = () => {
     if (this.validateForm()) {
       // Before saving, adjust the penalty_induced value based on the checkbox and input field
-      const { penalty_induced, penalty_induced_content, ...rest } =
-        this.state.activeItem;
-      const activeItemToSave = {
-        ...rest,
-        penalty_induced: penalty_induced
-          ? penalty_induced_content || "false"
-          : "false",
-      };
-      this.props.onSave(activeItemToSave);
+      // const { penalty_induced, penalty_induced_content, ...rest } =
+      //   this.state.activeItem;
+      // const activeItemToSave = {
+      //   ...rest,
+      //   penalty_induced: penalty_induced
+      //     ? penalty_induced_content || "false"
+      //     : "false",
+      // };
+      this.props.onSave(this.state.activeItem);
     }
   };
 
   renderField = (fieldName) => {
-    const { activeItem, validationErrors } = this.state;
+    const { activeItem, validationErrors, checked_penalty } = this.state;
 
     switch (fieldName) {
       case "title":
         return (
-          <FormControl isInvalid={!!validationErrors.title}>
+          <FormControl key="title" isInvalid={!!validationErrors.title}>
             <FormLabel htmlFor="title">Title</FormLabel>
             <Input
               id="title"
@@ -119,7 +129,7 @@ class CustomModal extends Component {
         );
       case "content":
         return (
-          <FormControl>
+          <FormControl key="content">
             <FormLabel htmlFor="content">Details</FormLabel>
             <Input
               id="content"
@@ -133,7 +143,7 @@ class CustomModal extends Component {
         );
       case "difficulty":
         return (
-          <FormControl>
+          <FormControl key="difficulty">
             <FormLabel htmlFor="difficulty">Difficulty</FormLabel>
             <Select
               id="difficulty"
@@ -150,7 +160,7 @@ class CustomModal extends Component {
         );
       case "importance":
         return (
-          <FormControl>
+          <FormControl key="importance">
             <FormLabel htmlFor="importance">Importance</FormLabel>
             <Select
               id="importance"
@@ -167,7 +177,7 @@ class CustomModal extends Component {
 
       case "type":
         return (
-          <FormControl>
+          <FormControl key="type">
             <FormLabel htmlFor="type">Type</FormLabel>
             <Select
               id="type"
@@ -184,7 +194,7 @@ class CustomModal extends Component {
         );
       case "expiration_time":
         return (
-          <FormControl>
+          <FormControl key="expiration_time">
             <FormLabel htmlFor="expiration_time">Expiration Time</FormLabel>
             <Input
               id="expiration_time"
@@ -197,7 +207,7 @@ class CustomModal extends Component {
         );
       case "time_to_completion":
         return (
-          <FormControl>
+          <FormControl key="time_to_completion">
             <FormLabel htmlFor="time_to_completion">
               Time to Complete the Habits
             </FormLabel>
@@ -213,7 +223,7 @@ class CustomModal extends Component {
         );
       case "frequency_coming_back":
         return (
-          <FormControl>
+          <FormControl key="frequency_coming_back">
             <FormLabel htmlFor="frequency_coming_back">
               Frequency of Coming Back
             </FormLabel>
@@ -230,24 +240,24 @@ class CustomModal extends Component {
 
       case "penalty_induced":
         return (
-          <FormControl>
+          <FormControl key="penalty_induced">
             <Checkbox
-              id="penalty_induced"
-              name="penalty_induced"
-              isChecked={activeItem.penalty_induced}
+              id="check_penalty_induced"
+              name="check_penalty_induced"
+              isChecked={checked_penalty}
               onChange={this.handleChange}
             >
               Penalty induced
             </Checkbox>
-            {activeItem.penalty_induced && (
+            {checked_penalty && (
               <Input
                 mt={4}
-                id="penalty_induced_content"
+                id="penalty_induced"
                 type="text"
-                name="penalty_induced_content"
-                value={activeItem.penalty_induced_content}
+                name="penalty_induced"
+                value={activeItem.penalty_induced}
                 onChange={this.handleChange}
-                placeholder="Enter penalty induced content"
+                placeholder="Enter penalty induced "
               />
             )}
           </FormControl>

@@ -34,6 +34,8 @@ class Tasks extends Component {
       habits: [],
       prohibited: [],
       checkedTasks: {},
+      isEfficient:"",
+      importanceValues:"",
     };
   }
   componentDidMount() {
@@ -49,6 +51,13 @@ class Tasks extends Component {
         prohibited: data.prohibited,
       });
     });
+    this.post_method(
+      "",
+      `${apiUrl}/button_get_setting`,
+      (data) => {
+        this.setState({ isEfficient: data.efficient, importanceValues:data.importance_values});
+      }
+    );
   };
 
   post_method(body_content, path, return_func) {
@@ -136,7 +145,7 @@ class Tasks extends Component {
       time_to_completion: "",
       frequency_coming_back: "",
       importance: "not so important",
-      penalty_induced: null,
+      penalty_induced: "",
       type: "once",
       id:"",
     };
@@ -146,6 +155,10 @@ class Tasks extends Component {
   editItem = (task) => {
     //const currentDate = new Date();
     //const formattedDate = currentDate.toISOString().split("T")[0]; // Formats the date to 'YYYY-MM-DD'
+    const importanceLevels = ["not so important", "important", "very important"];
+    const importanceIndex = this.state.importanceValues.findIndex(value => parseFloat(value) === task.importance);
+    const importanceString = importanceIndex !== -1 ? importanceLevels[importanceIndex] : "unknown importance";
+    const penalty_induced = task.penalty_induced === "false" ? "" : task.penalty_induced
 
     const item = {
       title: task.title,
@@ -154,8 +167,8 @@ class Tasks extends Component {
       expiration_time: task.expiration_time, // Set to current date
       time_to_completion: task.time_to_completion,
       frequency_coming_back: task.frequency_coming_back,
-      importance: task.importance,
-      penalty_induced: task.penalty_induced,
+      importance: importanceString,
+      penalty_induced: penalty_induced,
       type: task.task_type,
       id:task.id,
     };
@@ -220,33 +233,7 @@ class Tasks extends Component {
     return starElements;
   };
 
-  renderTasks = (newItems) => {
-    return newItems.map((item) => (
-      <li
-        key={item.id}
-        className={`task-grid basic ${
-          item.penalty_induced ? "penalty" : "no-penalty"
-        } ${item.task_type}`}
-      >
-        {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
-        <CustomCheckbox
-          onCheck={() => this.manageCompletion(item.id, item.task_type)}
-          checked={this.state.checkedTasks[item.id] || false}
-        />
-        <span className="task-title">{item.title}</span>
-        <span className="days-left">
-          {this.calculateDaysLeft(item.expiration_time)}
-        </span>
-        <div className="difficulty-importance-column">
-          <div className="difficulty-stars">
-            {this.renderStars(item.difficulty)}
-          </div>
 
-          <div>{`-${item.importance}`}</div>
-        </div>
-      </li>
-    ));
-  };
 
   renderProhibited = (newItems) => {
     return newItems.map((item) => (

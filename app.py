@@ -451,8 +451,9 @@ def function_get_setting():
 
     pause = other.get_pause_field(user_id)
     efficient = other.get_efficient_field(user_id)
+    importance_values = ta.get_importance_values(user_id)
 
-    response_data = {"message": "Setting captured successfully","pause":pause,"efficient":efficient}
+    response_data = {"message": "Setting captured successfully","pause":pause,"efficient":efficient,"importance_values":importance_values}
     return jsonify(response_data)
 
 
