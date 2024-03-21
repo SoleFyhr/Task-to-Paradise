@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.ee6e2ca9.css",
-    "main.js": "/static/js/main.2e1b05c8.js",
+    "main.js": "/static/js/main.6c1af4df.js",
     "pdfmake.js": "/static/js/pdfmake.a7d9e885.chunk.js",
     "canvg.js": "/static/js/canvg.2da58eb6.chunk.js",
     "xlsx.js": "/static/js/xlsx.b62316f1.chunk.js",
@@ -11,7 +11,7 @@
     "index.html": "/index.html",
     "static/media/exclamationRed.svg": "/static/media/exclamationRed.925144c6032aa584cbbb4deb7071e31a.svg",
     "main.ee6e2ca9.css.map": "/static/css/main.ee6e2ca9.css.map",
-    "main.2e1b05c8.js.map": "/static/js/main.2e1b05c8.js.map",
+    "main.6c1af4df.js.map": "/static/js/main.6c1af4df.js.map",
     "pdfmake.a7d9e885.chunk.js.map": "/static/js/pdfmake.a7d9e885.chunk.js.map",
     "canvg.2da58eb6.chunk.js.map": "/static/js/canvg.2da58eb6.chunk.js.map",
     "xlsx.b62316f1.chunk.js.map": "/static/js/xlsx.b62316f1.chunk.js.map",
@@ -19,6 +19,6 @@
   },
   "entrypoints": [
     "static/css/main.ee6e2ca9.css",
-    "static/js/main.2e1b05c8.js"
+    "static/js/main.6c1af4df.js"
   ]
 }

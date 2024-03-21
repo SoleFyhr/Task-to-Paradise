@@ -21,8 +21,6 @@ class CustomModal extends Component {
     super(props);
     const penaltyInducedAsBoolean =
       this.props.activeItem.penalty_induced !== "";
-    console.log("ayo");
-    console.log(penaltyInducedAsBoolean);
     this.state = {
       activeItem: { ...this.props.activeItem },
       validationErrors: {},
@@ -94,18 +92,10 @@ class CustomModal extends Component {
   };
 
   handleSave = () => {
-    if (this.validateForm()) {
-      // Before saving, adjust the penalty_induced value based on the checkbox and input field
-      // const { penalty_induced, penalty_induced_content, ...rest } =
-      //   this.state.activeItem;
-      // const activeItemToSave = {
-      //   ...rest,
-      //   penalty_induced: penalty_induced
-      //     ? penalty_induced_content || "false"
-      //     : "false",
-      // };
-      this.props.onSave(this.state.activeItem);
-    }
+    
+    this.state.activeItem.penalty_induced = this.state.activeItem.penalty_induced === "" ? "false" : this.state.activeItem.penalty_induced
+    this.props.onSave(this.state.activeItem);
+    
   };
 
   renderField = (fieldName) => {
