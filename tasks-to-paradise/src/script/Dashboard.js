@@ -325,9 +325,7 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.id}
-        className={` task-grid basic ${this.state.isEfficient ==="yes" ? 'efficient' : ''} ${
-          item.penalty_induced ? "penalty" : "no-penalty"
-        } ${item.task_type}`}
+        className={` task-grid basic ${this.state.isEfficient ==="yes" ? 'efficient' : ''} prohibited ${item.task_type}`}
       >
         {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
         <CustomCheckbox
@@ -335,7 +333,6 @@ class Dashboard extends Component {
           checked={this.state.checkedTasksProhibited[item.id] || false}
         />
         <span className="task-title">{item.title}</span>
-        <span className="days-left"></span>
         <div className="difficulty-importance-column">
           <div>{`-${item.importance}`}</div>
         </div>

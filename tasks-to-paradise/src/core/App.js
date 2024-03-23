@@ -12,7 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  NavLink,
+} from "react-router-dom";
 import Tasks from "../script/Tasks"; // Adjust the path according to your project structure
 import Dashboard from "../script/Dashboard"; // Adjust the path according to your project structure
 import Penalty from "../script/Penalty";
@@ -48,9 +54,7 @@ const globalStyle = css`
     height: 100%;
     z-index: -1;
     background-image: url(${backgroundImage});
-    background-color: var(
-      --second-bg-color
-    ); 
+    background-color: var(--second-bg-color);
     background-blend-mode: overlay;
     background-repeat: no-repeat;
     background-size: cover;
@@ -62,7 +66,6 @@ const globalStyle = css`
     z-index: 1; /* Ensures content is above the background */
   }
 `;
-
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -119,33 +122,74 @@ function App() {
               <nav>
                 {/* Hamburger Menu for smaller screens */}
                 <Box display={{ base: "block", md: "none" }}>
-                  <Menu className="title">
+                  <Menu className="title" >
                     <MenuButton
                       as={IconButton}
                       icon={<HamburgerIcon />}
                       variant="outline"
                       aria-label="Options"
+                      
                     />
                     <MenuList
                       sx={{
-                        bg: "black", // Your desired background color
-                        borderColor: "black", // Optional: if you want to change border color
+                        borderColor: "black",
+                        padding: 0, // Optional: if you want to change border color
                         // Add any other styles here
                       }}
                     >
-                      <MenuItem as={Link} to="/dashboard">
+                      <MenuItem
+                        as={NavLink}
+                        to="/dashboard"
+                        style={({ isActive }) =>
+                          isActive
+                            ? { backgroundColor: "black", color: "white" }
+                            : {}
+                        }
+                      >
                         Dashboard
                       </MenuItem>
-                      <MenuItem as={Link} to="/tasks">
+                      <MenuItem
+                        as={NavLink}
+                        to="/tasks"
+                        style={({ isActive }) =>
+                          isActive
+                            ? { backgroundColor: "black", color: "white" }
+                            : {}
+                        }
+                      >
                         Tasks
                       </MenuItem>
-                      <MenuItem as={Link} to="/penalty">
+                      <MenuItem
+                        as={NavLink}
+                        to="/penalty"
+                        style={({ isActive }) =>
+                          isActive
+                            ? { backgroundColor: "black", color: "white" }
+                            : {}
+                        }
+                      >
                         Penalty
                       </MenuItem>
-                      <MenuItem as={Link} to="/reward">
+                      <MenuItem
+                        as={NavLink}
+                        to="/reward"
+                        style={({ isActive }) =>
+                          isActive
+                            ? { backgroundColor: "black", color: "white" }
+                            : {}
+                        }
+                      >
                         Reward
                       </MenuItem>
-                      <MenuItem as={Link} to="/settings">
+                      <MenuItem
+                        as={NavLink}
+                        to="/settings"
+                        style={({ isActive }) =>
+                          isActive
+                            ? { backgroundColor: "black", color: "white" }
+                            : {}
+                        }
+                      >
                         Settings
                       </MenuItem>
                       <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -200,23 +244,23 @@ function App() {
 export default App;
 
 //TODO rajouter les infos d'une tache comme le content ou si elle a une penalty induced.
-//FIXME bug menu hamburger dashboard plus autres liens avec chrome quand on clique machin
-//? faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
-//?S'occuper du scaling des weekly, faire le modèle de regression logistique, et parametrer chat gpt 4 pour avoir un assistant stylé qui fait un debrief
-//? S'occuper du sacling monthly, en faisant mettre des objectifs aux utilisateurs avec plusieurs niveaux de difficulté , et à la fin du mois en leur demdandant à quel point ils ont atteint ces objectifs. Faire avec chatgpt aussi. 2 jours pour mettre les objectifs en début de mois.
-//?enlever les rewards daily?. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+
+//?S'occuper du score des weekly, faire le modèle de regression logistique, et parametrer chat gpt 4 pour avoir un assistant stylé qui fait un debrief
+//? faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points.
 //? passer la connection en paramètre de chaque fonction comme ce qui est fait dans 'export_data_collection_to_csv' pour booster les perfs de ouf.
 
+//S'occuper du sacling monthly, en faisant mettre des objectifs aux utilisateurs avec plusieurs niveaux de difficulté , et à la fin du mois en leur demdandant à quel point ils ont atteint ces objectifs. Faire avec chatgpt aussi. 2 jours pour mettre les objectifs en début de mois.  //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
 //Code project
 //Test project
 
-//Possibiltié d'étendre une tache de 1 jour, ce qui désactive la moitié des points d'importance de la tache et qui fait x1.5 les points d'importance. 
+//Possibiltié d'étendre une tache de 1 jour, ce qui désactive la moitié des points d'importance de la tache et qui fait x1.5 les points d'importance.
 // Rendre l'Edit possible d'une tache jusqu'à 2 jours avant l'expiration de la tache pour pas être tenté d'alléger le contenu de la tache (sorte de marchandage avec soi même en mode 'oh j'ai visé trop haut'. Non si l'user a visé trop haut il charbonne ou assume)
 //Pouvoir avoir plusieurs penalités sur la meme place (exemple, 3 pour le tier 0), et choisir laquelle est active (que une active possible)
-//rendre le details d'une tache hoverable 
+//rendre le details d'une tache hoverable
 //Rendre la penalty induced d'une task hoverable dans le dashboard avec un popover avec le content de la penalty induced et avec genre une étoile rouge en mode asterix.
 //Rendre la valeur d'importance d'une tâche customizable
 //bug du margin bottom ou y'en pas du tout sur toutes les pages
+//ajouter une option 'failed' dans les tasks pour permettre de les dégager, pour ne plus qu'elle polluent le dashboard. Rajouter ca dans les 3 petits points dans Task
 //faire que le pause mode empeche bien tout
 //Ajouter une fleche dans dashboard pour collapse plus de taches
 //degager la zone ppoints et rpoints et mettre à la place une prédiction de ce que l'on est en train de débloquer, en calculant chaque jour durant la daily routine du scheduler le score.
@@ -224,6 +268,7 @@ export default App;
 // mettre le menu en sticky ?
 
 //Peut etre le bouton add task dans dashboard aussi ?
+//changer couleur menu hamburger
 //make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
 //Mettre les popover dans settings
 //Rajouter dans le modal quand on veut un setting (soit complétion, soit importance etc), le nom des catégories (good, average...) en fonction de ce qu'on a décidé de changer (faire des listes contenants le nom des variables dans le modal, comme dans le modal pour task) et mettre l'ancienne valeur directement dans le modal comme j'ai pu faire dans le edit de penalties etc

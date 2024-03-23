@@ -182,7 +182,10 @@ nav ul li a:hover::before {
 }
 
 
-
+.active-link {
+  background-color: black;
+  /* Other styles to make the active link stand out */
+}
 
 /*!----------- BUTTTONNNN */
 
@@ -245,13 +248,17 @@ li.prohibited {
   transform: scale(1.03);
 }
 
-/* FIX THIS, for now it is the same as the other */
+/* FIXME, for now it is the same as the other */
 .task-grid.penalty {
   grid-template-columns: auto min-content 8fr 2fr 2fr;
 }
 
 .task-grid.no-penalty {
   grid-template-columns: auto min-content 8fr 2fr 2fr;
+}
+
+.task-grid.prohibited {
+  grid-template-columns: auto min-content 8fr 1fr;
 }
 
 /*!----------- TASK-------------- */
