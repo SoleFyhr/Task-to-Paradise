@@ -432,6 +432,11 @@ def function_change_scaling():
                 true_sequence.append(float(sequence[num_key]))
             else:
                 return jsonify({"error": f"Missing {num_key} in sequence."}), 400
+        if category == enu.Scaling_Cat.IMPORTANCE:
+
+            old_importance_values = ta.get_importance_values(user_id)
+            other.update_tasks_importance(user_id,old_importance_values,true_sequence)
+            
 
         other.new_sequence(user_id, true_sequence, category)
     except ValueError as e:

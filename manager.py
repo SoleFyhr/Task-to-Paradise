@@ -50,11 +50,16 @@ def check_tasks_expiration(user):
     current_date = datetime.datetime.now().date()
     tasks_to_move = []
     total_penalty = 0
+    importance_values = ta.get_importance_values(user)
+    shift_date = current_date + datetime.timedelta(days=int(-1))
+
 
     once, daily, habits,_ = js.get_all_tasks_by_type(user)
     for task in daily: #If there is any task in daily, it means they weren't completed on the day so -> failed
         value = int(task["importance"])
         total_penalty += value
+        js.add_task_to_data_collection(user,task['id'],0,task['task_type'],list(enum.Difficulty).index(enum.Difficulty.from_string(task["difficulty"])),importance_values.index(task["importance"]),0,shift_date) #completion is at 0 on failed task
+
         penalty_induced_manager(task,user)
         js.change_one_field_of_given_task(user,task["id"],"expiration_time",current_date.strftime('%Y-%m-%d'))
 
@@ -66,6 +71,8 @@ def check_tasks_expiration(user):
         if current_date > expiration_date:
             
             penalty_induced_manager(task,user)
+            js.add_task_to_data_collection(user,task['id'],0,task['task_type'],list(enum.Difficulty).index(enum.Difficulty.from_string(task["difficulty"])),importance_values.index(task["importance"]),0, shift_date) #completion is at 0 on failed task
+
             
             if task["task_type"] == "habits":
                 try: #TODO a changer pck pour l'instant la tache habits reste tant qu'on l'a pas fait. idéalement ca devrait aller dans l'historique je trouve c'est mieux. Et revenir quand c'est le moment.
@@ -132,11 +139,17 @@ def check_if_new_day(user):
 def task_completed(user, id,completion):
     task = js.get_thing_by_id(user,id)
     difficulty = enum.Difficulty.from_string(task[0]['difficulty'])
+    importance = task[0]['importance']
+
     completion_scaling = ta.get_completion_values(user)
-    
+    importance_values = ta.get_importance_values(user)
+
     value_completion = enum.Completion.value_completion(completion,completion_scaling)
     value_of_task = js.retrieve_value_in_scaling(user,enum.Scaling_Cat.DIFFICULTY,list(enum.Difficulty).index(difficulty))
     rew.add_reward_to_all(value_completion*value_of_task,user)
+    current_date = datetime.datetime.now().date()
+
+    js.add_task_to_data_collection(user,task[0]['id'],1,task[0]['task_type'],list(enum.Difficulty).index(difficulty),importance_values.index(importance),list(enum.Completion).index(completion),current_date)
     
     # if(task.task_type==enum.TaskType.HABITS.value): Commented because then the counter starts when i do the task. like if I want a task every week, and i do it the wednesday it will come back next wednesday
     
@@ -149,10 +162,16 @@ def task_completed(user, id,completion):
 
 def penalty_task_done(user,id):
     task = js.get_thing_by_id(user,id)
+    importance = task[0]['importance']
+    importance_values = ta.get_importance_values(user)
+
+    
     try:
-        importance_value = int(task[0]['importance'])
+        importance_value = int(importance)
     except ValueError as e:
                 print("error Invalid input. Sequence values must be integers.")
+
+    js.add_task_to_data_collection(user,task[0]['id'],1,task[0]['task_type'],0,importance_values.index(importance),0,datetime.datetime.now().date()) #difficulty and completion are at 0 on prohibited
 
     pen.add_penalty_to_all(importance_value,user)
 

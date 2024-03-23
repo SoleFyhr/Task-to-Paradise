@@ -199,35 +199,39 @@ function App() {
 
 export default App;
 
-//TODO Bug margin bottom, et rajouter un task-grid spécialement pour prhibited pour pas que la date prenne de l'espace alors qu'elle n'exsite pas.
-//TODO faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
-//TODO Régler problème importance quand on souhaite edit une task + régler le bu de penalty induced similairement.
-//?S'occuper du scaling des weekly et company
+//TODO rajouter les infos d'une tache comme le content ou si elle a une penalty induced.
+//FIXME bug menu hamburger dashboard plus autres liens avec chrome quand on clique machin
+//? faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points, et l'edit.
+//?S'occuper du scaling des weekly, faire le modèle de regression logistique, et parametrer chat gpt 4 pour avoir un assistant stylé qui fait un debrief
+//? S'occuper du sacling monthly, en faisant mettre des objectifs aux utilisateurs avec plusieurs niveaux de difficulté , et à la fin du mois en leur demdandant à quel point ils ont atteint ces objectifs. Faire avec chatgpt aussi. 2 jours pour mettre les objectifs en début de mois.
 //?enlever les rewards daily?. Que weekly and monthly. //Si penality weekly alors pas de reward weekly. pour le monthly, mettre ses objectifs en début de mois. (avoir une alerte qui tous les jours pop et dit de le faire)
+//? passer la connection en paramètre de chaque fonction comme ce qui est fait dans 'export_data_collection_to_csv' pour booster les perfs de ouf.
 
 //Code project
 //Test project
 
-//Fonction extend de tache qui consomme la moitié des points d'importance le dernier jour, et qui prolonge d'un jour mais en faisant x1.5 les points d'importance. Edit possible d'une tache jusqu'à 2 jours avant la complétion de la tache.
-//Pouvoir avoir plusieurs penalties sur de meme place, et en activer certaines (que une active possible)
-//rendre le details hoverable urgeamment
+//Possibiltié d'étendre une tache de 1 jour, ce qui désactive la moitié des points d'importance de la tache et qui fait x1.5 les points d'importance. 
+// Rendre l'Edit possible d'une tache jusqu'à 2 jours avant l'expiration de la tache pour pas être tenté d'alléger le contenu de la tache (sorte de marchandage avec soi même en mode 'oh j'ai visé trop haut'. Non si l'user a visé trop haut il charbonne ou assume)
+//Pouvoir avoir plusieurs penalités sur la meme place (exemple, 3 pour le tier 0), et choisir laquelle est active (que une active possible)
+//rendre le details d'une tache hoverable 
 //Rendre la penalty induced d'une task hoverable dans le dashboard avec un popover avec le content de la penalty induced et avec genre une étoile rouge en mode asterix.
-//Rendre la valeur des ppoints d'une task customizable, et si c'est le cas, dans app.js lors de la création de task regarder si on peut int() la valeur
+//Rendre la valeur d'importance d'une tâche customizable
 //bug du margin bottom ou y'en pas du tout sur toutes les pages
-//Peut etre le bouton add task dans dashboard aussi ?
+//faire que le pause mode empeche bien tout
+//Ajouter une fleche dans dashboard pour collapse plus de taches
+//degager la zone ppoints et rpoints et mettre à la place une prédiction de ce que l'on est en train de débloquer, en calculant chaque jour durant la daily routine du scheduler le score.
+
 // mettre le menu en sticky ?
 
-//faire que le pause mode empeche tout
+//Peut etre le bouton add task dans dashboard aussi ?
 //make an anti "I tap multiple times and i get 3* the planified rewards because it was sent 3 times by the js"
 //Mettre les popover dans settings
 //Rajouter dans le modal quand on veut un setting (soit complétion, soit importance etc), le nom des catégories (good, average...) en fonction de ce qu'on a décidé de changer (faire des listes contenants le nom des variables dans le modal, comme dans le modal pour task) et mettre l'ancienne valeur directement dans le modal comme j'ai pu faire dans le edit de penalties etc
 
-//Mettre les disques pour les ppoints et rpoints et ce qu'on a debloqué dans le dashboard
 //Corriger problème d'alignement entre menu et titre
 //Add custom pointer comme le site trop beau. Pour moi si je met un disque qui suit la souris en mode un peu lent c'est banger
 //Goumer le log out
 //Do achievements
-//Rajouter mode efficient vs mode aéré dans les settings. #FF
 //Prohibited : The deduction could be a fixed amount or vary based on the severity or frequency of the violation.
 //mot de passe  - Add authentification with google or smth not crackable
 

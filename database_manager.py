@@ -4,6 +4,7 @@ import enum_list as enu
 import datetime
 import psycopg2
 import psycopg2.extras
+import csv
 from decimal import Decimal
 
 
@@ -202,10 +203,14 @@ def add_task_to_db(user_id, new_task):
                 task_type, time_to_completion, frequency_coming_back,expiration_time = value
                 
                 #Voir si en changeant le type d'une task ca casse pas tout
-                if new_task.task_type == enu.TaskType.HABITS.value:    
+                if new_task.task_type == enu.TaskType.HABITS.value:  #FIXME pas certain certain de l'exaushitivité de la logique ici  
                     current_date = datetime.datetime.now().date()
                     expiration_time = expiration_time + datetime.timedelta(days=int(new_task.time_to_completion-time_to_completion))
                     expiration_time = expiration_time.strftime('%Y-%m-%d')
+
+                else:
+                    expiration_time = datetime.datetime.strptime(new_task.expiration_time, "%Y-%m-%d")
+
 
             
 
@@ -330,7 +335,23 @@ def change_one_field_of_given_task(user_id, task_id, parameter, new_value):
 
     update_one_field_by_id(user_id,JSONCategory.TASK.value,parameter,new_value,task_id)
   
-        
+def update_tasks_importance_values(user_id, old_value, new_value):
+    with get_db_connection() as conn:
+
+        with conn.cursor() as cursor:
+
+            sql = f"UPDATE {JSONCategory.TASK.value} SET importance = %s WHERE user_id = %s AND importance =%s"
+
+            cursor.execute(sql, (new_value,user_id,old_value))
+
+            sql = f"UPDATE {JSONCategory.HISTORIC.value} SET importance = %s WHERE user_id = %s AND importance =%s"
+
+            cursor.execute(sql, (new_value,user_id,old_value))
+
+            
+
+        conn.commit()
+
 def get_thing_by_id(user_id, task_id):
     task = get_one_thing_by_id(user_id,JSONCategory.TASK.value,task_id)
 
@@ -439,7 +460,7 @@ def clean_historic(user_id):
    
 
 #clean_historic(2)
-#-----------------  REWARD STEPS  --------------------------
+#!-----------------  REWARD STEPS  --------------------------
 
 
 
@@ -641,6 +662,144 @@ def get_points_category(user_id,category):
 # print(get_points_category(3,JSONCategory.PPOINTS))
 # print(get_value(3,JSONCategory.PPOINTS,enu.TimeEnum.DAILY))
 
+
+
+#!-----------------  DATA COLLECTION  --------------------------
+
+
+def add_task_to_data_collection(user_id,task_id, completed, task_type, difficulty, importance, level_of_completion,entry_added):
+
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+
+            sql = """
+                INSERT INTO data_collection 
+                (user_id, completed, task_type, difficulty, importance, level_of_completion,task_id,entry_added) 
+                VALUES (%s, %s, %s, %s, %s, %s,%s,%s)
+            """
+            cursor.execute(sql, (user_id, completed, task_type, difficulty, importance, level_of_completion,task_id,entry_added))
+        
+        conn.commit()
+
+
+
+def export_data_collection_to_csv(csv_file_name, conn=None):
+    should_close_conn = False
+    try:
+        # If no connection is passed, get a new database connection
+        if conn is None:
+            conn = get_db_connection()
+            should_close_conn = True
+
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+           
+            cursor.execute("SELECT * FROM data_collection")
+            data = cursor.fetchall()
+
+            # Column headers, adjust as needed based on the columns you want to export
+            fieldnames = [desc[0] for desc in cursor.description]
+
+            # Writing data to CSV
+            with open(csv_file_name, 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()  
+                for row in data:
+                    writer.writerow(dict(row))  
+
+        print(f"Data exported successfully to {csv_file_name}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Close the connection if it was opened within this function
+        if should_close_conn and conn.closed == 0:
+            conn.close()
+
+
+def clear_data_collection_table(conn=None): #TODO rajouter une période de date
+    should_close_conn = False
+    try:
+        # If no connection is passed, get a new database connection
+        if conn is None:
+            conn = get_db_connection()  # Ensure this function is defined to get your DB connection
+            should_close_conn = True
+
+        with conn.cursor() as cursor:
+            # SQL command to delete all data from the data_collection table
+            cursor.execute("DELETE FROM data_collection")
+        
+        # Committing the transaction to ensure the DELETE operation is saved
+        conn.commit()
+        print("Data from data_collection table cleared successfully.")
+
+    except Exception as e:
+        print(f"An error occurred while trying to clear the data_collection table: {e}")
+    finally:
+        # Correctly check if the connection is open and needs to be closed
+        if should_close_conn and conn.closed == 0:
+            conn.close()
+
+
+            
+
+def calculate_user_task_metrics_and_export_to_csv(csv_file_name, conn=None):
+    should_close_conn = False
+    try:
+      
+        if conn is None:
+            conn = get_db_connection()
+            should_close_conn = True
+        #The first line of the second part counts the raito of (tasks completed except prohibtied)/(tasks except prohibited)
+        #The second line counts the number total of tasks except prohibited,
+        # the third line calculates the avergae difficulty of tasks except prohibited
+        #The fourht line calculates how much 'very important' tasks were failed, and how many 'very important' prohibited tasks were commited
+        #the fifth line calacultes the average of the level of completion of completed tasks except prohibited
+        #the sixth line calculates how many times you redid a prohibited task (doing it one time is note counted)
+        sql = """
+        SELECT 
+            user_id,
+            ROUND(SUM(CASE WHEN completed = 1 AND task_type != 'prohibited' THEN 1 ELSE 0 END)::decimal / NULLIF(COUNT(CASE WHEN task_type != 'prohibited' THEN 1 END), 0), 2) AS completion_ratio,
+            COUNT(CASE WHEN task_type != 'prohibited' THEN 1 END) AS total_tasks,
+            ROUND(AVG(CASE WHEN task_type != 'prohibited' THEN difficulty ELSE NULL END), 2) AS avg_difficulty,
+            SUM(CASE WHEN importance = 2 AND (completed = 0 OR (completed = 1 AND task_type = 'prohibited')) THEN 1 ELSE 0 END) AS important_tasks_failed,
+            ROUND(AVG(CASE WHEN task_type != 'prohibited' AND completed = 1 THEN level_of_completion ELSE NULL END), 2) AS avg_completion,
+            (SELECT SUM(sub.task_count - 1) FROM (
+                SELECT user_id, task_id, COUNT(*) AS task_count
+                FROM data_collection
+                WHERE task_type = 'prohibited'
+                GROUP BY user_id, task_id
+                HAVING COUNT(*) > 1
+            ) sub WHERE sub.user_id = dc.user_id) AS prohibited_repeats
+        FROM 
+            data_collection dc
+        GROUP BY 
+            user_id
+        """
+        
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+            cursor.execute(sql)
+            data = cursor.fetchall()  # Fetch all the aggregated results
+            # Define column headers based on the query
+            fieldnames = [desc[0] for desc in cursor.description]
+            
+            # Write the fetched data to a CSV file
+            with open(csv_file_name, 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                for row in data:
+                    writer.writerow(dict(row))
+            #Maybe here launch function to delete table and give it connection
+            
+        print(f"User task metrics exported successfully to {csv_file_name}")
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Close the connection if it was opened within this function
+        if should_close_conn and conn.closed == 0:
+            conn.close()
+
+#calculate_user_task_metrics_and_export_to_csv("super_test.csv")
 
 #----------------- SCALING ---------------------
 

@@ -8,6 +8,11 @@ import enum_list as enu
 def new_sequence(user,sequence,category):
     database_manager.update_sequence_to_scaling(user,sequence,category)
 
+def update_tasks_importance(user_id,old_importance_values,new_importance_values):
+    for i in range(len(old_importance_values)):
+        database_manager.update_tasks_importance_values(user_id,old_importance_values[i],new_importance_values[i])
+    
+
 def get_scaling_parameters(user):
     difficulty = database_manager.retrieve_scaling(user,enu.Scaling_Cat.DIFFICULTY)
     importance = database_manager.retrieve_scaling(user,enu.Scaling_Cat.IMPORTANCE)
