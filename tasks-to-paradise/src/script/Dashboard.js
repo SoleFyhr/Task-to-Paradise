@@ -11,7 +11,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 // Use theme (optional)
 am4core.useTheme(am4themes_animated);
-const apiUrl = process.env.API_URL || '';
+const apiUrl = process.env.API_URL || "";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -31,9 +31,8 @@ class Dashboard extends Component {
       prohibitedList: [],
       taskList: [],
       activePenaltyList: [],
-      ppoints: [],
-      rpoints: [],
-      isEfficient:"",
+      pointsAndScores: [],
+      isEfficient: "",
     };
   }
 
@@ -104,45 +103,29 @@ class Dashboard extends Component {
   // }
 
   refreshList = () => {
-    this.post_method(
-      "",
-      `${apiUrl}/button_get_setting`,
-      (data) => {
-        this.setState({ isEfficient: data.efficient });
-      }
-    );
-    this.post_method("", `${apiUrl}/button_get_points`, (data) => {
-      this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
+    this.post_method("", `${apiUrl}/button_get_setting`, (data) => {
+      this.setState({ isEfficient: data.efficient });
     });
-    
-    this.post_method(
-      "",
-      `${apiUrl}/get_dashboard_tasks`,
-      (data) => {
-
-        // Concatenate the arrays using the spread operator
-        const concatenatedList = [...data.daily, ...data.habits, ...data.once];
-
-        this.setState({
-          onceList: data.once,
-          habitsList: data.habits,
-          dailyList: data.daily,
-          prohibitedList: data.prohibited,
-          taskList: concatenatedList, // Updated taskList
-        });
-      }
-    );
-    this.post_method(
-      "",
-      `${apiUrl}/button_get_active_penalty`,
-      (data) => {
-        this.setState({ activePenaltyList: data.active });
-      }
-    );
     this.post_method("", `${apiUrl}/button_get_points`, (data) => {
-      this.setState({ ppoints: data.ppoints, rpoints: data.rpoints });
+      this.setState({ pointsAndScores: data.points_scores});
+      console.log(this.state.pointsAndScores)
     });
 
+    this.post_method("", `${apiUrl}/get_dashboard_tasks`, (data) => {
+      // Concatenate the arrays using the spread operator
+      const concatenatedList = [...data.daily, ...data.habits, ...data.once];
+
+      this.setState({
+        onceList: data.once,
+        habitsList: data.habits,
+        dailyList: data.daily,
+        prohibitedList: data.prohibited,
+        taskList: concatenatedList, // Updated taskList
+      });
+    });
+    this.post_method("", `${apiUrl}/button_get_active_penalty`, (data) => {
+      this.setState({ activePenaltyList: data.active });
+    });
     
   };
 
@@ -153,7 +136,7 @@ class Dashboard extends Component {
         "Content-Type": "application/json",
       },
       body: body_content,
-      credentials: 'include',
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -179,8 +162,10 @@ class Dashboard extends Component {
 
   isMobileDevice = () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-  }
+    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      userAgent
+    );
+  };
 
   toggle = () => {
     //add this after modal creation
@@ -268,7 +253,9 @@ class Dashboard extends Component {
       const isMobile = this.isMobileDevice();
       number = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Adding 1 to include today
       if (number === 1) number = `1 day ${isMobile ? "" : "left"}`;
-      else number = number === 0 ? "Today" : number + ` days ${isMobile ? "" : "left"} `;
+      else
+        number =
+          number === 0 ? "Today" : number + ` days ${isMobile ? "" : "left"} `;
     }
     return number;
   };
@@ -284,7 +271,14 @@ class Dashboard extends Component {
 
     for (let i = 0; i < stars[difficulty]; i++) {
       starElements.push(
-        <img key={i} src={starIcon} alt="star" className={`star-icon ${this.state.isEfficient ==="yes" ? 'efficient' : ''}`}/>
+        <img
+          key={i}
+          src={starIcon}
+          alt="star"
+          className={`star-icon ${
+            this.state.isEfficient === "yes" ? "efficient" : ""
+          }`}
+        />
       );
     }
 
@@ -292,12 +286,12 @@ class Dashboard extends Component {
   };
 
   renderTasks = (newItems) => {
-   
     return newItems.map((item) => (
-          
       <li
         key={item.id}
-        className={`task-grid ${this.state.isEfficient ==="yes" ? 'efficient' : ''} basic ${
+        className={`task-grid ${
+          this.state.isEfficient === "yes" ? "efficient" : ""
+        } basic ${
           item.penalty_induced === "false" ? "no-penalty" : "penalty"
         } ${item.task_type}`}
       >
@@ -325,7 +319,9 @@ class Dashboard extends Component {
     return newItems.map((item) => (
       <li
         key={item.id}
-        className={` task-grid basic ${this.state.isEfficient ==="yes" ? 'efficient' : ''} prohibited ${item.task_type}`}
+        className={` task-grid basic ${
+          this.state.isEfficient === "yes" ? "efficient" : ""
+        } prohibited ${item.task_type}`}
       >
         {item.penalty_induced && <div>{/* Content for penalty_induced */}</div>}
         <CustomCheckbox
@@ -341,13 +337,14 @@ class Dashboard extends Component {
   };
 
   renderActive = () => {
-
-    return this.state.activePenaltyList.map((item, index) => (
-      
-      <li key={item.id} className={` task-grid ${this.state.isEfficient ==="yes" ? 'efficient' : ''} basic no-penalty`}>
-        <CustomCheckbox
-          onCheck={() => this.handleCompletionActive(item.id)}
-        />
+    return this.state.activePenaltyList.map((item) => (
+      <li
+        key={item.id}
+        className={` task-grid active ${
+          this.state.isEfficient === "yes" ? "efficient" : ""
+        } basic no-penalty`}
+      >
+        <CustomCheckbox onCheck={() => this.handleCompletionActive(item.id)} />
         <span className="task-title">{item.content}</span>
         <span className="days-left">{"Today"}</span>
         <div className="difficulty-importance-column">
@@ -365,12 +362,17 @@ class Dashboard extends Component {
     ));
   };
 
-  renderPoints = (sectionName, pointsType) => {
+  renderPoints = (pointsType) => {
     const listNames = ["Daily", "Weekly", "Monthly"];
+    const sectionNames = ["Penalty", "Score", "Score"];
 
     return listNames.map((name, index) => (
-      <li key = {index} className="ppoints-li">
-        <span className="points-text">{`${name} ${sectionName} Points: ${pointsType[name.toLowerCase()]}`}</span>
+      <li key={index} className="points-li">
+        <span className="points-text">
+          {`${name} ${sectionNames[index]} Points: ${
+            pointsType[name.toLowerCase()]
+          }`}
+        </span>
       </li>
     ));
   };
@@ -382,23 +384,27 @@ class Dashboard extends Component {
           {this.renderTabList(title)}
           <div className=" p-3 ">
             {renderFunction ? (
-              <ul className="list-group-flush no-pad">{renderFunction(args)}</ul>
+              <ul className="list-group-flush no-pad">
+                {renderFunction(args)}
+              </ul>
             ) : null}
           </div>
         </div>
-      
       </div>
     );
   }
 
   render() {
     return (
-      <>  
-      <main className="content">
-          {this.state.isEfficient ==="yes" ? false :
-          <div className="scroll-section-title center">
-            <h1 className="title">TASKS TO PARADISE</h1>
-          </div>}
+      <>
+        <main className="content">
+          {this.state.isEfficient === "yes" ? (
+            false
+          ) : (
+            <div className="scroll-section-title center">
+              <h1 className="title">TASKS TO PARADISE</h1>
+            </div>
+          )}
           {this.state.activePenaltyList.length === 0
             ? ""
             : this.renderSection("Do it or it doubles", this.renderActive)}
@@ -412,27 +418,37 @@ class Dashboard extends Component {
             this.renderProhibited,
             this.state.prohibitedList
           )}
-            <div className="col-md-6 col-sm-10 mx-auto p-0 ">
-              {this.renderTabList("Penalty")}
-              <div className=" p-3 ">
-                <ul className=" list-group-flush">
-                  {this.renderPoints("Penalty", this.state.ppoints)}
-                </ul>
-              </div>
+          <div className="col-md-6 mx-auto last_section ">
+            {this.renderTabList("Penalty Points")}
+            <div className=" p-3 ">
+              <ul className=" list-group-flush">
+                <li className="points-li">
+                  <span className="points-text">
+                    {`Daily Penalty Points: ${this.state.pointsAndScores['daily_ppoints']}`}
+                  </span>
+                </li>
+              </ul>
             </div>
+          </div>
           <div className="between_section">
             <div className="col-md-6 col-sm-10 mx-auto p-0 ">
-              {this.renderTabList("Reward")}
+              {this.renderTabList("Scores")}
               <div className=" p-3 ">
                 <ul className=" list-group-flush">
-                  {this.renderPoints("Reward", this.state.rpoints)}
+                  <li className="points-li">
+                    <span className="points-text">
+                      {`Weekly Score Points: ${this.state.pointsAndScores["weekly_score"]}`}
+                    </span>
+                  </li>
+                  <li className="points-li">
+                    <span className="points-text">
+                      {`Monthly Score Points: ${this.state.pointsAndScores["monthly_score"]}`}
+                    </span>
+                  </li>
                 </ul>
               </div>
             </div>
-            </div>
-
-          
-
+          </div>
 
           {/* <div
             id="rewardsPointsChartDiv"
@@ -445,7 +461,7 @@ class Dashboard extends Component {
               onSave={this.handleCompletion}
             />
           ) : null}
-          </main>
+        </main>
       </>
     );
   }

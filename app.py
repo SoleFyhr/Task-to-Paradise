@@ -385,12 +385,11 @@ def function_get_reward():
 def function_get_points():
     user_id = get_logged_in_user()
     if user_id == None:
-        return jsonify({'message': 'Unauthorized'}), 401
+        return jsonify({'message': 'Unauthorized user'}), 401
 
-    
+    points_scores = other.get_points_scores(user_id)
 
-    rpoints,ppoints = other.get_ppoints_rpoints(user_id)
-    response_data = {"message": "points captured successfully","rpoints":rpoints,"ppoints":ppoints}
+    response_data = {"message": "points captured successfully","points_scores":points_scores}
     return jsonify(response_data)
 
 #!------------------ Scaling ------------------

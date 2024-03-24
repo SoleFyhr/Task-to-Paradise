@@ -6,6 +6,8 @@ import psycopg2
 import psycopg2.extras
 import csv
 from decimal import Decimal
+from typing import List
+
 
 
 
@@ -18,6 +20,7 @@ class JSONCategory(Enum):
     REWARD = "rewards"
     HISTORIC = "historic"
     PPOINTS = "penalty_points"
+    SCORES = "scores"
     RPOINTS = "reward_points"
     SCALING = "scaling"
 
@@ -683,6 +686,20 @@ def add_task_to_data_collection(user_id,task_id, completed, task_type, difficult
 
 
 
+def csv_creator(data,fieldnames,csv_file_name):
+        fieldnames = []
+            
+            # Write the fetched data to a CSV file
+        with open(csv_file_name, 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in data:
+                writer.writerow(dict(row))
+        #Maybe here launch function to delete table and give it connection
+        
+        print(f"Data exported successfully to {csv_file_name}")
+          
+
 def export_data_collection_to_csv(csv_file_name, conn=None):
     should_close_conn = False
     try:
@@ -698,13 +715,12 @@ def export_data_collection_to_csv(csv_file_name, conn=None):
 
             # Column headers, adjust as needed based on the columns you want to export
             fieldnames = [desc[0] for desc in cursor.description]
+            current_date = datetime.datetime.now().date()
+            filename = f"./csv/csv_users_scores_{current_date.strftime('%d_%m_%Y')}.csv"
 
-            # Writing data to CSV
-            with open(csv_file_name, 'w', newline='') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()  
-                for row in data:
-                    writer.writerow(dict(row))  
+            csv_creator(data,fieldnames,filename)
+
+            
 
         print(f"Data exported successfully to {csv_file_name}")
 
@@ -740,9 +756,10 @@ def clear_data_collection_table(conn=None): #TODO rajouter une période de date
             conn.close()
 
 
-            
 
-def calculate_user_task_metrics_and_export_to_csv(csv_file_name, conn=None):
+  
+
+def retrieve_user_task_metrics(conn=None, to_csv = False):
     should_close_conn = False
     try:
       
@@ -779,18 +796,14 @@ def calculate_user_task_metrics_and_export_to_csv(csv_file_name, conn=None):
         with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
             cursor.execute(sql)
             data = cursor.fetchall()  # Fetch all the aggregated results
-            # Define column headers based on the query
-            fieldnames = [desc[0] for desc in cursor.description]
-            
-            # Write the fetched data to a CSV file
-            with open(csv_file_name, 'w', newline='') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
-                for row in data:
-                    writer.writerow(dict(row))
-            #Maybe here launch function to delete table and give it connection
-            
-        print(f"User task metrics exported successfully to {csv_file_name}")
+
+            if to_csv:
+                current_date = datetime.datetime.now().date()
+                filename = f"./csv/csv_users_scores_{current_date.strftime('%d_%m_%Y')}.csv"
+
+                csv_creator(data,[desc[0] for desc in cursor.description],filename)
+                return
+
     
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -798,10 +811,35 @@ def calculate_user_task_metrics_and_export_to_csv(csv_file_name, conn=None):
         # Close the connection if it was opened within this function
         if should_close_conn and conn.closed == 0:
             conn.close()
+    return data
 
-#calculate_user_task_metrics_and_export_to_csv("super_test.csv")
+#retrieve_user_task_metrics()
 
-#----------------- SCALING ---------------------
+
+#! -----------------  SCORES  --------------------------
+
+def calculate_weekly_score(user_data_line: List) -> float:
+    #call the regression model
+    print(user_data_line)
+    return 46
+
+
+
+def update_weekly_score():
+    data = retrieve_user_task_metrics()
+    users = []
+    for i in range(len(data)):
+        data[i]=[float(item) if isinstance(item, Decimal) else (0 if item is None else item) for item in data[i]]
+        users+=[data[i][0]]
+    
+    
+    for i in range(len(users)):
+        score = calculate_weekly_score(data[i])
+        change_value(users[i],score,JSONCategory.SCORES,enu.Score.WEEKLYSCORE)
+
+
+#update_weekly_score()
+#!----------------- SCALING ---------------------
 
 #A task completed, will earn X points if it's easy, X points if meidum... x level of completion
 #A task failed, will penalize X points if it's not so important, X points if it's important...

@@ -164,14 +164,13 @@ class Reward extends Component {
                         Add Reward
                       </button>
                     </div>
-                    <h4 className="text-uppercase  my-4">Daily</h4>
+                    {/* <h4 className="text-uppercase  my-4">Daily</h4>
 
                     <div className="card penaltyGroup">
-                      {/* {this.renderTabList()} */}
                       <ul className="list-group list-group-flush">
                         {this.renderItems(this.state.rewardDaily, "daily")}
                       </ul>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="between_section taskZone">
                     <h4 className="text-uppercase  my-4">Weekly</h4>

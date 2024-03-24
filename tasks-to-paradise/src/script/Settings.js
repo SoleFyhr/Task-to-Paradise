@@ -248,7 +248,7 @@ class Settings extends Component {
                 </span>
               </div>
             </div>
-            <div className="outer-flex-container text-center  ">
+            {/* <div className="outer-flex-container text-center  ">
               <div className="inner-flex-container">
                 <div>
                   Difficulty: {this.renderScale(this.state.difficultyScaling)}
@@ -282,8 +282,8 @@ class Settings extends Component {
                   </button>
                 </span>
               </div>
-            </div>
-            <div className="text-center my-4">
+            </div> */}
+            <div className="text-center outer-flex-container">
               <Button
                 colorScheme="blue"
                 onClick={() => {
@@ -300,7 +300,7 @@ class Settings extends Component {
             </div>
             <div className="outer-flex-container text-center  ">
               <div className="inner-flex-container">
-            <div className="text-center my-4">
+            <div className="text-center">
               <Textarea
                 placeholder="Your comments here..."
                 size="sm"

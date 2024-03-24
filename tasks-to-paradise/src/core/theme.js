@@ -35,7 +35,7 @@ const theme = extendTheme({
           color: 'white',  // Text color
           border: '2px solid', // Border style
           borderColor: 'white', // Border color
-          _hover: {
+          _active: {
             bg: 'transparent', // Background color on hover
             color: 'red', // Text color on hover
           },

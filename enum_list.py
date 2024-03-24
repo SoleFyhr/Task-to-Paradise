@@ -50,6 +50,19 @@ class Scaling_Cat(Enum):
         values = [4,5,3]
         return values[list(Scaling_Cat).index(category)]
 
+class Score(Enum):
+    WEEKLYSCORE = "weekly_score"
+    MONTHLYSCORE = "monthly_score"
+    
+
+    @staticmethod
+    def from_string(label):
+        for name, member in Score.__members__.items():
+            if member.value == label:
+                return member
+        raise ValueError(f'{label} is not a valid Scaling Cat')
+    
+
 
 
 class Completion(Enum):

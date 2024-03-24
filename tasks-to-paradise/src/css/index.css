@@ -261,6 +261,10 @@ li.prohibited {
   grid-template-columns: auto min-content 8fr 1fr;
 }
 
+.task-grid.active {
+  grid-template-columns: 1fr 8fr 2fr 2fr;
+}
+
 /*!----------- TASK-------------- */
 
 .star-icon {
@@ -330,6 +334,10 @@ li.prohibited {
 
 .between_section {
   margin-top: 10vh;
+}
+
+.last_section {
+  margin-bottom: 10vh;
 }
 
 .add_Task{

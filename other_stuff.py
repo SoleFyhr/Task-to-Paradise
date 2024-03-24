@@ -1,4 +1,3 @@
-import json
 import database_manager
 import enum_list as enu
 
@@ -37,15 +36,24 @@ def change_efficient_field(user):
 def get_efficient_field(user):
     return database_manager.retrieve_efficient_field(user)
 
-#!--------------------Points-------------------
+#!--------------------Points & Scores-------------------
 def get_ppoints_rpoints(user):
     rpoints = database_manager.get_points_category(user,database_manager.JSONCategory.RPOINTS)
     ppoints = database_manager.get_points_category(user,database_manager.JSONCategory.PPOINTS)
 
     return rpoints,ppoints
 
+def get_points_scores(user):
+    daily_ppoints = database_manager.get_value(user,database_manager.JSONCategory.PPOINTS,enu.TimeEnum.DAILY)
+    weekly_score =  database_manager.get_value(user,database_manager.JSONCategory.SCORES,enu.Score.WEEKLYSCORE)
+    monthly_score =  database_manager.get_value(user,database_manager.JSONCategory.SCORES,enu.Score.MONTHLYSCORE)
 
-#!--------------------users-------------------
+    points_scores = {"daily_ppoints" : daily_ppoints, "weekly_score": weekly_score, "monthly_score": monthly_score}
+
+    return points_scores
+
+
+#!--------------------Users-------------------
 def do_user_exist(user):
     if(user in database_manager.read_usernames_from_file('users.txt')):
         return True
