@@ -56,8 +56,8 @@ def get_all_reward_sorted(user_id):
 
 def add_reward_to_all(value,user):
     category = database_manager.JSONCategory.RPOINTS
-    time = [enu.TimeEnum.DAILY,enu.TimeEnum.WEEKLY,enu.TimeEnum.MONTHLY]
-
+    #time = [enu.TimeEnum.DAILY,enu.TimeEnum.WEEKLY,enu.TimeEnum.MONTHLY]
+    time = [enu.TimeEnum.DAILY]
     for i in range(len(time)):
         ancient_value = database_manager.get_value(user,category,time[i])
         database_manager.change_value(user,value+ancient_value,category,time[i])

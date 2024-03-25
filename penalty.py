@@ -59,7 +59,8 @@ def get_all_penalty_sorted(user_id):
 
 def add_penalty_to_all(value,user):
     category = database_manager.JSONCategory.PPOINTS
-    time = [enu.TimeEnum.DAILY,enu.TimeEnum.WEEKLY,enu.TimeEnum.MONTHLY]
+    #time = [enu.TimeEnum.DAILY,enu.TimeEnum.WEEKLY,enu.TimeEnum.MONTHLY]
+    time = [enu.TimeEnum.DAILY]
 
     for i in range(len(time)):
         ancient_value = database_manager.get_value(user,category,time[i])

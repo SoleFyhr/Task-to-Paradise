@@ -180,7 +180,7 @@ def manage_historic(user):
     js.clean_historic(user)
 
 
-#daily_routine()
+daily_routine()
 #user_process('aotrix')
 #ta.create_new_task("Sampe Task","test task", enum.TaskType.ONCE,"2023-12-20",enum.Difficulty.MEDIUM,enum.Importance.NSIMPORTANT)
     

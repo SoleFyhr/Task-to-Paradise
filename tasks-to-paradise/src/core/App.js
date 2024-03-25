@@ -244,8 +244,8 @@ function App() {
 export default App;
 
 //TODO rajouter les infos d'une tache comme le content ou si elle a une penalty induced.
-//FIXME ajouter le style prohibited aux penalties actives ?? pck elles étaient pétés aussi
-//?S'occuper du score des weekly, faire le modèle de regression logistique, et parametrer chat gpt 4 pour avoir un assistant stylé qui fait un debrief
+//FIXME ajouter le réapparait dans X jours, pour les habits dans tasks.
+//? S'occuper du score des weekly, faire le modèle de regression logistique, et parametrer chat gpt 4 pour avoir un assistant stylé qui fait un debrief
 //? faire le bon visuel dans tasks car ca va être réutiliser dans projet, surtout les 3 points.
 //? passer la connection en paramètre de chaque fonction comme ce qui est fait dans 'export_data_collection_to_csv' pour booster les perfs de ouf.
 
