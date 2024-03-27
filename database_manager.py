@@ -35,10 +35,10 @@ class JSONCategory(Enum):
 
 def get_db_connection():
     conn = psycopg2.connect(
-        dbname='d4hfuhkcajlvps',
-        user='oegrwfquyivedw',
-        password='8d65ec68616f883d5fe3eec5e79d698d3c3b1e77bd8d3a34452265256a952dc4',
-        host='ec2-23-21-10-246.compute-1.amazonaws.com',
+        dbname='ddcisi2r9ihtc3',
+        user='rebkaiibzxwbnb',
+        password='870d1bc5d2e10c1c466d994d60bc9e559bef0bfc00704578098cbd7adf4542f1',
+        host='ec2-34-193-110-25.compute-1.amazonaws.com',
         port='5432'
     )
     return conn
